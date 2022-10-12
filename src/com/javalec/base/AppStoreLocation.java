@@ -36,10 +36,10 @@ public class AppStoreLocation extends JFrame {
 	private JTable Inner_Table;
 	private JLabel lblNewLabel;
 	private JLabel lblhomebutton;
-    private final DefaultTableModel Outer_Table = new DefaultTableModel(); 
-    private JLabel lblShopName;
-    private JButton btnGoToMenu;
-
+	private final DefaultTableModel Outer_Table = new DefaultTableModel();
+	private JLabel lblShopName;
+	private JButton btnGoToMenu;
+	private JLabel lblNumber;
 
 	/**
 	 * Launch the application.
@@ -70,13 +70,13 @@ public class AppStoreLocation extends JFrame {
 	private void initialize() {
 		frmMelhor = new JFrame();
 		frmMelhor.addWindowListener(new WindowAdapter() {
-	          
-	          @Override
-	          public void windowActivated(WindowEvent e) {
-	             tableInit();
-	             searchAction();
-	          }
-	       });
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				tableInit();
+				searchAction();
+			}
+		});
 		frmMelhor.getContentPane().setBackground(new Color(247, 243, 243));
 		frmMelhor.setTitle("Mehlor 매장정보");
 		frmMelhor.setBounds(100, 100, 300, 500);
@@ -102,16 +102,17 @@ public class AppStoreLocation extends JFrame {
 		if (Inner_Table == null) {
 			Inner_Table = new JTable();
 			Inner_Table.addMouseListener(new MouseAdapter() {
-	         	@Override
-	         	public void mouseClicked(MouseEvent e) {
-	         		if(e.getButton() == 1) {
-	         			tableClick();
-	         		}
-	         		
-	         	}
-	         });
-	         Inner_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	         Inner_Table.setModel(Outer_Table);
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (e.getButton() == 1) {
+						tableClick();
+						
+					}
+
+				}
+			});
+			Inner_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			Inner_Table.setModel(Outer_Table);
 		}
 		return Inner_Table;
 	}
@@ -153,7 +154,7 @@ public class AppStoreLocation extends JFrame {
 		}
 		return lblhomebutton;
 	}
-	
+
 	private JLabel getLblShopName() {
 		if (lblShopName == null) {
 			lblShopName = new JLabel("New label");
@@ -161,12 +162,13 @@ public class AppStoreLocation extends JFrame {
 		}
 		return lblShopName;
 	}
+
 	private JButton getBtnGoToMenu() {
 		if (btnGoToMenu == null) {
 			btnGoToMenu = new JButton("주문하러가기");
 			btnGoToMenu.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+
 					frmMelhor.setVisible(false);
 					AppMenuList.main(null);
 				}
@@ -177,15 +179,15 @@ public class AppStoreLocation extends JFrame {
 	}
 
 	// function-------------------------
-	
-	//테이블 칼럼 만들기 
+
+	// 테이블 칼럼 만들기
 	public void tableInit() {
-		//테이블 칼럼 이름 
+		// 테이블 칼럼 이름
 		Outer_Table.addColumn("순서");
 		Outer_Table.addColumn("지점명");
 		Outer_Table.addColumn("주소");
 		Outer_Table.addColumn("번호");
-		// 테이블 칼럼 수 
+		// 테이블 칼럼 수
 		Outer_Table.setColumnCount(4);
 
 		int i = Outer_Table.getRowCount();
@@ -210,52 +212,57 @@ public class AppStoreLocation extends JFrame {
 		col = Inner_Table.getColumnModel().getColumn(vColIndex);
 		width = 100;
 		col.setPreferredWidth(width);
-		
+
 		vColIndex = 3;
 		col = Inner_Table.getColumnModel().getColumn(vColIndex);
 		width = 90;
 		col.setPreferredWidth(width);
 
 	}
-	
-	// DB to Table db에서 테이블로 정보 가져오기 
-		private void searchAction() {
-			// Dao연결 
-			AppStoreLocationDao dao = new AppStoreLocationDao();			//연결 
-			ArrayList<AppStoreLocationDto> dtoList = dao.shopList();		// 타입 = 실행 메소드 4. arraylist 형식으로 가져와서, 해당 Dao method 실행 
-			
-			int listCount = dtoList.size();				//	 데이터의 열의 수를 나타냄 
-			
-			//위의 데이터 행의 수만큼 정보 출력  
-			for(int index = 0; index < listCount; index++) {
-				String temp = Integer.toString(dtoList.get(index).getShop_number());		//  temp: seqno 할당 
-				String[] qTxt = {temp, dtoList.get(index).getShop_name(), dtoList.get(index).getShop_address(), dtoList.get(index).getShop_telno()};	//1행의 박스 할당  
-				Outer_Table.addRow(qTxt);	//출력  
-			}
-			
-			
-		}
-		
-		
-		// 선택한 지점 상단 텍스트라벨에 나타내기 
-		private void tableClick() {
-			
-			int i = Inner_Table.getSelectedRow();							// 출력 원하는 정보 클릭 메소드  
-			
-			//DB에서 해당 행의 번호 (primary key) 가져오기 
-			String wkSequence = (String) Inner_Table.getValueAt(i, 0);		//i 행 을 가져오고, 0은 primary key(순서)만 알면 되니까 0번 
-			AppStoreLocationDao dao = new AppStoreLocationDao(Integer.parseInt(wkSequence));				//숫자 프라이머리 키 를 정수로 바꿈  
-			
-			AppStoreLocationDto dto = dao.tableClick();										//data가 dto로 넘어오고 넘어온 데이터를 dto타입으로  받는 역할  
-			
-			lblShopName.setText(dto.getShop_name());		
-			
-			Static_StoreLocation.setShop_name(dto.getShop_name());
-			Static_StoreLocation.setShop_number(dto.getShop_number());
+
+	// DB to Table db에서 테이블로 정보 가져오기
+	public void searchAction() {
+		// Dao연결
+		AppStoreLocationDao dao = new AppStoreLocationDao(); // 연결
+		ArrayList<AppStoreLocationDto> dtoList = dao.shopList(); // 타입 = 실행 메소드 4. arraylist 형식으로 가져와서, 해당 Dao method 실행
+
+		int listCount = dtoList.size(); // 데이터의 열의 수를 나타냄
+
+		// 위의 데이터 행의 수만큼 정보 출력
+		for (int index = 0; index < listCount; index++) {
+			String temp = Integer.toString(dtoList.get(index).getShop_number()); // temp: seqno 할당
+			String[] qTxt = { temp, dtoList.get(index).getShop_name(), dtoList.get(index).getShop_address(),
+					dtoList.get(index).getShop_telno() }; // 1행의 박스 할당
+			Outer_Table.addRow(qTxt); // 출력
 
 		}
+
+	}
+
+	// 선택한 지점 상단 텍스트라벨에 나타내기
+	public void tableClick() {
+
+		int i = Inner_Table.getSelectedRow(); // 출력 원하는 정보 클릭 메소드
+
+		// DB에서 해당 행의 번호 (primary key) 가져오기
+		String wkSequence = (String) Inner_Table.getValueAt(i, 0); // i 행 을 가져오고, 0은 primary key(순서)만 알면 되니까 0번
+		AppStoreLocationDao dao = new AppStoreLocationDao(Integer.parseInt(wkSequence)); // 숫자 프라이머리 키 를 정수로 바꿈
+		AppStoreLocationDto dto = dao.tableClick(); // data가 dto로 넘어오고 넘어온 데이터를 dto타입으로 받는 역할
+
+
+		lblShopName.setText(dto.getShop_name());
+
+		Static_StoreLocation.setShop_name(dto.getShop_name());
+
+		Static_StoreLocation.setShop_number(dto.getShop_number());
+		
+		
+
+	}
+
+
 	
+	
+	
+
 }
-
-	
-	

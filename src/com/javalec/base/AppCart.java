@@ -144,8 +144,7 @@ public class AppCart {
 	private JLabel getLblResultPrice() {
 		if (lblResultPrice == null) {
 			lblResultPrice = new JLabel("New label");
-			
-			
+
 			lblResultPrice.setBounds(208, 353, 61, 16);
 		}
 		return lblResultPrice;
@@ -200,12 +199,13 @@ public class AppCart {
 	// 테이블 칼럼 만들기
 	public void tableInit() {
 		// 테이블 칼럼 이름
-		
+
+//		Outer_Table.addColumn("번호");
 		Outer_Table.addColumn("제품명");
 		Outer_Table.addColumn("가격");
 		Outer_Table.addColumn("수량");
 		// 테이블 칼럼 수
-		Outer_Table.setColumnCount(3);
+		Outer_Table.setColumnCount(4);
 
 		int i = Outer_Table.getRowCount();
 
@@ -217,7 +217,7 @@ public class AppCart {
 
 		int vColIndex = 0;
 		TableColumn col = Inner_Table.getColumnModel().getColumn(vColIndex);
-		int width = 100;
+		int width = 0;
 		col.setPreferredWidth(width);
 
 		vColIndex = 1;
@@ -230,6 +230,10 @@ public class AppCart {
 		width = 80;
 		col.setPreferredWidth(width);
 
+		vColIndex = 3;
+		col = Inner_Table.getColumnModel().getColumn(vColIndex);
+		width = 80;
+		col.setPreferredWidth(width);
 
 	}
 
@@ -243,17 +247,17 @@ public class AppCart {
 		int result = 0;
 		// 위의 데이터 행의 수만큼 정보 출력
 		for (int index = 0; index < listCount; index++) {
-//			String temp = Integer.toString(dtoList.get(index).getCart_id()); // temp: seqno 할당
+			String temp = Integer.toString(dtoList.get(index).getCart_id()); // temp: seqno 할당
 			String temp2 = Integer.toString(dtoList.get(index).getProduct_price());
 			String temp3 = Integer.toString(dtoList.get(index).getCart_product_quantity());
 			int price = Integer.parseInt(temp2);
 			int quantity = Integer.parseInt(temp3);
 
-			String[] qTxt = { dtoList.get(index).getProduct_name(), temp2, temp3 }; // 1행의 박스 할당
-			int[] qTxt1 = {price};
+			String[] qTxt = {temp, dtoList.get(index).getProduct_name(), temp2, temp3 }; // 1행의 박스 할당
+			int[] qTxt1 = { price };
 			Outer_Table.addRow(qTxt); // 출력
-			result += (price*quantity);
-			
+			result += (price * quantity);
+
 		}
 		lblResultPrice.setText(Integer.toString(result));
 
@@ -261,17 +265,15 @@ public class AppCart {
 
 	private void deleteAction() {
 
-		// sequence 넘버 정수로 바꾸기
+		int i = Inner_Table.getSelectedRow(); // 출력 원하는 정보 클릭 메소드
 
-		int i = Inner_Table.getSelectedRow(); // 몇번째 줄 인지 알려줌
-		String wkSequence = (String) Inner_Table.getValueAt(i, 0); // i번째 행의 0번째(Seqno) 값을 wkSequence에 넣어줌
-
-		AppCartDao dao = new AppCartDao(Integer.parseInt(wkSequence)); // 연결
-
-		Boolean ok = dao.deleteAction(); // 리턴값
+		// DB에서 해당 행의 번호 (primary key) 가져오기
+		String wkCartId = (String) Inner_Table.getValueAt(i, 0); // i 행 을 가져오고, 0은 primary key(순서)만 알면 되니까 0번
+		AppCartDao dao = new AppCartDao(Integer.parseInt(wkCartId));
 
 		
+		Boolean ok = dao.deleteAction(); // 리턴값
+
 	}
-	
 
 }
