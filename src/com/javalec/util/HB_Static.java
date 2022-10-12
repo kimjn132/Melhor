@@ -5,6 +5,9 @@ public class HB_Static {
 	public static int employee_id;
 	public static int shop_number;
 	public static int signUpIdCheck;
+	public static int day;
+	public static int month;
+	
 	public static int incentive = 50;
 	
 	public HB_Static() {
@@ -29,6 +32,18 @@ public class HB_Static {
 	}
 	public static void setSignUpIdCheck(int signUpIdCheck) {
 		HB_Static.signUpIdCheck = signUpIdCheck;
+	}
+	public static int getDay() {
+		return day;
+	}
+	public static void setDay(int day) {
+		HB_Static.day = day;
+	}
+	public static int getMonth() {
+		return month;
+	}
+	public static void setMonth(int month) {
+		HB_Static.month = month;
 	}
 	
 	
