@@ -1,11 +1,8 @@
 package com.javalec.base;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -22,14 +19,11 @@ import com.javalec.dao.HB_ManagerAppointDao;
 import com.javalec.util.HB_Static;
 
 import javax.swing.JTextField;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JPanel;
 
 public class HB_ManagerAppoint {
 
@@ -37,10 +31,8 @@ public class HB_ManagerAppoint {
 	private JLabel lblNewLabel;
 	private JLabel lblSalesStatus;
 	private JLabel lblStaffList;
-	private JLabel lblNewLabel_1_1_2;
 	private JLabel lblManagerList;
 	private JLabel lblManagerInsert;
-	private JLabel lblBestProductList;
 	private JLabel lblStoreInsert;
 	private JLabel lblNewLabel_2;
 	private JTextField tfManagerName;
@@ -53,6 +45,7 @@ public class HB_ManagerAppoint {
 	private JButton btnFilePath;
 	private JTextField tfFilePath;
 	private JButton btnNewButton_1;
+	private JLabel lblAttendManage;
 
 	/**
 	 * Launch the application.
@@ -92,10 +85,8 @@ public class HB_ManagerAppoint {
 		frame.getContentPane().add(getLblNewLabel());
 		frame.getContentPane().add(getLblSalesStatus());
 		frame.getContentPane().add(getLblStaffList());
-		frame.getContentPane().add(getLblNewLabel_1_1_2());
 		frame.getContentPane().add(getLblManagerList());
 		frame.getContentPane().add(getLblManagerInsert());
-		frame.getContentPane().add(getLblBestProductList());
 		frame.getContentPane().add(getLblNewLabel_2());
 		frame.getContentPane().add(getTfManagerName());
 		frame.getContentPane().add(getBtnappointment());
@@ -108,6 +99,7 @@ public class HB_ManagerAppoint {
 		frame.getContentPane().add(getBtnFilePath());
 		frame.getContentPane().add(getTfFilePath());
 		frame.getContentPane().add(getBtnNewButton_1());
+		frame.getContentPane().add(getLblAttendManage());
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
@@ -177,24 +169,6 @@ public class HB_ManagerAppoint {
 		}
 		return lblStaffList;
 	}
-	
-	private JLabel getLblNewLabel_1_1_2() {
-		if (lblNewLabel_1_1_2 == null) {
-			lblNewLabel_1_1_2 = new JLabel("고객 만족도");
-			lblNewLabel_1_1_2.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					
-				}
-			});
-			lblNewLabel_1_1_2.setOpaque(true);
-			lblNewLabel_1_1_2.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1_1_2.setForeground(Color.BLACK);
-			lblNewLabel_1_1_2.setBackground(new Color(227, 147, 132));
-			lblNewLabel_1_1_2.setBounds(0, 147, 114, 39);
-		}
-		return lblNewLabel_1_1_2;
-	}
 	private JLabel getLblManagerList() {
 		if (lblManagerList == null) {
 			lblManagerList = new JLabel("점장 리스트");
@@ -221,30 +195,10 @@ public class HB_ManagerAppoint {
 			lblManagerInsert.setHorizontalAlignment(SwingConstants.CENTER);
 			lblManagerInsert.setForeground(Color.BLACK);
 			lblManagerInsert.setBackground(new Color(227, 147, 132));
-			lblManagerInsert.setBounds(0, 225, 114, 39);
+			lblManagerInsert.setBounds(0, 147, 114, 39);
 		}
 		return lblManagerInsert;
 	}
-	private JLabel getLblBestProductList() {
-		if (lblBestProductList == null) {
-			lblBestProductList = new JLabel("인기메뉴 리스트");
-			lblBestProductList.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					
-					HB_BestProductList.main(null);
-					frame.setVisible(false);
-					
-				}
-			});
-			lblBestProductList.setOpaque(true);
-			lblBestProductList.setHorizontalAlignment(SwingConstants.CENTER);
-			lblBestProductList.setBackground(new Color(235, 199, 189));
-			lblBestProductList.setBounds(0, 264, 114, 39);
-		}
-		return lblBestProductList;
-	}
-	
 	private JLabel getLblStoreInsert() {
 		if (lblStoreInsert == null) {
 			lblStoreInsert = new JLabel("지점 등록");
@@ -261,11 +215,29 @@ public class HB_ManagerAppoint {
 			lblStoreInsert.setHorizontalAlignment(SwingConstants.CENTER);
 			lblStoreInsert.setForeground(Color.BLACK);
 			lblStoreInsert.setBackground(new Color(227, 147, 132));
-			lblStoreInsert.setBounds(0, 303, 114, 39);
+			lblStoreInsert.setBounds(0, 225, 114, 39);
 		}
 		return lblStoreInsert;
 	}
-	
+	private JLabel getLblAttendManage() {
+		if (lblAttendManage == null) {
+			lblAttendManage = new JLabel("출근 관리");
+			lblAttendManage.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+					HB_AttendManage.main(null);
+					frame.setVisible(false);
+					
+				}
+			});
+			lblAttendManage.setOpaque(true);
+			lblAttendManage.setHorizontalAlignment(SwingConstants.CENTER);
+			lblAttendManage.setBackground(new Color(235, 199, 189));
+			lblAttendManage.setBounds(0, 264, 114, 39);
+		}
+		return lblAttendManage;
+	}
 	private JLabel getLblNewLabel_2_2() {
 		if (lblNewLabel_2_2 == null) {
 			lblNewLabel_2_2 = new JLabel("전화번호");

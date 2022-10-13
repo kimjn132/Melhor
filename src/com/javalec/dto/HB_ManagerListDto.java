@@ -9,6 +9,8 @@ public class HB_ManagerListDto {
 	int employee_id;
 	String employee_telno;
 	String employee_in_date;
+	int employee_shop_number;
+	int order_salePrice;
 	
 	
 	public HB_ManagerListDto() {
@@ -17,7 +19,15 @@ public class HB_ManagerListDto {
 
 	
 	
-	public HB_ManagerListDto(String employee_name, String shop_name, String shop_address, int employee_id, String employee_telno, String employee_in_date) {
+	public HB_ManagerListDto(int order_salePrice) {
+		super();
+		this.order_salePrice = order_salePrice;
+	}
+
+
+
+	public HB_ManagerListDto(String employee_name, String shop_name, String shop_address, int employee_id, String employee_telno, String employee_in_date
+			,int employee_shop_number) {
 		super();
 		this.employee_name = employee_name;
 		this.shop_name = shop_name;
@@ -25,6 +35,7 @@ public class HB_ManagerListDto {
 		this.employee_id = employee_id;
 		this.employee_telno = employee_telno;
 		this.employee_in_date = employee_in_date;
+		this.employee_shop_number = employee_shop_number;
 	}
 
 
@@ -64,6 +75,18 @@ public class HB_ManagerListDto {
 	}
 	public void setShop_address(String shop_address) {
 		this.shop_address = shop_address;
+	}
+	public int getEmployee_shop_number() {
+		return employee_shop_number;
+	}
+	public void setEmployee_shop_number(int employee_shop_number) {
+		this.employee_shop_number = employee_shop_number;
+	}
+	public int getOrder_salePrice() {
+		return order_salePrice;
+	}
+	public void setOrder_salePrice(int order_salePrice) {
+		this.order_salePrice = order_salePrice;
 	}
 	
 	

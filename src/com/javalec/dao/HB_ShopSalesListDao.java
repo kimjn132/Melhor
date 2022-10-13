@@ -1,5 +1,8 @@
 package com.javalec.dao;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -131,7 +134,7 @@ public class HB_ShopSalesListDao {
 	public int shopDaySales(int day) {
 		int sales = 0;
 		
-		String whereStatement = "select sum(o.order_saleprice) from shop s, orders o ";
+		String whereStatement = "select sum(o.order_saleprice * order_quantity) from shop s, orders o ";
 		String whereStatement2 = "where s.shop_number = o.shop_number and s.shop_number = " + shop_number + " and "
 				+ "DATE(o.order_time) = DATE(now() - interval (DAY(now()) - " + day + ") day) "
 				+ "and o.order_stamp is not null";	
@@ -165,7 +168,7 @@ public class HB_ShopSalesListDao {
 
 		int sales = 0;
 
-		String whereStatement = "select sum(o.order_saleprice) from shop s, orders o ";
+		String whereStatement = "select sum(o.order_saleprice * order_quantity) from shop s, orders o ";
 		String whereStatement2 = "where s.shop_number = o.shop_number and s.shop_number = " + shop_number + " and "
 				+ "DATE(o.order_time) BETWEEN "
 				+ "LAST_DAY(NOW() - interval (month(now()) - " + (month - 1) + ") month) + interval 1 DAY and LAST_DAY(NOW() - interval (month(now()) - " + month + ") month) "
@@ -200,7 +203,7 @@ public class HB_ShopSalesListDao {
 
 		int sales = 0;
 
-		String whereStatement = "select sum(o.order_saleprice) from shop s, orders o ";
+		String whereStatement = "select sum(o.order_saleprice * order_quantity) from shop s, orders o ";
 		String whereStatement2 = "where s.shop_number = o.shop_number and s.shop_number = " + shop_number + " and "
 				 + "date(o.order_time) = DATE(now() - interval (month(now()) - " + month + ") month - interval (day(now()) - " + day + ") day) "
 				 + "and o.order_stamp is not null";
@@ -234,7 +237,7 @@ public class HB_ShopSalesListDao {
 
 		int sales = 0;
 
-		String whereStatement = "select sum(o.order_saleprice) from shop s, orders o ";
+		String whereStatement = "select sum(o.order_saleprice * order_quantity) from shop s, orders o ";
 		String whereStatement2 = "where s.shop_number = o.shop_number and s.shop_number = " + shop_number + " and o.order_stamp is not null";
 
 		try {
@@ -298,8 +301,9 @@ public class HB_ShopSalesListDao {
 	public HB_shopListDto allShopTotalSales() {
 		
 		HB_shopListDto dto = null;
-		String whereStatement = "select s.shop_name, sum(o.order_saleprice) from orders o, shop s where o.shop_number = s.shop_number and o.order_stamp is not null ";
-		String whereStatement2 = "group by s.shop_number order by o.order_saleprice asc";
+		String whereStatement = "select s.shop_name, sum(o.order_saleprice * order_quantity) from orders o, shop s ";
+		String whereStatement2 = "where o.shop_number = s.shop_number and o.order_stamp > 0 ";
+		String whereStatement3 = "group by s.shop_number order by o.order_saleprice * order_quantity desc";
 		try {
 
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -307,7 +311,7 @@ public class HB_ShopSalesListDao {
 					DBConnect.pw_mysql);
 			Statement stmt_mysql = conn_mysql.createStatement();
 
-			ResultSet rs = stmt_mysql.executeQuery(whereStatement + whereStatement2);
+			ResultSet rs = stmt_mysql.executeQuery(whereStatement + whereStatement2 + whereStatement3);
 
 			if (rs.next()) {
 
@@ -330,8 +334,9 @@ public class HB_ShopSalesListDao {
 	public HB_shopListDto allShopTodaySales() {
 		
 		HB_shopListDto dto = null;
-		String whereStatement = "select s.shop_name, sum(o.order_saleprice) from orders o, shop s where o.shop_number = s.shop_number and o.order_stamp is not null ";
-		String whereStatement2 = "and DATE(o.order_time) = curdate() group by s.shop_number order by o.order_saleprice desc";
+		String whereStatement = "select s.shop_name, sum(o.order_saleprice * order_quantity) from orders o, shop s ";
+		String whereStatement2 = " where o.shop_number = s.shop_number and o.order_stamp is not null ";
+		String whereStatement3 = "and DATE(o.order_time) = curdate() group by s.shop_number order by o.order_saleprice desc";
 		try {
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -339,7 +344,7 @@ public class HB_ShopSalesListDao {
 					DBConnect.pw_mysql);
 			Statement stmt_mysql = conn_mysql.createStatement();
 			
-			ResultSet rs = stmt_mysql.executeQuery(whereStatement + whereStatement2);
+			ResultSet rs = stmt_mysql.executeQuery(whereStatement + whereStatement2 + whereStatement3);
 			
 			if (rs.next()) {
 				
@@ -360,11 +365,79 @@ public class HB_ShopSalesListDao {
 	
 	
 	
+	public ArrayList<HB_shopListDto> shopBestMenu() {
+
+		ArrayList<HB_shopListDto> dtoList = new ArrayList<HB_shopListDto>();
+		String whereStatement = "select p.product_name, sum(o.order_quantity * order_quantity), p.product_image  from orders o, product p, shop s ";
+		String whereStatement2 = "where p.product_id = o.product_id and s.shop_number = o.shop_number and o.order_stamp > 0 and s.shop_number = " + HB_Static.getShop_number();
+		String whereStatement3 = " group by o.product_id, s.shop_name order by s.shop_name desc, sum(o.order_quantity) desc ";
+
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,
+					DBConnect.pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			ResultSet rs = stmt_mysql.executeQuery(whereStatement + whereStatement2 + whereStatement3);
+
+			if (rs.next()) {
+
+				String product_name = rs.getString(1);
+				int order_quantity = rs.getInt(2);
+
+				// 이미지 불러오기
+				DBConnect.filename = DBConnect.filename + 1;
+            	File file = new File(Integer.toString(DBConnect.filename));
+            	FileOutputStream output = new FileOutputStream(file);
+            	InputStream employee_image = rs.getBinaryStream(3);
+                byte[] buffer = new byte[1024];
+                while (employee_image.read(buffer) > 0) {
+                    output.write(buffer);
+                }
+                // 이미지 불러오기
+				
+                HB_shopListDto dto = new HB_shopListDto(order_quantity, product_name);
+                dtoList.add(dto);
+			}
+
+			conn_mysql.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return dtoList;
+	}
 	
 	
 	
-	
-	
+	public int cbInsertDay(int month) {
+
+		int count = 0;
+
+		String whereStatement = "select DAY(LAST_DAY(NOW() - interval (month(now()) - " + month + ") month))";
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,
+					DBConnect.pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			ResultSet rs = stmt_mysql.executeQuery(whereStatement);
+
+			while (rs.next()) {
+
+				count = rs.getInt(1);
+
+			}
+
+			conn_mysql.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
+
+	}
 	
 	
 	
