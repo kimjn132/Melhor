@@ -178,12 +178,13 @@ public class AppJoin {
 		if (tfPwCheck == null) {
 			tfPwCheck = new JTextField();
 			tfPwCheck.addKeyListener(new KeyAdapter() {
-	
 				@Override
-				public void keyPressed(KeyEvent e) {
+				public void keyReleased(KeyEvent e) {
 					customer_pwCheck();
 				}
 			});
+			
+		
 			tfPwCheck.setColumns(10);
 			tfPwCheck.setBounds(87, 171, 130, 26);
 		}
