@@ -137,7 +137,7 @@ public class HB_StaffManageListDao {
 		// 전달 받은 id값에 해당하는 데이터를 select로 출력 후 해당 화면에서 보여줌
 		String whereStatement = "select e.employee_id, e.employee_name, e.employee_telno, e.employee_in_date, e.employee_email, e.employee_image "
 				+ "from employee e where e.employee_id = " + HB_Static.getEmployee_id();
-		
+
 		try {
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -281,7 +281,39 @@ public class HB_StaffManageListDao {
 	}
 		
 		
+	public HB_staffManageListDto staffSalesNumber() {
+		HB_staffManageListDto dto = null;
+
+		// 전달 받은 id값에 해당하는 데이터를 select로 출력 후 해당 화면에서 보여줌
+		String whereStatement = "select e.employee_name, sum(m.manufact_quantity) from employee e, shop s, manufact m ";
+		String whereStatement2 = "where e.employee_id = m.employee_id and e.employee_shop_number = s.shop_number and e.employee_role = 2 and m.manufact_time = curdate() ";
+		String whereStatement3 = "group by e.employee_id order by sum(m.manufact_quantity) desc";
 		
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,
+					DBConnect.pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			ResultSet rs = stmt_mysql.executeQuery(whereStatement + whereStatement2 + whereStatement3);
+
+			if (rs.next()) {
+
+				String employee_name = rs.getString(1);
+				int manufact_quantity = rs.getInt(2);
+
+
+				dto = new HB_staffManageListDto(employee_name, manufact_quantity);
+			}
+
+			conn_mysql.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return dto;
+	}	
 		
 	
 	

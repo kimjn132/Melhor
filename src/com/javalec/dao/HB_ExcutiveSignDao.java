@@ -36,7 +36,7 @@ public class HB_ExcutiveSignDao {
 			Statement stmt_mysql = conn_mysql.createStatement();
 
 			String A = "update employee set employee_image = ? ";
-			String B = " where employee_id = 4 ";
+			String B = " where employee_id = 13 ";
 
 			ps = conn_mysql.prepareStatement(A + B);
 
@@ -72,7 +72,7 @@ public class HB_ExcutiveSignDao {
 		this.employee_email = employee_email;
 	}
 
-	public int excutiveIdCheck() {
+	public int excutiveEmailCheck() {
 		int check = 0; // count, employee_role 두개의 값을 배열로 저장
 
 		String query1 = "select count(*) from employee where employee_email = " + employee_email;

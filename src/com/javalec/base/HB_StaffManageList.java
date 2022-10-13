@@ -48,6 +48,7 @@ public class HB_StaffManageList {
 	private JLabel lblBestProductList;
 	private JLabel lblStoreInsert;
 	private JButton btnNewButton_1;
+	private JLabel lblStaffSalesNumber;
 
 	/**
 	 * Launch the application.
@@ -87,6 +88,7 @@ public class HB_StaffManageList {
 			public void windowActivated(WindowEvent e) {
 				staffTableInit();
 				staffSearchAction();
+				staffSalesNumber();
 			}
 		});
 		frame.setBounds(100, 100, 697, 541);
@@ -106,6 +108,7 @@ public class HB_StaffManageList {
 		frame.getContentPane().add(getLblBestProductList());
 		frame.getContentPane().add(getLblStoreInsert());
 		frame.getContentPane().add(getBtnNewButton_1());
+		frame.getContentPane().add(getLblStaffSalesNumber());
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
@@ -122,7 +125,7 @@ public class HB_StaffManageList {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(115, 106, 568, 372);
+			scrollPane.setBounds(115, 106, 568, 238);
 			scrollPane.setViewportView(getInner_Table());
 		}
 		return scrollPane;
@@ -130,7 +133,7 @@ public class HB_StaffManageList {
 	private JLabel getLblTotalStaffNumber() {
 		if (lblTotalStaffNumber == null) {
 			lblTotalStaffNumber = new JLabel("총 직원 수");
-			lblTotalStaffNumber.setBounds(520, 479, 163, 25);
+			lblTotalStaffNumber.setBounds(115, 354, 163, 25);
 		}
 		return lblTotalStaffNumber;
 	}
@@ -280,6 +283,14 @@ public class HB_StaffManageList {
 		return lblStoreInsert;
 	}
 	
+	private JLabel getLblStaffSalesNumber() {
+		if (lblStaffSalesNumber == null) {
+			lblStaffSalesNumber = new JLabel("New label");
+			lblStaffSalesNumber.setBounds(115, 389, 556, 31);
+		}
+		return lblStaffSalesNumber;
+	}
+	
 	// --------------------------------- Action Listener -------------------------------------------
 	
 	private JTable getInner_Table() {
@@ -422,6 +433,14 @@ public class HB_StaffManageList {
 
 	
 	
+	private void staffSalesNumber() {
+		
+		HB_StaffManageListDao dao = new HB_StaffManageListDao();
+		HB_staffManageListDto dto = dao.staffSalesNumber();
+		
+		lblStaffSalesNumber.setText(dto.getEmployee_name() + "님의 총 판매 건수는 " + dto.getManufact_quantity() + "건으로 금일 판매실적이 가장 높습니다.");
+		
+	}
 	
 	
 	

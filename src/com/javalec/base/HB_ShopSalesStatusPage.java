@@ -52,6 +52,8 @@ public class HB_ShopSalesStatusPage extends JFrame {
 	private final DefaultTableModel Outer_Table = new DefaultTableModel();
 	
 	private JLabel lblTotalShopNumber;
+	private JLabel lblTodaySales;
+	private JLabel lblListCount;
 	
 	/**
 	 * Launch the application.
@@ -91,6 +93,7 @@ public class HB_ShopSalesStatusPage extends JFrame {
 			public void windowActivated(WindowEvent e) {
 				shopSalesTableInit();
 				shopSearchAction();
+				allShopTotalSales();
 			}
 		});
 		frame.setBounds(100, 100, 697, 542);
@@ -111,6 +114,8 @@ public class HB_ShopSalesStatusPage extends JFrame {
 		frame.getContentPane().add(getLblStoreInsert());
 		frame.getContentPane().add(getLblTotalShopNumber());
 		frame.getContentPane().add(getBtnNewButton_1());
+		frame.getContentPane().add(getLblTodaySales());
+		frame.getContentPane().add(getLblListCount());
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
@@ -139,7 +144,7 @@ public class HB_ShopSalesStatusPage extends JFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(115, 108, 568, 370);
+			scrollPane.setBounds(115, 108, 568, 235);
 			scrollPane.setViewportView(getInner_Table());
 		}
 		return scrollPane;
@@ -149,7 +154,7 @@ public class HB_ShopSalesStatusPage extends JFrame {
 	private JLabel getLblTotalSales() {
 		if (lblTotalSales == null) {
 			lblTotalSales = new JLabel("");
-			lblTotalSales.setBounds(520, 480, 163, 25);
+			lblTotalSales.setBounds(115, 385, 556, 25);
 		}
 		return lblTotalSales;
 	}
@@ -297,6 +302,22 @@ public class HB_ShopSalesStatusPage extends JFrame {
 		return lblStoreInsert;
 	}
 	
+	private JLabel getLblTodaySales() {
+		if (lblTodaySales == null) {
+			lblTodaySales = new JLabel("");
+			lblTodaySales.setBounds(115, 420, 556, 25);
+		}
+		return lblTodaySales;
+	}
+	
+	private JLabel getLblListCount() {
+		if (lblListCount == null) {
+			lblListCount = new JLabel("");
+			lblListCount.setBounds(115, 350, 151, 25);
+		}
+		return lblListCount;
+	}
+	
 	// --------------------------------- Action Listener -------------------------------------------
 	
 	private JTable getInner_Table() {
@@ -390,17 +411,17 @@ public class HB_ShopSalesStatusPage extends JFrame {
 	
 			vColIndex = 1;
 			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			width = 134;
+			width = 100;
 			col.setPreferredWidth(width);
 	
 			vColIndex = 2;
 			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			width = 134;
+			width = 100;
 			col.setPreferredWidth(width);
 	
 			vColIndex = 3;
 			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			width = 134;
+			width = 100;
 			col.setPreferredWidth(width);
 
 			vColIndex = 4;
@@ -438,6 +459,33 @@ public class HB_ShopSalesStatusPage extends JFrame {
 			Outer_Table.addRow(qTxt);
 		}
 		
+		lblListCount.setText("총 " + listCount + "개의 지점이 있습니다.");
 		
 	}
+	
+	
+	
+	private void allShopTotalSales() {
+		
+		HB_shopListDto dto = null;
+		
+		HB_ShopSalesListDao dao = new HB_ShopSalesListDao();
+
+		dto = dao.allShopTotalSales();
+		lblTotalSales.setText("오픈 일부터 판매 실적이 가장 높은 지점은 " + dto.getShop_name() + "이고, 총 매출액은 " + dto.getOrder_saleprice() + "원 입니다.");
+		
+		dto = dao.allShopTodaySales();
+		lblTodaySales.setText("금일 판매 실적이 가장 높은 지점은 " + dto.getShop_name() + "이고, 금일 매출액은 " + dto.getOrder_saleprice() + "원 입니다.");
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }// End Line

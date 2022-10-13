@@ -281,11 +281,11 @@ public class HB_ExcutiveSignUp {
 					int tfcheck = insertFieldCheck();
 					if(tfcheck == 0) {
 						
-						if(HB_Static.getSignUpIdCheck() == 1 && lblPwCheck.getText() == "PW가 동일합니다.") {
+						if(HB_Static.signUpEmailCheck() == 1 && lblPwCheck.getText() == "PW가 동일합니다.") {
 							employeeSignUp();
 
-						} else if(HB_Static.getSignUpIdCheck() == 0){
-							JOptionPane.showMessageDialog(null, "ID 중복체크를 확인하세요.");
+						} else if(HB_Static.signUpEmailCheck() == 0){
+							JOptionPane.showMessageDialog(null, "Email 중복체크를 확인하세요.");
 							
 						} else if(lblPwCheck.getText() == "PW가 동일하지 않습니다.") {
 							JOptionPane.showMessageDialog(null, "PW가 동일하지 않습니다.");
@@ -476,17 +476,16 @@ public class HB_ExcutiveSignUp {
 		String employee_email = tfEmployeeEmail.getText() + tfEmployeeEmail2.getText();
 
 		HB_ExcutiveSignDao dao = new HB_ExcutiveSignDao(employee_email);
-		int count = dao.excutiveIdCheck();
+		int count = dao.excutiveEmailCheck();
 		int check = 0;
 
 		if (count == 0) {
 			JOptionPane.showMessageDialog(null, email + "는(은) 사용 가능한 이메일입니다");
 			check = 1;
-			tfEmployeePw.requestFocus();
 		} else {
 			JOptionPane.showMessageDialog(null, email + "는(은) 중복된 이메일입니다.");
-			tfEmployeeID.requestFocus();
-			tfEmployeeID.setText("");
+			tfEmployeeEmail.requestFocus();
+			tfEmployeeEmail.setText("");
 
 		}
 

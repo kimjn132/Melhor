@@ -18,6 +18,15 @@ public class HB_shopListDto {
 
 
 
+	public HB_shopListDto(String shop_name, int order_salePrice) {
+		super();
+		this.shop_name = shop_name;
+		this.order_salePrice = order_salePrice;
+	}
+
+
+
+
 	public HB_shopListDto(int shop_number, int employee_id, String shop_name, String shop_address, String shop_telno) {
 		super();
 		this.shop_number = shop_number;
