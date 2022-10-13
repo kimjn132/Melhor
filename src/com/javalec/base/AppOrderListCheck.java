@@ -174,7 +174,7 @@ public class AppOrderListCheck {
 			btnPay = new JButton("결제 진행하기");
 			btnPay.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-//					insertOrders();
+					insertOrders();
 					frmMelhor.setVisible(false);
 					AppPayDone.main(null);
 					deleteCart();
@@ -323,20 +323,22 @@ public class AppOrderListCheck {
 
 	
 	
-//	// orders 테이블에 입력
-//	private void insertOrders() {
-//
-//	
-//		int order_id = 1;
-//		int order_stamp = 1;
-//		String order_payment = "카드";
-//
-//		AppOrderListCheckDao dao = new AppOrderListCheckDao(Static_CustomerId.product_id, Static_CustomerId.customer_id,
-//				Static_StoreLocation.shop_number, order_id, order_payment, order_stamp);
-//
-//		int check = dao.insertOrder();
-//
-//	}
+	// orders 테이블에 입력
+	private void insertOrders() {
+
+	
+		int order_id = 1;
+		int order_stamp = 1;
+		int order_saleprice = 0;
+		String order_payment = "카드";
+
+		AppOrderListCheckDao dao = new AppOrderListCheckDao(Static_CustomerId.product_id, Static_CustomerId.customer_id,
+				Static_StoreLocation.shop_number, order_id, order_saleprice, order_payment, order_stamp);
+
+		int check = dao.insertOrder();
+		System.out.println(check);
+
+	}
 
 	
 	

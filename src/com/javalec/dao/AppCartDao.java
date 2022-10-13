@@ -27,10 +27,7 @@ public class AppCartDao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AppCartDao(int cart_id) {
-		super();
-		this.cart_id = cart_id;
-	}
+
 
 	public AppCartDao(int cart_id, String product_name, int product_price, int cart_product_quantity) {
 		super();
@@ -43,6 +40,11 @@ public class AppCartDao {
 	
 
 
+
+	public AppCartDao(int cart_id) {
+		super();
+		this.cart_id = cart_id;
+	}
 
 
 

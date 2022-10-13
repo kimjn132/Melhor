@@ -273,6 +273,7 @@ public class AppCart {
 
 		
 		Boolean ok = dao.deleteAction(); // 리턴값
+		
 
 	}
 

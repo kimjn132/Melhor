@@ -365,10 +365,11 @@ public class HB_ShopSalesListDao {
 	
 	
 	
+	
 	public ArrayList<HB_shopListDto> shopBestMenu() {
 
 		ArrayList<HB_shopListDto> dtoList = new ArrayList<HB_shopListDto>();
-		String whereStatement = "select p.product_name, sum(o.order_quantity * order_quantity), p.product_image  from orders o, product p, shop s ";
+		String whereStatement = "select p.product_name, sum(o.order_quantity), p.product_image  from orders o, product p, shop s ";
 		String whereStatement2 = "where p.product_id = o.product_id and s.shop_number = o.shop_number and o.order_stamp > 0 and s.shop_number = " + HB_Static.getShop_number();
 		String whereStatement3 = " group by o.product_id, s.shop_name order by s.shop_name desc, sum(o.order_quantity) desc ";
 

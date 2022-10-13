@@ -123,7 +123,6 @@ public class HB_ManagerList {
 		}
 		return scrollPane;
 	}
-	
 	private JLabel getLblTotalManagerNumber() {
 		if (lblTotalManagerNumber == null) {
 			lblTotalManagerNumber = new JLabel("총 점장 수");

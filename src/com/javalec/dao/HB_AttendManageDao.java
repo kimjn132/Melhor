@@ -33,6 +33,11 @@ public class HB_AttendManageDao {
 		String whereStatement3 = "DATE(a.attend_on) BETWEEN LAST_DAY(NOW() - interval (month(now()) - " + (HB_Static.getMonth() - 1) + ") month) + interval 1 DAY and LAST_DAY(NOW() - interval (month(now()) - " + HB_Static.getMonth() + ") month) ";
 		String whereStatement4 = "group by e.employee_name ";
 
+		System.out.println("result: " + result);
+		System.out.println("search: " + search);
+		System.out.println("rbEmployee: " + rbEmployee);
+		System.out.println("HB_Static.getMonth(): " + HB_Static.getMonth());
+		
 		try {
 
 			Class.forName("com.mysql.cj.jdbc.Driver");

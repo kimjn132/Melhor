@@ -290,8 +290,16 @@ public class HB_AttendManage {
 	private JRadioButton getRbManager() {
 		if (rbManager == null) {
 			rbManager = new JRadioButton("점장");
-			rbManager.setSelected(true);
+			rbManager.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					attendTableInit();
+					attendManageList();
+					
+				}
+			});
 			buttonGroup.add(rbManager);
+			rbManager.setSelected(true);
 			rbManager.setBounds(612, 108, 59, 23);
 		}
 		return rbManager;
@@ -299,8 +307,16 @@ public class HB_AttendManage {
 	private JRadioButton getRbStaff() {
 		if (rbStaff == null) {
 			rbStaff = new JRadioButton("알바생");
-			rbStaff.setSelected(true);
+			rbStaff.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					attendTableInit();
+					attendManageList();
+					
+				}
+			});
 			buttonGroup.add(rbStaff);
+			rbStaff.setSelected(true);
 			rbStaff.setBounds(531, 108, 77, 23);
 		}
 		return rbStaff;
@@ -337,6 +353,7 @@ public class HB_AttendManage {
 						HB_Static.setMonth(12);
 					}
 					
+					attendTableInit();
 					attendManageList();
 					
 				}
@@ -400,7 +417,7 @@ public class HB_AttendManage {
 		String searchText = tfSearchText.getText();
 		int rbEmployee = 0;
 
-		if ((String) cbStaffInfo.getSelectedItem() == "알바생 이름") {
+		if ((String) cbStaffInfo.getSelectedItem() == "이름") {
 			result = "e.employee_name"; // employee Table 컬럼명
 		}
 

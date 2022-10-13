@@ -297,6 +297,7 @@ public class HB_ShopSalesStatusPage extends JFrame {
 		return lblListCount;
 	}
 	
+	
 	// --------------------------------- Action Listener -------------------------------------------
 	
 	private JTable getInner_Table() {
