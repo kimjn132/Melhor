@@ -46,12 +46,13 @@ public class AppOrderListCheckDao {
 		this.cart_product_quantity = cart_product_quantity;
 	}
 
-	public AppOrderListCheckDao(int product_id, String customer_id, int shop_number, int order_id, String order_payment, int order_stamp) {
+	public AppOrderListCheckDao(int product_id, String customer_id, int shop_number, int order_id, int order_saleprice, String order_payment, int order_stamp) {
 		super();
 		this.product_id = product_id;
 		this.customer_id = customer_id;
 		this.shop_number = shop_number;
 		this.order_id = order_id;
+		this.order_saleprice = order_saleprice;
 		this.order_payment = order_payment;
 		this.order_stamp = order_stamp;
 
@@ -111,49 +112,53 @@ public class AppOrderListCheckDao {
 	}
 
 	
-//	// 결제하기 버튼 클릭시 (상품 구매) orders 테이블에 데이터 입력
-//	public int insertOrder() {
-//		PreparedStatement ps = null;
-//		int check = 0;
-//
-//		try { // error확인
-//
-//			Class.forName("com.mysql.cj.jdbc.Driver");
-//			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,
-//					DBConnect.pw_mysql); // database에 접근을 하겠다. (선언자, 실행 x)
-//			Statement stmt_mysql = conn_mysql.createStatement(); // Connection conn_mysql 인스턴스를 이용해서 Statement 객체 생성
-//
-//			// 쿼리 문장 만들기 (preparestatement)
-//			String query1 = "insert into orders (product_id, customer_id, shop_number, order_id, order_time, order_saleprice, order_quantity, order_payment, order_stamp) ";
-//			String query2 = "select '" + Static_CustomerId.product_id + "', '" + Static_CustomerId.customer_id + "' , '"
-//					+ Static_StoreLocation.shop_number 
-//					+ "' , ?, now(), p.product_price, c.cart_product_quantity, ?, ? ";
-//			String query3 = "from product p, cart c, customer u, shop s ";
-//			String query4 = "where p.product_id = c.product_id and c.customer_id = u.customer_id and s.shop_number = c.shop_number and c.customer_id = '"
-//					+ Static_CustomerId.customer_id + " ' ";
-//
-//			// 위의 쿼리 문장대로 순서대로 쓴다.
-//			ps = conn_mysql.prepareStatement(query1 + query2 + query3 + query4);
-//
+	// 결제하기 버튼 클릭시 (상품 구매) orders 테이블에 데이터 입력
+	public int insertOrder() {
+		PreparedStatement ps = null;
+		int check = 0;
+
+		try { // error확인
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,
+					DBConnect.pw_mysql); // database에 접근을 하겠다. (선언자, 실행 x)
+			Statement stmt_mysql = conn_mysql.createStatement(); // Connection conn_mysql 인스턴스를 이용해서 Statement 객체 생성
+
+			// 쿼리 문장 만들기 (preparestatement)
+
+			String query01 = "insert into orders (product_id, customer_id, shop_number, order_id, order_time, order_saleprice, order_quantity, order_stamp) ";
+			String query02 = "select c.product_id, c.customer_id, c.shop_number, '3', now(), p.product_price, c.cart_product_quantity, 1 ";
+			String query03 = "from product p, cart c, customer u, shop s ";
+			String query04 = "where p.product_id = c.product_id and c.customer_id = u.customer_id and s.shop_number = c.shop_number and c.customer_id = '" + Static_CustomerId.customer_id + " ' and c.shop_number = '" + Static_StoreLocation.shop_number +  " ' " ;
+			String query05 = "order by c.shop_number ";
+			
+			
+			
+			
+			// 위의 쿼리 문장대로 순서대로 쓴다.
+			ps = conn_mysql.prepareStatement(query01 + query02 + query03 + query04 + query05);
+
+			//(1, ?) >> 쿼리문에 ? 값이 있는 경우에만 필요하다.
 //			ps.setInt(1, product_id);
 //			ps.setString(2, customer_id);
 //			ps.setInt(3, shop_number);
 //			ps.setInt(4, order_id);
-//			ps.setString(5, order_payment);
-//			ps.setInt(6, order_stamp);
-//
-//			check = ps.executeUpdate(); // insert update method 이거 하나밖에 없다
-//
-//			conn_mysql.close(); // close 해야 다른 사람의 DB도 들어올 수 있다.
-//
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			e.printStackTrace();
-//			return check;
-//
-//		}
-//		return check;
-//	}
+//			ps.setInt(5, order_saleprice);
+//			ps.setString(6, order_payment);
+//			ps.setInt(7, order_stamp);
+
+			check = ps.executeUpdate(); // insert update method 이거 하나밖에 없다
+
+			conn_mysql.close(); // close 해야 다른 사람의 DB도 들어올 수 있다.
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return check;
+
+		}
+		return check;
+	}
 
 	
 	// 삭제
