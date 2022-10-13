@@ -15,7 +15,9 @@ import javax.swing.table.TableColumn;
 
 import com.javalec.dao.KioskDao;
 import com.javalec.dto.KioskDto;
+import com.javalec.dto.KioskOrdersDto;
 import com.javalec.util.DBConnect;
+import com.javalec.util.Static_OrdersInfo;
 import com.javalec.util.Static_ProductInfo;
 
 import javax.swing.JPanel;
@@ -222,6 +224,8 @@ public class KioskOrdersCoffee {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 
+					
+					
 					if(AddKioskCartList()) {
 					frmMelhorCoffeeKioskOrders.setVisible(false);
 					KioskPay.main(null);
@@ -270,6 +274,7 @@ public class KioskOrdersCoffee {
 			InnerTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					KioskOrdersOption.main(null);
 					tableClick();
 				}
 			});
@@ -312,14 +317,24 @@ public class KioskOrdersCoffee {
 	
 	///////////	///////////	///////////	///////////	///////////	///////////	Function	///////////	///////////	///////////	///////////	///////////	///////////	///////////	///////////
 
+	//--> 장바구니 총 금액 계산하기 
+	//lblResultPrice.setText();
+	
+	
+	/////
 	private void tableClick() { // 카페 메뉴를 클릭하면 바텀 장바구니에 클릭한 메뉴가 추가 됨 
+		
+		KioskOrdersOption.main(null);
+		
 		
 		int i = InnerTable.getSelectedRow(); // 몇번째 줄 인지 알려줌
 		String wkSequence = (String) InnerTable.getValueAt(i, 0); // i번째 행의 0번째(Seqno) 값을 wkSequence에 넣어줌
 		
 		Static_ProductInfo.setProduct_id(Integer.parseInt(wkSequence)); //테이블 클릭한 값을 가져옴 
+		Static_ProductInfo.product_name=(String) InnerTable.getValueAt(i, 1); // 클릭한 테이블의 제품명(i,1)을 스태틱에 담음 
+		
 		bottomInit();
-		AddKioskCartInsert();
+	//	AddKioskCartInsert();
 		
 	}
 	
@@ -328,8 +343,10 @@ public class KioskOrdersCoffee {
 		//Outer_Table.addColumn("상품번호");
 		Outer_Table.addColumn("순번");
 		Outer_Table.addColumn("이름");
+		Outer_Table.addColumn("가격");
+		
 
-		Outer_Table.setColumnCount(2);
+		Outer_Table.setColumnCount(4);
 
 		int i = Outer_Table.getRowCount();
 		for (int j = 0; j < i; j++) {
@@ -348,6 +365,13 @@ public class KioskOrdersCoffee {
 		col = InnerTable.getColumnModel().getColumn(vColIndex);
 		width = 200;
 		col.setPreferredWidth(width);
+		
+		vColIndex = 2;
+		col = InnerTable.getColumnModel().getColumn(vColIndex);
+		width = 190;
+		col.setPreferredWidth(width);
+
+
 
 	}
 	
@@ -366,8 +390,8 @@ public class KioskOrdersCoffee {
 			String[] qTxt = {
 					Integer.toString(dtoList.get(index).getProduct_id()), 
 					dtoList.get(index).getProduct_name(), 
-					//dtoList.get(index).getCart_id()
-					//Integer.toString(dtoList.get(index).getProduct_price())
+				//	Integer.toString(dtoList.get(index).getGetQuantityNum()),
+					Integer.toString(dtoList.get(index).getProduct_price()) 
 				}; // 1행의 박스 할당
 			Outer_Table.addRow(qTxt); // 출력
 		}
@@ -382,11 +406,11 @@ public class KioskOrdersCoffee {
 	
 
 	private void bottomInit() {
-		//Outer_Table.addColumn("상품번호");
-		Outer_Table2.addColumn("");
-		Outer_Table2.addColumn("");
-
-		Outer_Table2.setColumnCount(2);
+		
+		Outer_Table2.addColumn("제품명");
+		Outer_Table2.addColumn("주문번호");
+		Outer_Table2.addColumn("갯수");
+		Outer_Table2.setColumnCount(3);
 
 		int i = Outer_Table2.getRowCount();
 		for (int j = 0; j < i; j++) {
@@ -404,11 +428,15 @@ public class KioskOrdersCoffee {
 		vColIndex = 1;
 		col = InnerTable2.getColumnModel().getColumn(vColIndex);
 //		width = 0;
+		col.setPreferredWidth(70);
+		vColIndex = 2;
+		col = InnerTable2.getColumnModel().getColumn(vColIndex);
+//		width = 0;
 		col.setPreferredWidth(100);
 	}
 	
 
-	private void AddKioskCartInsert() { // bottom cart menu
+	public void AddKioskCartInsert() { // bottom cart menu 메뉴에서 제품 클릭하면 넘어왔던 곳, 옵션 만들고는 그 뒤에 할꺼임 
 		
 	//	KioskDao dao = new KioskDao(Static_ProductInfo.getProduct_id());
 		KioskDao dao = new KioskDao();
@@ -425,10 +453,11 @@ public class KioskOrdersCoffee {
 	}
 
 	private boolean AddKioskCartList() {
-		boolean a;
+
 		KioskDao dao = new KioskDao(); 
 		ArrayList<KioskDto> dtoList = dao.cartSelectList(); // 
 
+		
 		int listCount = dtoList.size(); // 데이터의 열의 수를 나타냄
 		if(listCount>0) {
 			for (int index = 0; index < listCount; index++) {
@@ -436,14 +465,16 @@ public class KioskOrdersCoffee {
 			String[] qTxt = {
 					dtoList.get(index).getProduct_name(),
 					Integer.toString(dtoList.get(index).getCart_id()),
+					Integer.toString(dtoList.get(index).getGetQuantityNum())
+
 				}; // 1행의 박스 할당
-			
+	
 			Outer_Table2.addRow(qTxt); // 출력
 			}
 		}else {
-			return a = false;
+			return false;
 		}
-		return a = true;
+		return true;
 
 	}//searchAction End
 	
@@ -456,6 +487,7 @@ public class KioskOrdersCoffee {
 		String wkSequence = (String) InnerTable2.getValueAt(i, 1); // i번째 행의 0번째(Seqno) 값을 wkSequence에 넣어줌
 		
 		Static_ProductInfo.setCart_id(Integer.parseInt(wkSequence)); //테이블 클릭한 값을 가져옴 
+
 		CartDelete();
 		bottomInit();
 		

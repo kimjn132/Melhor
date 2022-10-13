@@ -23,6 +23,7 @@ import com.javalec.dao.KioskDao;
 import com.javalec.dto.KioskDto;
 import com.javalec.util.DBConnect;
 import com.javalec.util.Static_ProductInfo;
+import com.javalec.util.Static_StoreLocation;
 
 import java.awt.Font;
 import java.awt.Window;
@@ -126,31 +127,7 @@ public class KioskPay {
 	}
 		
 
-	private JLabel getLblOrder() { // 결제하기 누르면 결제 됬다고 JPop나옴 
-		if (lblOrder == null) {
-			lblOrder = new JLabel("결제하기");
-			lblOrder.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					// boolean 값으로 ordertable에 들어가면은 return으로 받은 다음에 잘 들어갔으면 JOption으로완료 안내 
-					//	JOptionPane.showMessageDialog(null,"결제가 완료되었습니다.");
-					
-					if(AddKioskCartList()==true) {
-						InsertOrders();
-						System.out.println("결제하기 버튼 누르면InsertOrders");
-						deleteAllCart();
-						frmMelhorCoffeeKioskPay.setVisible(false);
-						KioskOrdersCoffee.main(null);
-					}else {
-						JOptionPane.showMessageDialog(null,"상품이 아무것도 담겨있지 않습니다.");
-					}
-				}
-			});
-			lblOrder.setFont(new Font("Lucida Grande", Font.PLAIN, 22));
-			lblOrder.setBounds(250, 672, 80, 30);
-		}
-		return lblOrder;
-	}
+	
 	private JLabel getLblCnlth() {
 		if (lblCnlth == null) {
 			lblCnlth = new JLabel("취소하기");
@@ -201,29 +178,7 @@ public class KioskPay {
 	
 
 
-	public boolean deleteAllCart() { // 장바구니 상품에 delete date insert 하기
 	
-		PreparedStatement ps = null;
-		try { // error확인
-
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql, DBConnect.pw_mysql); // database에 접근을 하겠다. (선언자, 실행 x)
-			Statement stmt_mysql = conn_mysql.createStatement(); // Connection conn_mysql 인스턴스를 이용해서 Statement 객체 생성
-
-			String query = "delete from cart;";
-			ps = conn_mysql.prepareStatement(query);
-			ps.executeUpdate(); // insert update method 이거 하나밖에 없다
-				
-			conn_mysql.close(); // close 해야 다른 사람의 DB도 들어올 수 있다.
-
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "에러발생, 매장직원에 문의해 주세요.");
-			return false;
-		}
-		return true;
-	}
 
 	//////// 결제버튼 누른 뒤 order table에 DB넣기
 
@@ -275,23 +230,25 @@ public class KioskPay {
 //
 //	}//searchAction End
 	
-	private boolean AddKioskCartList() { 
+	private boolean AddKioskCartList() { //장바구에 제품이 담기면 true값으로 리턴, 없으면 false 로 다음페이지 안넘어가게,
+										// 장바구니에 내용이 있따면 size 로 값 가져와서 for Moon으로 리스트출력 
 		
 		KioskDao dao = new KioskDao(); 
 		ArrayList<KioskDto> dtoList = dao.cartSelectList(); // 
-
 		int listCount = dtoList.size(); // 데이터의 열의 수를 나타냄
+
 		if(listCount>0) {
 			for (int index = 0; index < listCount; index++) {
-				System.out.println("AddKioskCartList의 ListCount = "+listCount+ " index = "+index);
+				//System.out.println("AddKioskCartList의 ListCount = "+listCount+ " index = "+index);
 			String[] qTxt = {
 					//dtoList.get(index).,
 					dtoList.get(index).getProduct_name()
 				}; // 1행의 박스 할당
 			
-				String result =	dtoList.get(index).getProduct_name();
-				cometomyproductname(result);
-				System.out.println("comtomyproductname's result = "+result);
+//				String result =	dtoList.get(index).getProduct_name();
+				
+//				cometomyproductname(result);
+			//	System.out.println("comtomyproductname's result = "+result);
 			
 			Outer_Table.addRow(qTxt); // 출력
 			}
@@ -306,37 +263,86 @@ public class KioskPay {
 	
 	
 	
-	private void cometomyproductname(String name) {
-		
-		KioskDao dao = new KioskDao(name);
-		dao.cometomyproductname();
-		
+//	private void cometomyproductname(String name) {
+//		
+////		KioskDao dao = new KioskDao(name);
+////		dao.cometomyproductname();
+//		
+//	}
+//	
+	
+	
+	private JLabel getLblOrder() { // 결제하기 누르면 결제 됬다고 JPop나옴 
+		if (lblOrder == null) {
+			lblOrder = new JLabel("결제하기");
+			lblOrder.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// boolean 값으로 ordertable에 들어가면은 return으로 받은 다음에 잘 들어갔으면 JOption으로완료 안내 
+					//	JOptionPane.showMessageDialog(null,"결제가 완료되었습니다.");
+					
+					if(AddKioskCartList()==true) {
+						
+						InsertOrders();
+						deleteAllCart();
+						JOptionPane.showMessageDialog(null, "주문이 완료되었습니다.");
+						frmMelhorCoffeeKioskPay.setVisible(false);
+						System.out.println(Static_StoreLocation.shop_name);
+						
+						// 요거 밑에껄로 속성옵션에다가 넣을꺼임 
+						if(Static_ProductInfo.InOut) {
+							System.out.println(Static_ProductInfo.InOut+"트루면 매장 ");
+						}else {
+							System.out.println(Static_ProductInfo.InOut+"거짓이면 포장 ");
+						}
+						KioskMain.main(null);
+					}else {
+						JOptionPane.showMessageDialog(null,"상품이 아무것도 담겨있지 않습니다.");
+					}
+				}
+			});
+			lblOrder.setFont(new Font("Lucida Grande", Font.PLAIN, 22));
+			lblOrder.setBounds(250, 672, 80, 30);
+		}
+		return lblOrder;
 	}
+	
+	
 	
 	
 	private void InsertOrders() { // 바구니에 있는 제품을 오더테이블에 넣어야 댐 
 		KioskDao insertOrders = new KioskDao();
-		
 		ArrayList<KioskDto> dtoList = insertOrders.cartSelectList(); // 
-		
-		boolean a = insertOrders.InsertOrders();
-		
-		
-		if(a == true) {
-
-			int listCount = dtoList.size(); // 데이터의 열의 수를 나타냄
-				for (int index = 0; index < listCount-1; index++) {
-						insertOrders.InsertOrders();
-						System.out.println("InsertOrders 의 listcount = "+listCount+"index = "+index);
-					}; //
-				JOptionPane.showMessageDialog(null, "주문이 완료되었습니다.");
-				System.out.println("for문 끝나고 나서 보는거 "+listCount);
-		}else {
-			JOptionPane.showMessageDialog(null, "에러발생, 직원에게 문의해 주세요.");
-			
-		}
-		
+			// cartList에 있는 제품을 KioskDto배열로 넣
+				insertOrders.InsertOrdersSQL();
 	}//InsertOrders End 
+	
+	
+	
+	public boolean deleteAllCart() { // 장바구니 상품에 delete date insert 하기
+		
+		PreparedStatement ps = null;
+		try { // error확인
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql, DBConnect.pw_mysql); // database에 접근을 하겠다. (선언자, 실행 x)
+			Statement stmt_mysql = conn_mysql.createStatement(); // Connection conn_mysql 인스턴스를 이용해서 Statement 객체 생성
+
+			String query = "delete from cart;";
+			ps = conn_mysql.prepareStatement(query);
+			ps.executeUpdate(); // insert update method 이거 하나밖에 없다
+				
+			conn_mysql.close(); // close 해야 다른 사람의 DB도 들어올 수 있다.
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "에러발생, 매장직원에 문의해 주세요.");
+			return false;
+		}
+		return true;
+	}
+	
 	
 	
 }//End
