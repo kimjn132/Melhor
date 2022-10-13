@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.javalec.dto.HB_ManagerListDto;
 import com.javalec.dto.HB_staffManageListDto;
 import com.javalec.util.DBConnect;
 import com.javalec.util.HB_Static;
@@ -315,6 +316,9 @@ public class HB_StaffManageListDao {
 		return dto;
 	}	
 		
+	
+	
+	
 	
 	
 }

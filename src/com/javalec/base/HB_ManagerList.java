@@ -38,15 +38,14 @@ public class HB_ManagerList {
 	private JTable Inner_Table;
 	private final DefaultTableModel Outer_Table = new DefaultTableModel();
 	private JLabel lblTotalManagerNumber;
-	private JLabel lblNewLabel_1_1_2;
 	private JComboBox cbManagerInfo;
 	private JTextField tfManagerText;
 	private JButton btnNewButton;
 	private JLabel lblManagerList;
 	private JLabel lblManagerInsert;
-	private JLabel lblBestProductList;
 	private JLabel lblStoreInsert;
 	private JButton btnNewButton_1;
+	private JLabel lblAttendManage;
 
 	/**
 	 * Launch the application.
@@ -96,15 +95,14 @@ public class HB_ManagerList {
 		frame.getContentPane().add(getLblStaffList());
 		frame.getContentPane().add(getScrollPane());
 		frame.getContentPane().add(getLblTotalManagerNumber());
-		frame.getContentPane().add(getLblNewLabel_1_1_2());
 		frame.getContentPane().add(getCbManagerInfo());
 		frame.getContentPane().add(getTfManagerText());
 		frame.getContentPane().add(getBtnNewButton());
 		frame.getContentPane().add(getLblManagerList());
 		frame.getContentPane().add(getLblManagerInsert());
-		frame.getContentPane().add(getLblBestProductList());
 		frame.getContentPane().add(getLblStoreInsert());
 		frame.getContentPane().add(getBtnNewButton_1());
+		frame.getContentPane().add(getLblAttendManage());
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
@@ -124,31 +122,6 @@ public class HB_ManagerList {
 			scrollPane.setViewportView(getInner_Table());
 		}
 		return scrollPane;
-	}
-	private JTable getInner_Table() {
-		if (Inner_Table == null) {
-			Inner_Table = new JTable();
-			Inner_Table.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					if (e.getButton() == 1) { // 버튼이 눌리면
-
-						int i = Inner_Table.getSelectedRow(); // 클릭한 데이터가 몇번째 줄 인지 알려줌
-						String wkSequence = (String) Inner_Table.getValueAt(i, 3); // 해당하는 행의 i번째 데이터행 중 1번째에 있는 데이터를 wkSequence 변수에 저장 
-//						wkSequence에는 employee_id 값이 저장
-						
-						HB_Static.setEmployee_id(Integer.parseInt(wkSequence)); // static으로 Shop_number 값을 저장 후 필요할 때 가져와서 사용
-						HB_ManagerSalesStatus.main(null); // 저장 후 다른 화면 띄워줌
-						frame.setVisible(false);
-						
-					}
-				}
-			});
-			
-			Inner_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			Inner_Table.setModel(Outer_Table);
-		}
-		return Inner_Table;
 	}
 	private JLabel getLblTotalManagerNumber() {
 		if (lblTotalManagerNumber == null) {
@@ -214,24 +187,6 @@ public class HB_ManagerList {
 		}
 		return lblStaffList;
 	}
-	
-	private JLabel getLblNewLabel_1_1_2() {
-		if (lblNewLabel_1_1_2 == null) {
-			lblNewLabel_1_1_2 = new JLabel("고객 만족도");
-			lblNewLabel_1_1_2.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					
-				}
-			});
-			lblNewLabel_1_1_2.setOpaque(true);
-			lblNewLabel_1_1_2.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1_1_2.setForeground(Color.BLACK);
-			lblNewLabel_1_1_2.setBackground(new Color(227, 147, 132));
-			lblNewLabel_1_1_2.setBounds(0, 147, 114, 39);
-		}
-		return lblNewLabel_1_1_2;
-	}
 	private JLabel getLblManagerList() {
 		if (lblManagerList == null) {
 			lblManagerList = new JLabel("점장 리스트");
@@ -258,30 +213,10 @@ public class HB_ManagerList {
 			lblManagerInsert.setHorizontalAlignment(SwingConstants.CENTER);
 			lblManagerInsert.setForeground(Color.BLACK);
 			lblManagerInsert.setBackground(new Color(227, 147, 132));
-			lblManagerInsert.setBounds(0, 225, 114, 39);
+			lblManagerInsert.setBounds(0, 147, 114, 39);
 		}
 		return lblManagerInsert;
 	}
-	private JLabel getLblBestProductList() {
-		if (lblBestProductList == null) {
-			lblBestProductList = new JLabel("인기메뉴 리스트");
-			lblBestProductList.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					
-					HB_BestProductList.main(null);
-					frame.setVisible(false);
-					
-				}
-			});
-			lblBestProductList.setOpaque(true);
-			lblBestProductList.setHorizontalAlignment(SwingConstants.CENTER);
-			lblBestProductList.setBackground(new Color(235, 199, 189));
-			lblBestProductList.setBounds(0, 264, 114, 39);
-		}
-		return lblBestProductList;
-	}
-	
 	private JLabel getLblStoreInsert() {
 		if (lblStoreInsert == null) {
 			lblStoreInsert = new JLabel("지점 등록");
@@ -298,11 +233,29 @@ public class HB_ManagerList {
 			lblStoreInsert.setHorizontalAlignment(SwingConstants.CENTER);
 			lblStoreInsert.setForeground(Color.BLACK);
 			lblStoreInsert.setBackground(new Color(227, 147, 132));
-			lblStoreInsert.setBounds(0, 303, 114, 39);
+			lblStoreInsert.setBounds(0, 225, 114, 39);
 		}
 		return lblStoreInsert;
 	}
-	
+	private JLabel getLblAttendManage() {
+		if (lblAttendManage == null) {
+			lblAttendManage = new JLabel("출근 관리");
+			lblAttendManage.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+					HB_AttendManage.main(null);
+					frame.setVisible(false);
+					
+				}
+			});
+			lblAttendManage.setOpaque(true);
+			lblAttendManage.setHorizontalAlignment(SwingConstants.CENTER);
+			lblAttendManage.setBackground(new Color(235, 199, 189));
+			lblAttendManage.setBounds(0, 264, 114, 39);
+		}
+		return lblAttendManage;
+	}
 	// --------------------------------- Action Listener -------------------------------------------
 	
 	private JButton getBtnNewButton() {
@@ -338,6 +291,34 @@ public class HB_ManagerList {
 		return btnNewButton_1;
 	}
 	
+	private JTable getInner_Table() {
+		if (Inner_Table == null) {
+			Inner_Table = new JTable();
+			Inner_Table.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (e.getButton() == 1) { // 버튼이 눌리면
+
+						int i = Inner_Table.getSelectedRow(); // 클릭한 데이터가 몇번째 줄 인지 알려줌
+						String managerId = (String) Inner_Table.getValueAt(i, 1); // 해당하는 행의 i번째 데이터행 중 1번째에 있는 데이터를 wkSequence 변수에 저장 
+						String shopNumber = (String) Inner_Table.getValueAt(i, 6);
+//						wkSequence에는 employee_id 값이 저장
+						
+						HB_Static.setEmployee_id(Integer.parseInt(managerId)); // static으로 Shop_number 값을 저장 후 필요할 때 가져와서 사용
+						HB_Static.setShop_number(Integer.parseInt(shopNumber));
+						HB_ManagerSalesStatus.main(null); // 저장 후 다른 화면 띄워줌
+						frame.setVisible(false);
+						
+					}
+				}
+			});
+			
+			Inner_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			Inner_Table.setModel(Outer_Table);
+		}
+		return Inner_Table;
+	}
+	
 	// --------------------------------- Action Listener -------------------------------------------
 	
 	// -----------------------------------------------------------------------------------
@@ -345,13 +326,14 @@ public class HB_ManagerList {
 	private void managerTableInit() {
 		
 		Outer_Table.addColumn("점장 이름");
+		Outer_Table.addColumn("점장 사번");
 		Outer_Table.addColumn("지점명");
 		Outer_Table.addColumn("지점 주소");
-		Outer_Table.addColumn("사원번호");
 		Outer_Table.addColumn("전화번호");
 		Outer_Table.addColumn("입사날짜");
+		Outer_Table.addColumn("지점번호");
 		
-		Outer_Table.setColumnCount(6);
+		Outer_Table.setColumnCount(7);
 		
 		int i = Outer_Table.getRowCount();
 		
@@ -363,30 +345,35 @@ public class HB_ManagerList {
 			
 			int vColIndex = 0;
 			TableColumn col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			int width = 94;
+			int width = 80;
 			col.setPreferredWidth(width);
-	
+
 			vColIndex = 1;
 			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			width = 94;
-			col.setPreferredWidth(width);
-	
-			vColIndex = 2;
-			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			width = 94;
+			width = 70;
 			col.setPreferredWidth(width);
 			
+			vColIndex = 2;
+			col = Inner_Table.getColumnModel().getColumn(vColIndex);
+			width = 60;
+			col.setPreferredWidth(width);
+	
 			vColIndex = 3;
 			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			width = 94;
+			width = 164;
 			col.setPreferredWidth(width);
 			
 			vColIndex = 4;
 			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			width = 94;
+			width = 100;
 			col.setPreferredWidth(width);
 	
 			vColIndex = 5;
+			col = Inner_Table.getColumnModel().getColumn(vColIndex);
+			width = 94;
+			col.setPreferredWidth(width);
+			
+			vColIndex = 6;
 			col = Inner_Table.getColumnModel().getColumn(vColIndex);
 			width = 94;
 			col.setPreferredWidth(width);
@@ -421,8 +408,8 @@ public class HB_ManagerList {
 		int listCount = dtoList.size();
 
 		for (int i = 0; i < listCount; i++) {
-			String[] qTxt = { dtoList.get(i).getEmployee_name(), dtoList.get(i).getShop_name(), dtoList.get(i).getShop_address() ,Integer.toString(dtoList.get(i).getEmployee_id()),
-					dtoList.get(i).getEmployee_telno(), dtoList.get(i).getEmployee_in_date()};
+			String[] qTxt = { dtoList.get(i).getEmployee_name(), Integer.toString(dtoList.get(i).getEmployee_id()), dtoList.get(i).getShop_name(), dtoList.get(i).getShop_address(),
+					dtoList.get(i).getEmployee_telno(), dtoList.get(i).getEmployee_in_date(), Integer.toString(dtoList.get(i).getEmployee_shop_number())};
 			Outer_Table.addRow(qTxt);
 		}
 		// 총 직원 수를 listCount의 개수로 출력

@@ -8,13 +8,23 @@ public class HB_shopListDto {
 	String shop_telno;
 	int employee_id;
 	int order_salePrice;
-	
+	String product_name;
+	int order_quantity;
 	
 	
 	public HB_shopListDto() {
 		// TODO Auto-generated constructor stub
 	}
 	
+
+
+
+	public HB_shopListDto(int order_quantity, String product_name) {
+		super();
+		this.order_quantity = order_quantity;
+		this.product_name = product_name;
+	}
+
 
 
 
@@ -90,6 +100,24 @@ public class HB_shopListDto {
 	}
 	public void setEmployee_id(int employee_id) {
 		this.employee_id = employee_id;
+	}
+	public int getOrder_salePrice() {
+		return order_salePrice;
+	}
+	public void setOrder_salePrice(int order_salePrice) {
+		this.order_salePrice = order_salePrice;
+	}
+	public String getProduct_name() {
+		return product_name;
+	}
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+	public int getOrder_quantity() {
+		return order_quantity;
+	}
+	public void setOrder_quantity(int order_quantity) {
+		this.order_quantity = order_quantity;
 	}
 	
 	

@@ -11,25 +11,29 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import com.javalec.dao.HB_AttendManageDao;
 import com.javalec.dao.HB_StaffManageListDao;
+import com.javalec.dto.HB_AttendManageDto;
 import com.javalec.dto.HB_staffManageListDto;
 import com.javalec.util.HB_Static;
 
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ListSelectionModel;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
-public class HB_StaffManageList {
+public class HB_AttendManage {
 
 	private JFrame frame;
 	private JLabel lblNewLabel;
@@ -38,17 +42,18 @@ public class HB_StaffManageList {
 	private JScrollPane scrollPane;
 	private JTable Inner_Table;
 	private final DefaultTableModel Outer_Table = new DefaultTableModel();
-	private JLabel lblTotalStaffNumber;
 	private JComboBox cbStaffInfo;
-	private JTextField tfStaffText;
+	private JTextField tfSearchText;
 	private JButton btnNewButton;
 	private JLabel lblManagerList;
 	private JLabel lblManagerInsert;
 	private JLabel lblStoreInsert;
-	private JButton btnNewButton_1;
-	private JLabel lblStaffSalesNumber;
 	private JLabel lblAttendManage;
-
+	private JRadioButton rbManager;
+	private JRadioButton rbStaff;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JComboBox cbMonth;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -56,7 +61,7 @@ public class HB_StaffManageList {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					HB_StaffManageList window = new HB_StaffManageList();
+					HB_AttendManage window = new HB_AttendManage();
 					window.frame.setVisible(true);
 					window.frame.setLocationRelativeTo(null);
 					window.frame.setSize(697,542);
@@ -71,7 +76,7 @@ public class HB_StaffManageList {
 	/**
 	 * Create the application.
 	 */
-	public HB_StaffManageList() {
+	public HB_AttendManage() {
 		initialize();
 	}
 
@@ -80,14 +85,13 @@ public class HB_StaffManageList {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("알바생 리스트");
+		frame.setTitle("출근 관리 리스트");
 		frame.addWindowListener(new WindowAdapter() {
 
 			@Override
 			public void windowActivated(WindowEvent e) {
-				staffTableInit();
-				staffSearchAction();
-				staffSalesNumber();
+				attendTableInit();
+				attendManageList();
 			}
 		});
 		frame.setBounds(100, 100, 697, 541);
@@ -96,17 +100,17 @@ public class HB_StaffManageList {
 		frame.getContentPane().add(getLblNewLabel());
 		frame.getContentPane().add(getLblSalesStatus());
 		frame.getContentPane().add(getLblStaffList());
-		frame.getContentPane().add(getScrollPane());
-		frame.getContentPane().add(getLblTotalStaffNumber());
 		frame.getContentPane().add(getCbStaffInfo());
-		frame.getContentPane().add(getTfStaffText());
-		frame.getContentPane().add(getBtnNewButton());
+		frame.getContentPane().add(getTfSearchText());
 		frame.getContentPane().add(getLblManagerList());
 		frame.getContentPane().add(getLblManagerInsert());
 		frame.getContentPane().add(getLblStoreInsert());
-		frame.getContentPane().add(getBtnNewButton_1());
-		frame.getContentPane().add(getLblStaffSalesNumber());
 		frame.getContentPane().add(getLblAttendManage());
+		frame.getContentPane().add(getBtnNewButton());
+		frame.getContentPane().add(getScrollPane());
+		frame.getContentPane().add(getRbManager());
+		frame.getContentPane().add(getRbStaff());
+		frame.getContentPane().add(getCbMonth());
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
@@ -120,37 +124,21 @@ public class HB_StaffManageList {
 		return lblNewLabel;
 	}
 	
-	private JScrollPane getScrollPane() {
-		if (scrollPane == null) {
-			scrollPane = new JScrollPane();
-			scrollPane.setBounds(115, 106, 568, 238);
-			scrollPane.setViewportView(getInner_Table());
-		}
-		return scrollPane;
-	}
-	private JLabel getLblTotalStaffNumber() {
-		if (lblTotalStaffNumber == null) {
-			lblTotalStaffNumber = new JLabel("총 직원 수");
-			lblTotalStaffNumber.setBounds(115, 354, 163, 25);
-		}
-		return lblTotalStaffNumber;
-	}
-	
 	private JComboBox getCbStaffInfo() {
 		if (cbStaffInfo == null) {
 			cbStaffInfo = new JComboBox();
-			cbStaffInfo.setModel(new DefaultComboBoxModel(new String[] {"알바생 이름"}));
+			cbStaffInfo.setModel(new DefaultComboBoxModel(new String[] {"이름"}));
 			cbStaffInfo.setBounds(115, 69, 125, 39);
 		}
 		return cbStaffInfo;
 	}
-	private JTextField getTfStaffText() {
-		if (tfStaffText == null) {
-			tfStaffText = new JTextField();
-			tfStaffText.setBounds(241, 69, 346, 39);
-			tfStaffText.setColumns(10);
+	private JTextField getTfSearchText() {
+		if (tfSearchText == null) {
+			tfSearchText = new JTextField();
+			tfSearchText.setBounds(241, 69, 346, 39);
+			tfSearchText.setColumns(10);
 		}
-		return tfStaffText;
+		return tfSearchText;
 	}
 	private JLabel getLblSalesStatus() {
 		if (lblSalesStatus == null) {
@@ -247,15 +235,6 @@ public class HB_StaffManageList {
 	private JLabel getLblAttendManage() {
 		if (lblAttendManage == null) {
 			lblAttendManage = new JLabel("출근 관리");
-			lblAttendManage.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					
-					HB_AttendManage.main(null);
-					frame.setVisible(false);
-					
-				}
-			});
 			lblAttendManage.setOpaque(true);
 			lblAttendManage.setHorizontalAlignment(SwingConstants.CENTER);
 			lblAttendManage.setBackground(new Color(235, 199, 189));
@@ -263,17 +242,30 @@ public class HB_StaffManageList {
 		}
 		return lblAttendManage;
 	}
-	
-	private JLabel getLblStaffSalesNumber() {
-		if (lblStaffSalesNumber == null) {
-			lblStaffSalesNumber = new JLabel("New label");
-			lblStaffSalesNumber.setBounds(115, 389, 556, 31);
+
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("검색");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+
+					
+
+				}
+			});
+			btnNewButton.setBounds(586, 69, 97, 39);
 		}
-		return lblStaffSalesNumber;
+		return btnNewButton;
 	}
 	
-	// --------------------------------- Action Listener -------------------------------------------
-	
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setBounds(115, 133, 556, 296);
+			scrollPane.setViewportView(getInner_Table());
+		}
+		return scrollPane;
+	}
 	private JTable getInner_Table() {
 		if (Inner_Table == null) {
 			Inner_Table = new JTable();
@@ -284,13 +276,6 @@ public class HB_StaffManageList {
 					// Table 데이터 클릭 하였을 경우
 					if(e.getButton() == 1) { // 버튼이 눌리면
 						
-						int i = Inner_Table.getSelectedRow(); // 클릭한 데이터가 몇번째 줄 인지 알려줌
-						String wkSequence = (String) Inner_Table.getValueAt(i, 1); // 해당하는 행의 i번째 데이터행 중 2번째에 있는 데이터를 wkSequence 변수에 저장 
-//						wkSequence에는 employee_id 값이 저장
-
-						HB_Static.setEmployee_id(Integer.parseInt(wkSequence)); // static으로 employee_id 값을 저장 후 필요할 때 가져와서 사용
-						HB_StaffSalesStatus.main(null); // 저장 후 다른 화면 띄워줌
-						frame.setVisible(false);
 						
 					}
 					
@@ -302,131 +287,161 @@ public class HB_StaffManageList {
 		}
 		return Inner_Table;
 	}
-	
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("검색");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-
-					staffTableInit();
-					staffSearchAction();
-					
-
-				}
-			});
-			btnNewButton.setBounds(586, 69, 97, 39);
-			Inner_Table.setModel(Outer_Table);
-		}
-		return btnNewButton;
-	}
-	
-	private JButton getBtnNewButton_1() {
-		if (btnNewButton_1 == null) {
-			btnNewButton_1 = new JButton("로그아웃");
-			btnNewButton_1.addActionListener(new ActionListener() {
+	private JRadioButton getRbManager() {
+		if (rbManager == null) {
+			rbManager = new JRadioButton("점장");
+			rbManager.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					HB_ExcutiveLogin.main(null);
-					frame.setVisible(false);
-					HB_Static.setEmployee_id(0);
+					attendTableInit();
+					attendManageList();
 					
 				}
 			});
-			btnNewButton_1.setBounds(563, 24, 108, 25);
+			buttonGroup.add(rbManager);
+			rbManager.setSelected(true);
+			rbManager.setBounds(612, 108, 59, 23);
 		}
-		return btnNewButton_1;
+		return rbManager;
+	}
+	private JRadioButton getRbStaff() {
+		if (rbStaff == null) {
+			rbStaff = new JRadioButton("알바생");
+			rbStaff.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					attendTableInit();
+					attendManageList();
+					
+				}
+			});
+			buttonGroup.add(rbStaff);
+			rbStaff.setSelected(true);
+			rbStaff.setBounds(531, 108, 77, 23);
+		}
+		return rbStaff;
+	}
+	private JComboBox getCbMonth() {
+		if (cbMonth == null) {
+			cbMonth = new JComboBox();
+			cbMonth.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					if(cbMonth.getSelectedItem() == "1월") {
+						HB_Static.setMonth(0);
+					} else if(cbMonth.getSelectedItem() == "2월") {
+						HB_Static.setMonth(2);
+					} else if(cbMonth.getSelectedItem() == "3월") {
+						HB_Static.setMonth(3);
+					} else if(cbMonth.getSelectedItem() == "4월") {
+						HB_Static.setMonth(4);
+					} else if(cbMonth.getSelectedItem() == "5월") {
+						HB_Static.setMonth(5);
+					} else if(cbMonth.getSelectedItem() == "6월") {
+						HB_Static.setMonth(6);
+					} else if(cbMonth.getSelectedItem() == "7월") {
+						HB_Static.setMonth(7);
+					} else if(cbMonth.getSelectedItem() == "8월") {
+						HB_Static.setMonth(8);
+					} else if(cbMonth.getSelectedItem() == "9월") {
+						HB_Static.setMonth(9);
+					} else if(cbMonth.getSelectedItem() == "10월") {
+						HB_Static.setMonth(10);
+					} else if(cbMonth.getSelectedItem() == "11월") {
+						HB_Static.setMonth(11);
+					} else if(cbMonth.getSelectedItem() == "12월") {
+						HB_Static.setMonth(12);
+					}
+					
+					attendTableInit();
+					attendManageList();
+					
+				}
+			});
+			cbMonth.setModel(new DefaultComboBoxModel(new String[] {"1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"}));
+			cbMonth.setBounds(436, 108, 87, 23);
+		}
+		return cbMonth;
 	}
 	
-	// --------------------------------- Action Listener -------------------------------------------
 	
-	// -----------------------------------------------------------------------------------
 	
-	private void staffTableInit() {
-		
-		Outer_Table.addColumn("이름");
+	// -------------------------------------------------------------------------------------------------
+
+	private void attendTableInit() {
+
 		Outer_Table.addColumn("사원번호");
-		Outer_Table.addColumn("전화번호");
-		Outer_Table.addColumn("입사날짜");
-		
+		Outer_Table.addColumn("이름");
+		Outer_Table.addColumn("지점");
+		Outer_Table.addColumn("출근횟수");
+
 		Outer_Table.setColumnCount(4);
-		
+
 		int i = Outer_Table.getRowCount();
-		
-		for(int j = 0; j < i; j++) {
+
+		for (int j = 0; j < i; j++) {
 			Outer_Table.removeRow(0);
 		}
-		
-			Inner_Table.setAutoResizeMode(Inner_Table.AUTO_RESIZE_OFF);
-			
-			int vColIndex = 0;
-			TableColumn col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			int width = 141;
-			col.setPreferredWidth(width);
-	
-			vColIndex = 1;
-			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			col.setPreferredWidth(width);
-	
-			vColIndex = 2;
-			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			col.setPreferredWidth(width);
-	
-			vColIndex = 3;
-			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			col.setPreferredWidth(width);
 
+		Inner_Table.setAutoResizeMode(Inner_Table.AUTO_RESIZE_OFF);
+
+		int vColIndex = 0;
+		TableColumn col = Inner_Table.getColumnModel().getColumn(vColIndex);
+		int width = 100;
+		col.setPreferredWidth(width);
+
+		vColIndex = 1;
+		col = Inner_Table.getColumnModel().getColumn(vColIndex);
+		width = 120;
+		col.setPreferredWidth(width);
+
+		vColIndex = 2;
+		col = Inner_Table.getColumnModel().getColumn(vColIndex);
+		width = 110;
+		col.setPreferredWidth(width);
+
+		vColIndex = 3;
+		col = Inner_Table.getColumnModel().getColumn(vColIndex);
+		width = 100;
+		col.setPreferredWidth(width);
 
 	}
 	
-	// 총 직원 리스트 출력 메소드
-	public void staffSearchAction() {
-		/* 
-		 콤보 박스에서 SelectedItem으로 가져온 값을
-		 result 값으로 변환하여 MySQL like문 작성
-		*/
+	
+	public void attendManageList() {
 		
+		/*
+		 * 콤보 박스에서 SelectedItem으로 가져온 값을 result 값으로 변환하여 MySQL like문 작성
+		 */
 		String result = "";
-		String staffText = tfStaffText.getText();
-		
-		if ((String) cbStaffInfo.getSelectedItem() == "알바생 이름") {
-			result = "e.employee_name"; // employee Table 컬럼명
+		String searchText = tfSearchText.getText();
+		int rbEmployee = 0;
 
+		if ((String) cbStaffInfo.getSelectedItem() == "이름") {
+			result = "e.employee_name"; // employee Table 컬럼명
 		}
 
+		if(rbManager.isSelected() == true) {
+			rbEmployee = 1;
+		} else if(rbStaff.isSelected() == true) {
+			rbEmployee = 2;
+		}
+		
+		
+		
+		HB_AttendManageDao dao = new HB_AttendManageDao(result, searchText);
 
-		HB_StaffManageListDao dao = new HB_StaffManageListDao(result, staffText); // 콤보박스, 텍스트필드 값 Dao로 전달
-		
-		ArrayList<HB_staffManageListDto> dtoList1 = dao.employeeStaffList();
-		
-		int listCount = dtoList1.size();
+		ArrayList<HB_AttendManageDto> dtoList = dao.attendManageList(rbEmployee);
+		int listCount = dtoList.size();
 
 		for (int i = 0; i < listCount; i++) {
-			String[] qTxt = {dtoList1.get(i).getEmployee_name(), Integer.toString(dtoList1.get(i).getEmployee_id()), 
-							 dtoList1.get(i).getEmployee_telno(), dtoList1.get(i).getEmployee_in_date()};
-			
+			String[] qTxt = {Integer.toString(dtoList.get(i).getEmployee_id()), dtoList.get(i).getEmployee_name(), 
+					dtoList.get(i).getShop_name(), Integer.toString(dtoList.get(i).getAteend_count())};
+
 			Outer_Table.addRow(qTxt);
 		}
-		// 총 직원 수를 listCount의 개수로 출력
-		lblTotalStaffNumber.setText("총 직원 수: " + Integer.toString(listCount) + "명");
-		
-	}
 
-	
-	
-	private void staffSalesNumber() {
-		
-		HB_StaffManageListDao dao = new HB_StaffManageListDao();
-		HB_staffManageListDto dto = dao.staffSalesNumber();
-		
-		lblStaffSalesNumber.setText(dto.getEmployee_name() + "님의 총 판매 건수는 " + dto.getManufact_quantity() + "건으로 금일 판매실적이 가장 높습니다.");
-		
 	}
-	
-	
-	
-	
-	
 	
 	
 	

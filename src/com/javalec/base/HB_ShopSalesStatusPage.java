@@ -39,13 +39,11 @@ public class HB_ShopSalesStatusPage extends JFrame {
 	private JScrollPane scrollPane;
 	private JTable Inner_Table;
 	private JLabel lblTotalSales;
-	private JLabel lblNewLabel_1_1_2;
 	private JComboBox cbShop;
 	private JTextField tfShopText;
 	private JButton btnNewButton;
 	private JLabel lblManagerList;
 	private JLabel lblManagerInsert;
-	private JLabel lblBestProductList;
 	private JLabel lblStoreInsert;
 	private JButton btnNewButton_1;
 	
@@ -54,6 +52,7 @@ public class HB_ShopSalesStatusPage extends JFrame {
 	private JLabel lblTotalShopNumber;
 	private JLabel lblTodaySales;
 	private JLabel lblListCount;
+	private JLabel lblAttendManage;
 	
 	/**
 	 * Launch the application.
@@ -104,18 +103,17 @@ public class HB_ShopSalesStatusPage extends JFrame {
 		frame.getContentPane().add(getLblStaffList());
 		frame.getContentPane().add(getScrollPane());
 		frame.getContentPane().add(getLblTotalSales());
-		frame.getContentPane().add(getLblNewLabel_1_1_2());
 		frame.getContentPane().add(getCbShop());
 		frame.getContentPane().add(getTfShopText());
 		frame.getContentPane().add(getBtnNewButton());
 		frame.getContentPane().add(getLblManagerList());
 		frame.getContentPane().add(getLblManagerInsert());
-		frame.getContentPane().add(getLblBestProductList());
 		frame.getContentPane().add(getLblStoreInsert());
 		frame.getContentPane().add(getLblTotalShopNumber());
 		frame.getContentPane().add(getBtnNewButton_1());
 		frame.getContentPane().add(getLblTodaySales());
 		frame.getContentPane().add(getLblListCount());
+		frame.getContentPane().add(getLblAttendManage());
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
@@ -205,24 +203,6 @@ public class HB_ShopSalesStatusPage extends JFrame {
 		}
 		return lblStaffList;
 	}
-	
-	private JLabel getLblNewLabel_1_1_2() {
-		if (lblNewLabel_1_1_2 == null) {
-			lblNewLabel_1_1_2 = new JLabel("고객 만족도");
-			lblNewLabel_1_1_2.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					
-				}
-			});
-			lblNewLabel_1_1_2.setOpaque(true);
-			lblNewLabel_1_1_2.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1_1_2.setForeground(Color.BLACK);
-			lblNewLabel_1_1_2.setBackground(new Color(227, 147, 132));
-			lblNewLabel_1_1_2.setBounds(0, 147, 114, 39);
-		}
-		return lblNewLabel_1_1_2;
-	}
 	private JLabel getLblManagerList() {
 		if (lblManagerList == null) {
 			lblManagerList = new JLabel("점장 리스트");
@@ -258,28 +238,9 @@ public class HB_ShopSalesStatusPage extends JFrame {
 			lblManagerInsert.setHorizontalAlignment(SwingConstants.CENTER);
 			lblManagerInsert.setForeground(Color.BLACK);
 			lblManagerInsert.setBackground(new Color(227, 147, 132));
-			lblManagerInsert.setBounds(0, 225, 114, 39);
+			lblManagerInsert.setBounds(0, 147, 114, 39);
 		}
 		return lblManagerInsert;
-	}
-	private JLabel getLblBestProductList() {
-		if (lblBestProductList == null) {
-			lblBestProductList = new JLabel("인기메뉴 리스트");
-			lblBestProductList.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					
-					HB_BestProductList.main(null);
-					frame.setVisible(false);
-					
-				}
-			});
-			lblBestProductList.setOpaque(true);
-			lblBestProductList.setHorizontalAlignment(SwingConstants.CENTER);
-			lblBestProductList.setBackground(new Color(235, 199, 189));
-			lblBestProductList.setBounds(0, 264, 114, 39);
-		}
-		return lblBestProductList;
 	}
 	private JLabel getLblStoreInsert() {
 		if (lblStoreInsert == null) {
@@ -297,11 +258,29 @@ public class HB_ShopSalesStatusPage extends JFrame {
 			lblStoreInsert.setHorizontalAlignment(SwingConstants.CENTER);
 			lblStoreInsert.setForeground(Color.BLACK);
 			lblStoreInsert.setBackground(new Color(227, 147, 132));
-			lblStoreInsert.setBounds(0, 303, 114, 39);
+			lblStoreInsert.setBounds(0, 225, 114, 39);
 		}
 		return lblStoreInsert;
 	}
-	
+	private JLabel getLblAttendManage() {
+		if (lblAttendManage == null) {
+			lblAttendManage = new JLabel("출근 관리");
+			lblAttendManage.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+					HB_AttendManage.main(null);
+					frame.setVisible(false);
+					
+				}
+			});
+			lblAttendManage.setOpaque(true);
+			lblAttendManage.setHorizontalAlignment(SwingConstants.CENTER);
+			lblAttendManage.setBackground(new Color(235, 199, 189));
+			lblAttendManage.setBounds(0, 264, 114, 39);
+		}
+		return lblAttendManage;
+	}
 	private JLabel getLblTodaySales() {
 		if (lblTodaySales == null) {
 			lblTodaySales = new JLabel("");
@@ -317,6 +296,7 @@ public class HB_ShopSalesStatusPage extends JFrame {
 		}
 		return lblListCount;
 	}
+	
 	
 	// --------------------------------- Action Listener -------------------------------------------
 	
@@ -421,12 +401,12 @@ public class HB_ShopSalesStatusPage extends JFrame {
 	
 			vColIndex = 3;
 			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			width = 100;
+			width = 235;
 			col.setPreferredWidth(width);
 
 			vColIndex = 4;
 			col = Inner_Table.getColumnModel().getColumn(vColIndex);
-			width = 134;
+			width = 100;
 			col.setPreferredWidth(width);
 			
 	}

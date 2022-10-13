@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import com.javalec.dao.HB_ManagerAppointDao;
 import com.javalec.dao.HB_ShopInsertDao;
 import com.javalec.util.HB_Static;
 
@@ -26,10 +25,8 @@ public class HB_ShopInsert {
 	private JLabel lblNewLabel;
 	private JLabel lblSalesStatus;
 	private JLabel lblStaffList;
-	private JLabel lblNewLabel_1_1_2;
 	private JLabel lblManagerList;
 	private JLabel lblManagerInsert;
-	private JLabel lblBestProductList;
 	private JLabel lblStoreInsert;
 	private JLabel lblNewLabel_1;
 	private JTextField tfShopName;
@@ -42,6 +39,7 @@ public class HB_ShopInsert {
 	private JTextField tfEmployeeId;
 	private JButton btnRename;
 	private JButton btnNewButton_1;
+	private JLabel lblAttendManage;
 
 	/**
 	 * Launch the application.
@@ -81,10 +79,8 @@ public class HB_ShopInsert {
 		frame.getContentPane().add(getLblNewLabel());
 		frame.getContentPane().add(getLblSalesStatus());
 		frame.getContentPane().add(getLblStaffList());
-		frame.getContentPane().add(getLblNewLabel_1_1_2());
 		frame.getContentPane().add(getLblManagerList());
 		frame.getContentPane().add(getLblManagerInsert());
-		frame.getContentPane().add(getLblBestProductList());
 		frame.getContentPane().add(getLblNewLabel_1());
 		frame.getContentPane().add(getTextField_1());
 		frame.getContentPane().add(getLblNewLabel_1_1());
@@ -97,6 +93,7 @@ public class HB_ShopInsert {
 		frame.getContentPane().add(getTfEmployeeId());
 		frame.getContentPane().add(getBtnRename());
 		frame.getContentPane().add(getBtnNewButton_1());
+		frame.getContentPane().add(getLblAttendManage());
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
@@ -150,24 +147,6 @@ public class HB_ShopInsert {
 		}
 		return lblStaffList;
 	}
-	
-	private JLabel getLblNewLabel_1_1_2() {
-		if (lblNewLabel_1_1_2 == null) {
-			lblNewLabel_1_1_2 = new JLabel("고객 만족도");
-			lblNewLabel_1_1_2.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					
-				}
-			});
-			lblNewLabel_1_1_2.setOpaque(true);
-			lblNewLabel_1_1_2.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1_1_2.setForeground(Color.BLACK);
-			lblNewLabel_1_1_2.setBackground(new Color(227, 147, 132));
-			lblNewLabel_1_1_2.setBounds(0, 147, 114, 39);
-		}
-		return lblNewLabel_1_1_2;
-	}
 	private JLabel getLblManagerList() {
 		if (lblManagerList == null) {
 			lblManagerList = new JLabel("점장 리스트");
@@ -203,30 +182,29 @@ public class HB_ShopInsert {
 			lblManagerInsert.setHorizontalAlignment(SwingConstants.CENTER);
 			lblManagerInsert.setForeground(Color.BLACK);
 			lblManagerInsert.setBackground(new Color(227, 147, 132));
-			lblManagerInsert.setBounds(0, 225, 114, 39);
+			lblManagerInsert.setBounds(0, 147, 114, 39);
 		}
 		return lblManagerInsert;
 	}
-	private JLabel getLblBestProductList() {
-		if (lblBestProductList == null) {
-			lblBestProductList = new JLabel("인기메뉴 리스트");
-			lblBestProductList.addMouseListener(new MouseAdapter() {
+	private JLabel getLblAttendManage() {
+		if (lblAttendManage == null) {
+			lblAttendManage = new JLabel("출근 관리");
+			lblAttendManage.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					
-					HB_BestProductList.main(null);
+					HB_AttendManage.main(null);
 					frame.setVisible(false);
 					
 				}
 			});
-			lblBestProductList.setOpaque(true);
-			lblBestProductList.setHorizontalAlignment(SwingConstants.CENTER);
-			lblBestProductList.setBackground(new Color(235, 199, 189));
-			lblBestProductList.setBounds(0, 264, 114, 39);
+			lblAttendManage.setOpaque(true);
+			lblAttendManage.setHorizontalAlignment(SwingConstants.CENTER);
+			lblAttendManage.setBackground(new Color(235, 199, 189));
+			lblAttendManage.setBounds(0, 264, 114, 39);
 		}
-		return lblBestProductList;
+		return lblAttendManage;
 	}
-
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("지점명 :");
@@ -291,7 +269,7 @@ public class HB_ShopInsert {
 			lblStoreInsert.setHorizontalAlignment(SwingConstants.CENTER);
 			lblStoreInsert.setForeground(Color.BLACK);
 			lblStoreInsert.setBackground(new Color(227, 147, 132));
-			lblStoreInsert.setBounds(0, 303, 114, 39);
+			lblStoreInsert.setBounds(0, 225, 114, 39);
 		}
 		return lblStoreInsert;
 	}
