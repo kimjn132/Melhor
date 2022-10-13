@@ -10,16 +10,24 @@ import javax.swing.JLabel;
 
 import com.javalec.dao.KioskDao;
 import com.javalec.dto.KioskDto;
+import com.javalec.util.DBConnect;
 import com.javalec.util.Static_ProductInfo;
+import com.javalec.util.Static_StoreLocation;
 
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class KioskMain {
 //	private JFrame frame;
@@ -66,6 +74,7 @@ public class KioskMain {
 		frmMelhorCoffeeKiosk.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent e) {
+				addComboShopName();
 				Timer timer = new Timer();
 				TimerTask task = new TimerTask() {
 					
@@ -75,13 +84,13 @@ public class KioskMain {
 						switch(count%3) {
 						case 1 : background.setIcon(new ImageIcon(KioskMain.class.getResource(backImg[0])));	break;
 						case 2 : background.setIcon(new ImageIcon(KioskMain.class.getResource(backImg[1])));	break;
-				
+	
 						}
 						
 					}
 				};
 				
-				timer.schedule(task, 0, 1400);
+				timer.schedule(task, 0, 1900);
 
 			}
 		});
@@ -109,7 +118,7 @@ public class KioskMain {
 					frmMelhorCoffeeKiosk.setVisible(false);
 					KioskOrdersCoffee.main(null);
 					Static_ProductInfo.InOut=false;
-					System.out.println();
+					Static_StoreLocation.shop_name=(String) cbShop.getSelectedItem();
 					
 				}
 			});
@@ -129,6 +138,7 @@ public class KioskMain {
 					frmMelhorCoffeeKiosk.setVisible(false);
 					KioskOrdersCoffee.main(null);
 					Static_ProductInfo.InOut=true;
+					Static_StoreLocation.shop_name=(String) cbShop.getSelectedItem();
 				}
 			});
 			lblShop.setFont(new Font("Lucida Grande", Font.PLAIN, 40));
@@ -155,19 +165,74 @@ public class KioskMain {
 	private JComboBox getCbShop() {  // 콤보박스 지점 
 		if (cbShop == null) {
 			cbShop = new JComboBox();
-			cbShop.setBounds(321, 39, 113, 27);
+			cbShop.setModel(
+					new DefaultComboBoxModel(new String[] {}));
+			cbShop.setBounds(307, 39, 127, 27);
 		}
 		return cbShop;
-	}
+	}// JComboBox End
 	
 	
 	
 	
 	
 	
-	//////////////////////////////
+	////////////////////////////// 진형씨한테 받은 콤보박스 DB에서 shop_id 불러오기 코드 /////////////////
+
+
 	
-	cbInsertShopid combo<KioskDto> = new cbInsert
+	private void addComboShopName() {
+		
+		KioskDao dao = new KioskDao();
+		ArrayList<KioskDto> dtoList = dao.cbInsertShopid();
+		int i=0;
+		
+		while(dtoList.size() > i) {
+//		cbShop.addItem(dtoList.get(i).getProduct_name());
+		cbShop.addItem(dtoList.get(i).getProduct_name());
+			i++;
+		}
+	}//addComboShopName End
+	
+	
+	
+	
+	
+
+	public ArrayList<KioskDto> cbInsertShopid(){
+		
+		ArrayList<KioskDto> dtoList = new ArrayList<KioskDto>();
+		
+		String whereStatement = "select shop_name from shop;";
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql,DBConnect.id_mysql,DBConnect.pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			ResultSet rs = stmt_mysql.executeQuery(whereStatement);
+			
+			while(rs.next()) {
+				
+				String wkshop_name = rs.getString(1);
+				
+				KioskDto dto = new KioskDto(wkshop_name);
+				dtoList.add(dto);
+			}
+		
+			conn_mysql.close();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			}
+		return dtoList;
+	}//cbInsertShopid End
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }// Class End
