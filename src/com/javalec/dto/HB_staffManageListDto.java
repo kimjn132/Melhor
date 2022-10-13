@@ -15,6 +15,14 @@ public class HB_staffManageListDto {
 	
 	
 
+	public HB_staffManageListDto(String employee_name, int manufact_quantity) {
+		super();
+		this.employee_name = employee_name;
+		this.manufact_quantity = manufact_quantity;
+	}
+
+
+
 	public HB_staffManageListDto(String employee_name, int employee_id, String employee_telno, String employee_in_date) {
 		super();
 		this.employee_name = employee_name;

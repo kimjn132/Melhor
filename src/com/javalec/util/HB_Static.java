@@ -4,7 +4,7 @@ public class HB_Static {
 
 	public static int employee_id;
 	public static int shop_number;
-	public static int signUpIdCheck;
+	public static int signUpEmailCheck;
 	public static int day;
 	public static int month;
 	
@@ -27,11 +27,11 @@ public class HB_Static {
 	public static void setShop_number(int shop_number) {
 		HB_Static.shop_number = shop_number;
 	}
-	public static int getSignUpIdCheck() {
-		return signUpIdCheck;
+	public static int signUpEmailCheck() {
+		return signUpEmailCheck;
 	}
-	public static void setSignUpIdCheck(int signUpIdCheck) {
-		HB_Static.signUpIdCheck = signUpIdCheck;
+	public static void setSignUpIdCheck(int signUpEmailCheck) {
+		HB_Static.signUpEmailCheck = signUpEmailCheck;
 	}
 	public static int getDay() {
 		return day;

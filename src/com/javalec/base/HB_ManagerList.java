@@ -128,6 +128,23 @@ public class HB_ManagerList {
 	private JTable getInner_Table() {
 		if (Inner_Table == null) {
 			Inner_Table = new JTable();
+			Inner_Table.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (e.getButton() == 1) { // 버튼이 눌리면
+
+						int i = Inner_Table.getSelectedRow(); // 클릭한 데이터가 몇번째 줄 인지 알려줌
+						String wkSequence = (String) Inner_Table.getValueAt(i, 3); // 해당하는 행의 i번째 데이터행 중 1번째에 있는 데이터를 wkSequence 변수에 저장 
+//						wkSequence에는 employee_id 값이 저장
+						
+						HB_Static.setEmployee_id(Integer.parseInt(wkSequence)); // static으로 Shop_number 값을 저장 후 필요할 때 가져와서 사용
+						HB_ManagerSalesStatus.main(null); // 저장 후 다른 화면 띄워줌
+						frame.setVisible(false);
+						
+					}
+				}
+			});
+			
 			Inner_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			Inner_Table.setModel(Outer_Table);
 		}

@@ -295,8 +295,67 @@ public class HB_ShopSalesListDao {
 
 	
 	
+	public HB_shopListDto allShopTotalSales() {
+		
+		HB_shopListDto dto = null;
+		String whereStatement = "select s.shop_name, sum(o.order_saleprice) from orders o, shop s where o.shop_number = s.shop_number and o.order_stamp is not null ";
+		String whereStatement2 = "group by s.shop_number order by o.order_saleprice asc";
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,
+					DBConnect.pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			ResultSet rs = stmt_mysql.executeQuery(whereStatement + whereStatement2);
+
+			if (rs.next()) {
+
+				String shop_name = rs.getString(1);
+				int order_price = rs.getInt(2);
+
+				dto = new HB_shopListDto(shop_name, order_price);
+			}
+
+			conn_mysql.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return dto;
+	}
 	
 	
+	
+	public HB_shopListDto allShopTodaySales() {
+		
+		HB_shopListDto dto = null;
+		String whereStatement = "select s.shop_name, sum(o.order_saleprice) from orders o, shop s where o.shop_number = s.shop_number and o.order_stamp is not null ";
+		String whereStatement2 = "and DATE(o.order_time) = curdate() group by s.shop_number order by o.order_saleprice desc";
+		try {
+			
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,
+					DBConnect.pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+			
+			ResultSet rs = stmt_mysql.executeQuery(whereStatement + whereStatement2);
+			
+			if (rs.next()) {
+				
+				String shop_name = rs.getString(1);
+				int order_price = rs.getInt(2);
+				
+				dto = new HB_shopListDto(shop_name, order_price);
+			}
+			
+			conn_mysql.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
 	
 	
 	
