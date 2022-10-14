@@ -5,7 +5,7 @@ public class Static_ProductInfo {
 	
 	public static int product_id;
 	public static String product_name;
-	public static int product_price;
+//	public static int product_price;
 	public static String product_recipe;
 	public static String product_explain;
 	public static int cart_id;
@@ -50,20 +50,6 @@ public class Static_ProductInfo {
 	public static void setProduct_name(String product_name) {
 		Static_ProductInfo.product_name = product_name;
 	}
-
-
-
-	public static int getProduct_price() {
-		return product_price;
-	}
-
-
-
-	public static void setProduct_price(int product_price) {
-		Static_ProductInfo.product_price = product_price;
-	}
-
-
 
 	public static String getProduct_recipe() {
 		return product_recipe;

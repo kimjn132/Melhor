@@ -236,9 +236,10 @@ public class KioskPay {
 		KioskDao dao = new KioskDao(); 
 		ArrayList<KioskDto> dtoList = dao.cartSelectList(); // 
 		int listCount = dtoList.size(); // 데이터의 열의 수를 나타냄
-
+			System.out.println("AddKioskCartList에 list COunt = "+listCount);
 		if(listCount>0) {
 			for (int index = 0; index < listCount; index++) {
+			//System.out.println("AddKioskCartList 안에 for문 index = "+index);
 				//System.out.println("AddKioskCartList의 ListCount = "+listCount+ " index = "+index);
 			String[] qTxt = {
 					//dtoList.get(index).,
@@ -291,9 +292,9 @@ public class KioskPay {
 						
 						// 요거 밑에껄로 속성옵션에다가 넣을꺼임 
 						if(Static_ProductInfo.InOut) {
-							System.out.println(Static_ProductInfo.InOut+"트루면 매장 ");
+							System.out.println(Static_ProductInfo.InOut+" 트루면 매장 ");
 						}else {
-							System.out.println(Static_ProductInfo.InOut+"거짓이면 포장 ");
+							System.out.println(Static_ProductInfo.InOut+" 거짓이면 포장 ");
 						}
 						KioskMain.main(null);
 					}else {
@@ -312,7 +313,7 @@ public class KioskPay {
 	
 	private void InsertOrders() { // 바구니에 있는 제품을 오더테이블에 넣어야 댐 
 		KioskDao insertOrders = new KioskDao();
-		ArrayList<KioskDto> dtoList = insertOrders.cartSelectList(); // 
+		//ArrayList<KioskDto> dtoList = insertOrders.cartSelectList(); // 
 			// cartList에 있는 제품을 KioskDto배열로 넣
 				insertOrders.InsertOrdersSQL();
 	}//InsertOrders End 
@@ -337,7 +338,7 @@ public class KioskPay {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "에러발생, 매장직원에 문의해 주세요.");
+			JOptionPane.showMessageDialog(null, "에러발생, 매장직원에 문의해 주세요.(deleteAllCart, KioskPay.java)");
 			return false;
 		}
 		return true;

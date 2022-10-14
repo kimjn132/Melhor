@@ -19,7 +19,7 @@ public class KioskDto {
 	int order_quantity;
 	String order_delete_time;
 	String order_stamp;
-
+	int TotalPrice;
 	int product_price;
 	int order_price;
 	int cart_id;
@@ -35,11 +35,12 @@ public class KioskDto {
 	public void setGetQuantityNum(int getQuantityNum) {
 		this.getQuantityNum = getQuantityNum;
 	}
-	public KioskDto(String product_name, int cart_id, int getQuantityNum) {
+	public KioskDto(String product_name, int cart_id, int getQuantityNum, int wkTotalPrice) {
 		super();
 		this.product_name = product_name;
 		this.cart_id = cart_id;
 		this.getQuantityNum = getQuantityNum;
+		this.product_price=wkTotalPrice;
 	}
 	public KioskDto(String product_name, int cart_id) {
 		super();

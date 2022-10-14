@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import com.javalec.base.KioskOrdersOption;
 import com.javalec.dto.KioskDto;
+import com.javalec.dto.KioskRealFinalLastResultSum;
 import com.javalec.util.DBConnect;
 import com.javalec.util.Static_OrdersInfo;
 import com.javalec.util.Static_ProductInfo;
@@ -111,18 +112,20 @@ public class KioskDao {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql, DBConnect.pw_mysql); // database에 접근을 하겠다. (선언자, 실행 x)
 			Statement stmt_mysql = conn_mysql.createStatement(); // Connection conn_mysql 인스턴스를 이용해서 Statement 객체 생성
-
+			System.out.println("SQL cartInsert shop_number = "+ Static_StoreLocation.getShop_number());
 			// 쿼리 문장 만들기 (preparestatement)
+	//		String query = "insert into cart (product_id, customer_id, cart_date, cart_product_quantity) "; // relation) 여기 띄어쓰기 있어야지 에러 안걸림
 			String query = "insert into cart (product_id, customer_id, shop_number, cart_date, cart_product_quantity) "; // relation) 여기 띄어쓰기 있어야지 에러 안걸림
-			String query1 = "values (?, 0, ?, now(), ?)";
+				//한별씨꺼에 shop_id가 빠져있었음 
+			String query1 = "values (?,?, 0, now(), ?)";
 			// 위의 쿼리 문장대로 순서대로 쓴다.
 			ps = conn_mysql.prepareStatement(query + query1);
 			ps.setInt(1, Static_ProductInfo.getProduct_id());
-			System.out.println("SQL cartInsert Static_product_id = "+ Static_ProductInfo.getProduct_id());
+				//System.out.println("SQL cartInsert Static_product_id = "+ Static_ProductInfo.getProduct_id());	
 			ps.setInt(2, Static_StoreLocation.shop_number);
-			System.out.println("SQL cartInsert shop_number = "+ Static_StoreLocation.getShop_number());
+				//System.out.println("SQL cartInsert shop_number = "+ Static_StoreLocation.getShop_number());
 			ps.setInt(3, Static_OrdersInfo.QuantityNum);
-			System.out.println("SQL cartInsert QuantityNum = " + Static_OrdersInfo.getQuantityNum() );
+				//System.out.println("SQL cartInsert QuantityNum = " + Static_OrdersInfo.getQuantityNum() );
 					
 					//라벨 텍스트 가져오
 					
@@ -146,9 +149,9 @@ public class KioskDao {
 		
 		ArrayList<KioskDto> dtoList = new ArrayList<KioskDto>(); 
 		
-		String whereStatement = "select p.product_name, c.cart_id, c.cart_product_quantity from product p, cart c where p.product_id = c.product_id ;";
+		String whereStatement = "select p.product_name, c.cart_id, c.cart_product_quantity, p.product_price from product p, cart c where p.product_id = c.product_id ;";
 	//	String whereStatement = "select p.product_name, c.cart_id , c.cart_product_quantity from product p, cart c where p.product_id = c.product_id ;";
-
+		int wkTotalPrice = 0;
 		try { 
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,DBConnect.pw_mysql);// DB linkStart 
@@ -161,12 +164,13 @@ public class KioskDao {
 				String wkName = rs.getString(1); // 나중에 이미지도 같이 불러와서 키오스크처럼 보이게끔 할꺼에요 
 				int wkCart_id = rs.getInt(2);
 				int wkQuanT = rs.getInt(3);
-				KioskDto KioskOrderDto = new KioskDto(wkName,wkCart_id,wkQuanT); // KioskOrderDto이름으로 제품 이름만 받아와서 kisosktoLis에 반복해서 추가 
+				wkTotalPrice = rs.getInt(4);
+ 				KioskDto KioskOrderDto = new KioskDto(wkName,wkCart_id,wkQuanT,wkTotalPrice); // KioskOrderDto이름으로 제품 이름만 받아와서 kisosktoLis에 반복해서 추가 
 				
 				dtoList.add(KioskOrderDto); 
 			}
 			conn_mysql.close();
-			
+			System.out.println("KioskDto에서 불러온 wkTotalPrice = "+wkTotalPrice);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -300,19 +304,27 @@ public class KioskDao {
 			Statement stmt_mysql = conn_mysql.createStatement(); // Connection conn_mysql 인스턴스를 이용해서 Statement 객체 생성
 
 			// 쿼리 문장 만들기 (preparestatement)
-    
-			String query = "insert into orders (product_id, customer_id, shop_number,order_seqno, order_time, order_saleprice, order_quantity, order_stamp) "; 
-			String query1 = "select p.product_id, c.customer_id, c.shop_number,300,now(), p.product_price, c.cart_product_quantity,1 ";
+				//---> 한별씨 sql에 cart에 shop_id가 없어서 기존꺼 주석처리 후 밑에 다시 넣음 
+			String query = "insert into orders (product_id, customer_id, shop_number, order_seqno, order_time, order_saleprice, order_quantity, order_stamp) "; 
+			String query1 = "select p.product_id, c.customer_id,"+Static_StoreLocation.shop_number+",300,now(), p.product_price, c.cart_product_quantity,c.cart_product_quantity ";
 			String query2 = "from product p, cart c ";
 			String query3 = "where p.product_id = c.product_id and c.customer_id=0 ";
 			String query4 = "order by c.shop_number" ;
 
+				// ====> 한별씨가 cart 에 shop_number 잊어먹었따고 해서 기존꺼 
+//			String query = "insert into orders (product_id, customer_id, order_seqno, order_time, order_saleprice, order_quantity, order_stamp) "; 
+//			String query1 = "select p.product_id, c.customer_id, 300 ,now(), p.product_price, c.cart_product_quantity,1 ";
+//			String query2 = "from product p, cart c ";
+//			String query3 = "where p.product_id = c.product_id ";//and c.customer_id=0 ";
+		//	String query4 = "order by c.shop_number" ;
+			
+			
 //			String query = "insert into orders (product_id, customer_id, shop_number,order_seqno, order_time, order_saleprice, order_quantity, order_stamp) "
 //					+ "select p.product_id, c.customer_id, c.shop_number,132,now(), p.product_price, c.cart_product_quantity,1 from product p, cart c where p.product_id = c.product_id and c.customer_id=0 order by c.shop_number;" ;
 			
 			
 			
-			ps = conn_mysql.prepareStatement(query+query1+query2+query3+query4);
+			ps = conn_mysql.prepareStatement(query+query1+query2+query3);//+query4);
 			ps.executeUpdate(); // insert update method 이거 하나밖에 없다
 
 			conn_mysql.close(); // close 해야 다른 사람의 DB도 들어올 수 있다.
@@ -347,7 +359,6 @@ public class KioskDao {
 			
 			while(rs.next()) {
 				String wkshop_name = rs.getString(1);
-				
 				KioskDto dto = new KioskDto(wkshop_name);
 				dtoList.add(dto);
 			}
@@ -360,6 +371,9 @@ public class KioskDao {
 		return dtoList;
 	}
 //////////////  KioskMain Shops Name Combo Box End //////////////
+	
+
+	
 	
 	
 	

@@ -44,7 +44,12 @@ public class KioskOrdersOption {
 	private JLabel lblNewLabel_1;
 	private JLabel lblDanga;
 	private JLabel lblCoffeeMuch;
-	
+	String product_p = null;
+	String product_name = null;
+	int product_price = 0;
+	int cart_product_quantity = 1;
+	int quanNum=1;
+	int sum = 0;
 	/**
 	 * Launch the application.
 	 */
@@ -55,6 +60,7 @@ public class KioskOrdersOption {
 					KioskOrdersOption window = new KioskOrdersOption();
 					window.frmMelhorCoffeeKiosk.setVisible(true);
 					window.frmMelhorCoffeeKiosk.setLocationRelativeTo(null);
+			
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -85,7 +91,9 @@ public class KioskOrdersOption {
 		frmMelhorCoffeeKiosk.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-				getOrders();
+				preGetStatic();
+				resultPriceSum();
+				
 			}
 		});
 	}
@@ -151,12 +159,14 @@ public class KioskOrdersOption {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					//숫자 줄이기, 1미만으로는 못가게 
-					int quanNum = Integer.parseInt(lblQuantity.getText());
-				quanNum--;
+					quanNum = Integer.parseInt(lblQuantity.getText());
+						quanNum--;
 					if(quanNum==0) {
 						quanNum=1;
 					}
 					lblQuantity.setText(Integer.toString(quanNum));
+					resultPriceSum();
+					//////////////////////////////////////////////////////////////////////////
 				}
 			});
 			lblLeftArrow.setIcon(new ImageIcon(KioskOrdersOption.class.getResource("/com/javalec/img/leftArrow.png")));
@@ -171,16 +181,15 @@ public class KioskOrdersOption {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					// 숫자 올리기 50이상은 못가게 
-					int quanNum = Integer.parseInt(lblQuantity.getText());
-				
+						quanNum = Integer.parseInt(lblQuantity.getText());
 						quanNum++;
-					lblQuantity.setText(Integer.toString(quanNum));
+							lblQuantity.setText(Integer.toString(quanNum));
 						if(quanNum==51) {
 							quanNum=50;
 							JOptionPane.showMessageDialog(null, "50잔 이상 주문은 직원에게 문의해 주세요");
 							lblQuantity.setText(Integer.toString(quanNum));
 						}// if end 
-					
+						resultPriceSum();
 				}
 			});
 			lblRightArrow.setIcon(new ImageIcon(KioskOrdersOption.class.getResource("/com/javalec/img/rightArrow.png")));
@@ -195,6 +204,7 @@ public class KioskOrdersOption {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					// 옵션 선택 후 담기 
+					product_name=lblMenuName.getText();
 					Static_OrdersInfo.QuantityNum=Integer.parseInt(lblQuantity.getText());
 					Static_ProductInfo.product_name=lblMenuName.getText();
 					KioskOrdersCoffee order = new KioskOrdersCoffee();
@@ -202,6 +212,7 @@ public class KioskOrdersOption {
 					
 					frmMelhorCoffeeKiosk.setVisible(false);
 					KioskOrdersCoffee.main(null);
+					
 				}
 			});
 			btnNewButton.setFont(new Font("Lucida Grande", Font.PLAIN, 35));
@@ -243,41 +254,36 @@ public class KioskOrdersOption {
 	////////////////////////////////////////////////////////////////////////////////////
 	
 
-	private void getOrders() {
+	private void preGetStatic() {
 
-		KioskDao orderListDao = new KioskDao(); 
-		ArrayList<KioskDto> dtoList = orderListDao.SelectList(); 
+	//	KioskDao orderListDao = new KioskDao(); 
+		//ArrayList<KioskDto> dtoList = orderListDao.SelectList(); 
+	System.out.println(Static_ProductInfo.product_name);
+	String whereStatement = "select product_price ";
+	String whereStatement1 = "from product where product_name = '"+Static_ProductInfo.product_name+"'";
 
-		
-		
-	String whereStatement = "select p.product_name, p.product_price, c.cart_product_quantity ";
-	String whereStatement1 = "from cart c, product p where c.product_id = p.product_id ;";
-	
+
+		//String whereStatement = "product_price from product where product_name='"+Static_ProductInfo.getProduct_name()+"'";
 	try { 
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,DBConnect.pw_mysql);// DB linkStart 
 		Statement stmt_mysql = conn_mysql.createStatement();
 		
 		ResultSet rs = stmt_mysql.executeQuery(whereStatement+whereStatement1);
-		
 		while (rs.next()) { 
 			
-			String product_name = rs.getString(1); // 나중에 이미지도 같이 불러와서 키오스크처럼 보이게끔 할꺼에요 
-			int product_price = rs.getInt(2);
-			int cart_product_quantity = rs.getInt(3);
+//			 Static_ProductInfo.product_name = rs.getString(1); // 나중에 이미지도 같이 불러와서 키오스크처럼 보이게끔 할꺼에요 
+//			 Static_OrdersInfo.product_price = rs.getInt(2);
+			 
+			 //product_name = rs.getString(1);
+			 product_price = rs.getInt(1);
+			// cart_product_quantity = rs.getInt(3);
 //			KioskDto KioskOrderDto = new KioskDto(wkName,wkCart_id); // KioskOrderDto이름으로 제품 이름만 받아와서 kisosktoLis에 반복해서 추가 
-			
 //			dtoList.add(KioskOrderDto); 
-
-			lblMenuName.setText(product_name);
-		//	lblNewLabel.setText(dtoList.get().getProduct_price()); //제품 단가 나와야 댐 
-			String product_p = Integer.toString(product_price);
-			lblDanga.setText(product_p); 
-			int sum=cart_product_quantity*product_price;
-			lblCoffeeMuch.setText(Integer.toString(sum)); // 갯수에 따른 금액 나와야 댐 
-
 		}
-		conn_mysql.close();
+		product_price = Static_OrdersInfo.product_price;
+			
+			conn_mysql.close();
 		
 	} catch (Exception e) {
 		// TODO: handle exception
@@ -286,41 +292,59 @@ public class KioskOrdersOption {
 	
 }//SelectList End
 
-		
-		
-		
-//	private void paymoney() { // 단가 가져올거임 
-//		
-////		ArrayList<KioskDto> dtoList = new ArrayList<KioskDto>(); 
-//		
-//		String whereStatement = "select p.price from product p, cart c where p.product_id = c.product_id ;";
-//		String whereStatement1 = " from product p, cart c where p.product_id = c.product_id ;";
+
+//	private void getOrders() {
+//
+//	//	KioskDao orderListDao = new KioskDao(); 
+//		//ArrayList<KioskDto> dtoList = orderListDao.SelectList(); 
 //	
-//		try { 
-//			Class.forName("com.mysql.cj.jdbc.Driver");
-//			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,DBConnect.pw_mysql);// DB linkStart 
-//			Statement stmt_mysql = conn_mysql.createStatement();
-//			
-//			ResultSet rs = stmt_mysql.executeQuery(whereStatement);
-//			
-//			while (rs.next()) { 
-//				
-//				String wkName = rs.getString(1); // 나중에 이미지도 같이 불러와서 키오스크처럼 보이게끔 할꺼에요 
-//				int wkCart_id = rs.getInt(2);
-//				int wkQuanT = rs.getInt(3);
-//				KioskDto KioskOrderDto = new KioskDto(wkName,wkCart_id,wkQuanT); // KioskOrderDto이름으로 제품 이름만 받아와서 kisosktoLis에 반복해서 추가 
-//				
-//				dtoList.add(KioskOrderDto); 
-//			}
-//			conn_mysql.close();
-//			
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			e.printStackTrace();
-//		}
-//		return dtoList;
+////	String whereStatement = "select p.product_price ";
+////	String whereStatement1 = "from , product p where c.product_id = p.product_id ;";
 //		
-//	}//SelectList End
+//
+//		String whereStatement = "product_price from product where product_name='"+Static_ProductInfo.getProduct_name()+"'";
+//	try { 
+//		Class.forName("com.mysql.cj.jdbc.Driver");
+//		Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,DBConnect.pw_mysql);// DB linkStart 
+//		Statement stmt_mysql = conn_mysql.createStatement();
+//		
+//		ResultSet rs = stmt_mysql.executeQuery(whereStatement);
+//		System.out.println(whereStatement);
+//		while (rs.next()) { 
+//			
+////			 Static_ProductInfo.product_name = rs.getString(1); // 나중에 이미지도 같이 불러와서 키오스크처럼 보이게끔 할꺼에요 
+//			 Static_OrdersInfo.product_price = rs.getInt(1);
+////			 cart_product_quantity = rs.getInt(3);
+////			KioskDto KioskOrderDto = new KioskDto(wkName,wkCart_id); // KioskOrderDto이름으로 제품 이름만 받아와서 kisosktoLis에 반복해서 추가 
+//			
+////			dtoList.add(KioskOrderDto); 
+//		}
+//			
+//			conn_mysql.close();
+//		
+//	} catch (Exception e) {
+//		// TODO: handle exception
+//		e.printStackTrace();
+//	}
+//	
+//}//SelectList End
+	
+	
+	
+		
+		private void resultPriceSum() {
+//			product_p = Integer.toString(product_price);
+			
+			sum=quanNum*(Static_OrdersInfo.product_price);
+	
+			lblMenuName.setText(Static_ProductInfo.product_name);
+			lblDanga.setText(Integer.toString( Static_OrdersInfo.product_price)); //제품 단가 나와야 댐 
+			lblCoffeeMuch.setText(Integer.toString(sum)); // 갯수에 따른 금액 나와야 댐 
+
+	}
+		public void resultPriceAllSum() {
+			sum=quanNum*(Static_OrdersInfo.product_price);
+		}
 	
 	
 	

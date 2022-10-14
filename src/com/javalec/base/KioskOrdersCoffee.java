@@ -14,8 +14,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import com.javalec.dao.KioskDao;
+import com.javalec.dao.KioskOrdersDao;
 import com.javalec.dto.KioskDto;
 import com.javalec.dto.KioskOrdersDto;
+import com.javalec.dto.KioskRealFinalLastResultSum;
 import com.javalec.util.DBConnect;
 import com.javalec.util.Static_OrdersInfo;
 import com.javalec.util.Static_ProductInfo;
@@ -27,6 +29,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -47,6 +53,7 @@ public class KioskOrdersCoffee {
 	private JLabel Orders_top_Ads;
 	private JLabel lblOrder;
 	private JLabel lblResultPrice;
+	
 //private static JTable mainMenuInnerTable;
 	
 
@@ -96,6 +103,9 @@ public class KioskOrdersCoffee {
 				searchAction();
 				bottomInit();
 				AddKioskCartList();
+
+				lblResultPrice.setText(Integer.toString(KioskRealFinalLastResultSum.real_final_last_end_resultSum));
+						
 			}
 		});
 		
@@ -194,6 +204,7 @@ public class KioskOrdersCoffee {
 			lbldessert.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					
 				}
 			});
 			lbldessert.setHorizontalAlignment(SwingConstants.CENTER);
@@ -224,8 +235,6 @@ public class KioskOrdersCoffee {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 
-					
-					
 					if(AddKioskCartList()) {
 					frmMelhorCoffeeKioskOrders.setVisible(false);
 					KioskPay.main(null);
@@ -242,6 +251,7 @@ public class KioskOrdersCoffee {
 		if (lblResultPrice == null) {
 			lblResultPrice = new JLabel("총금액라벨");
 			lblResultPrice.setBounds(335, 720, 70, 20);
+	
 		}
 		return lblResultPrice;
 	}
@@ -292,7 +302,7 @@ public class KioskOrdersCoffee {
 		if (scrollPane_1 == null) {
 			scrollPane_1 = new JScrollPane();
 			
-			scrollPane_1.setBounds(27, 681, 295, 59);
+			scrollPane_1.setBounds(27, 650, 295, 90);
 			scrollPane_1.setViewportView(getInnerTable2());
 		}
 		return scrollPane_1;
@@ -329,6 +339,9 @@ public class KioskOrdersCoffee {
 		
 		int i = InnerTable.getSelectedRow(); // 몇번째 줄 인지 알려줌
 		String wkSequence = (String) InnerTable.getValueAt(i, 0); // i번째 행의 0번째(Seqno) 값을 wkSequence에 넣어줌
+		String wkPrice = (String) InnerTable.getValueAt(i, 2); // i번째 행의 0번째(Seqno) 값을 wkSequence에 넣어줌
+		
+		Static_OrdersInfo.product_price= Integer.parseInt(wkPrice);
 		
 		Static_ProductInfo.setProduct_id(Integer.parseInt(wkSequence)); //테이블 클릭한 값을 가져옴 
 		Static_ProductInfo.product_name=(String) InnerTable.getValueAt(i, 1); // 클릭한 테이블의 제품명(i,1)을 스태틱에 담음 
@@ -346,7 +359,7 @@ public class KioskOrdersCoffee {
 		Outer_Table.addColumn("가격");
 		
 
-		Outer_Table.setColumnCount(4);
+		Outer_Table.setColumnCount(3);
 
 		int i = Outer_Table.getRowCount();
 		for (int j = 0; j < i; j++) {
@@ -384,7 +397,7 @@ public class KioskOrdersCoffee {
 		ArrayList<KioskDto> dtoList = orderListDao.SelectList(); // 
 
 		int listCount = dtoList.size(); // 데이터의 열의 수를 나타냄
-
+//		String a = null; //--> Static_OrdersInfo.product_price에 값 넣어보려고 작성했던거 
 			for (int index = 0; index < listCount; index++) {
 
 			String[] qTxt = {
@@ -392,9 +405,12 @@ public class KioskOrdersCoffee {
 					dtoList.get(index).getProduct_name(), 
 				//	Integer.toString(dtoList.get(index).getGetQuantityNum()),
 					Integer.toString(dtoList.get(index).getProduct_price()) 
+					
 				}; // 1행의 박스 할당
 			Outer_Table.addRow(qTxt); // 출력
 		}
+//			Static_OrdersInfo.product_price = Integer.parseInt(a);
+//			System.out.println(Static_OrdersInfo.product_price);
 
 	}//searchAction End
 
@@ -410,7 +426,8 @@ public class KioskOrdersCoffee {
 		Outer_Table2.addColumn("제품명");
 		Outer_Table2.addColumn("주문번호");
 		Outer_Table2.addColumn("갯수");
-		Outer_Table2.setColumnCount(3);
+		Outer_Table2.addColumn("금액");
+		Outer_Table2.setColumnCount(4);
 
 		int i = Outer_Table2.getRowCount();
 		for (int j = 0; j < i; j++) {
@@ -419,17 +436,22 @@ public class KioskOrdersCoffee {
 
 		InnerTable2.setAutoResizeMode(InnerTable2.AUTO_RESIZE_OFF);
 
-		int vColIndex = 0;
+		int vColIndex = 0; // cart에 담은 고유번호 
 		TableColumn col = InnerTable2.getColumnModel().getColumn(vColIndex);
 		int width = 200;
 		col.setPreferredWidth(width);
-		
 
-		vColIndex = 1;
+		vColIndex = 1; // 담긴 제품 이름 
 		col = InnerTable2.getColumnModel().getColumn(vColIndex);
 //		width = 0;
 		col.setPreferredWidth(70);
-		vColIndex = 2;
+		
+		vColIndex = 2; // 담긴 제품의 갯수 
+		col = InnerTable2.getColumnModel().getColumn(vColIndex);
+//		width = 0;
+		col.setPreferredWidth(100);
+		
+		vColIndex = 3; // 총금액 
 		col = InnerTable2.getColumnModel().getColumn(vColIndex);
 //		width = 0;
 		col.setPreferredWidth(100);
@@ -441,35 +463,53 @@ public class KioskOrdersCoffee {
 	//	KioskDao dao = new KioskDao(Static_ProductInfo.getProduct_id());
 		KioskDao dao = new KioskDao();
 		int count = dao.cartInsert();
-		
+		System.out.println("KioskOrdersCoffee AddKioskCartInsert count = "+count);
 		if(count == 1) {
 			JOptionPane.showMessageDialog(null, "장바구니에 추가 되었습니다.");
 			AddKioskCartList();
+			
+			////////// ----> 총 금액 섬 값이 들어 와야 댐
+			int sum = Static_OrdersInfo.product_price*Static_OrdersInfo.QuantityNum;
+			int resultsum;
+			resultsum = sum+sum;
+			System.out.println("sum result = "+resultsum);
+			System.out.println(Static_OrdersInfo.product_price); // 가격은 가져 오는중 
+			System.out.println("Quan Num = "+Static_OrdersInfo.QuantityNum);
+			
 		}else {
-			JOptionPane.showMessageDialog(null, "에러발생, 매장직원에 문의해 주세요.");
+			JOptionPane.showMessageDialog(null, "KioskOrdersCoffee.java AddKioskCartInsert Method 에러발생, 매장직원에 문의해 주세요.");
 			
 		}
 		
 	}
-
-	private boolean AddKioskCartList() {
+	
+	KioskRealFinalLastResultSum dd = new KioskRealFinalLastResultSum();
+	
+	
+	private boolean AddKioskCartList() { // 바텀에 카트리스트 
 
 		KioskDao dao = new KioskDao(); 
 		ArrayList<KioskDto> dtoList = dao.cartSelectList(); // 
-
-		
+		int a = 0;
+		KioskRealFinalLastResultSum.real_final_last_end_resultSum=0;
 		int listCount = dtoList.size(); // 데이터의 열의 수를 나타냄
+//		System.out.println(dtoList.get(index).getProduct_price());
 		if(listCount>0) {
 			for (int index = 0; index < listCount; index++) {
 
-			String[] qTxt = {
-					dtoList.get(index).getProduct_name(),
-					Integer.toString(dtoList.get(index).getCart_id()),
-					Integer.toString(dtoList.get(index).getGetQuantityNum())
-
+				String[] qTxt = {
+						dtoList.get(index).getProduct_name(),
+						Integer.toString(dtoList.get(index).getCart_id()),
+						Integer.toString(dtoList.get(index).getGetQuantityNum()),
+					Integer.toString((dtoList.get(index).getGetQuantityNum())*(dtoList.get(index).getProduct_price()))
+					
 				}; // 1행의 박스 할당
-	
-			Outer_Table2.addRow(qTxt); // 출력
+				Outer_Table2.addRow(qTxt); // 출력
+			a=	(dtoList.get(index).getGetQuantityNum())*(dtoList.get(index).getProduct_price());
+				
+//				KioskRealFinalLastResultSum.real_final_last_end_resultSum += a; 
+			KioskRealFinalLastResultSum.real_final_last_end_resultSum =KioskRealFinalLastResultSum.real_final_last_end_resultSum +	(dtoList.get(index).getGetQuantityNum())*(dtoList.get(index).getProduct_price());
+				
 			}
 		}else {
 			return false;
@@ -485,9 +525,9 @@ public class KioskOrdersCoffee {
 		
 		int i = InnerTable2.getSelectedRow(); // 몇번째 줄 인지 알려줌
 		String wkSequence = (String) InnerTable2.getValueAt(i, 1); // i번째 행의 0번째(Seqno) 값을 wkSequence에 넣어줌
-		
 		Static_ProductInfo.setCart_id(Integer.parseInt(wkSequence)); //테이블 클릭한 값을 가져옴 
-
+		
+		
 		CartDelete();
 		bottomInit();
 		
@@ -499,6 +539,7 @@ public class KioskOrdersCoffee {
 		boolean a = deldao.deleteCart(); // 장바구니 제품id를 받아와 deleteCart
 								//에서 데이터를 지우는데 성공하면 
 		if(a == true) {
+			KioskRealFinalLastResultSum.real_final_last_end_resultSum =0;
 			JOptionPane.showMessageDialog(null, "장바구니 메뉴가 취소되었습니다.");
 			deldao.deleteCart();
 			AddKioskCartList();
@@ -508,6 +549,10 @@ public class KioskOrdersCoffee {
 		}
 		
 	}//CartDelete End 
+	
+	
+
+	
 	
 	
 	

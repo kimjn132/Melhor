@@ -24,10 +24,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class KioskMain {
 //	private JFrame frame;
@@ -119,6 +122,7 @@ public class KioskMain {
 					KioskOrdersCoffee.main(null);
 					Static_ProductInfo.InOut=false;
 					Static_StoreLocation.shop_name=(String) cbShop.getSelectedItem();
+					findShopNumber();
 					
 				}
 			});
@@ -137,6 +141,7 @@ public class KioskMain {
 					//매장 마우스 클릭  product 에서 매장 정보 저장 
 					frmMelhorCoffeeKiosk.setVisible(false);
 					KioskOrdersCoffee.main(null);
+					findShopNumber();
 					Static_ProductInfo.InOut=true;
 					Static_StoreLocation.shop_name=(String) cbShop.getSelectedItem();
 				}
@@ -165,15 +170,18 @@ public class KioskMain {
 	private JComboBox getCbShop() {  // 콤보박스 지점 
 		if (cbShop == null) {
 			cbShop = new JComboBox();
+			cbShop.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					// 지점을 셀렉트 할떄 샾 넘버가 구해져야 함 
+					System.out.println("itemStateChanged = "+cbShop.getSelectedItem());
+				}
+			});
 			cbShop.setModel(
 					new DefaultComboBoxModel(new String[] {}));
 			cbShop.setBounds(307, 39, 127, 27);
 		}
 		return cbShop;
 	}// JComboBox End
-	
-	
-	
 	
 	
 	
@@ -188,35 +196,64 @@ public class KioskMain {
 		int i=0;
 		
 		while(dtoList.size() > i) {
-//		cbShop.addItem(dtoList.get(i).getProduct_name());
 		cbShop.addItem(dtoList.get(i).getProduct_name());
 			i++;
 		}
+		
 	}//addComboShopName End
 	
 	
 	
 	
 	
+// KioskMain에 상단 지점을 고를때 DB에서 지점명 가져오는 문  // Dao에 있음, 지워도 되는거 
+//
+//	public ArrayList<KioskDto> cbInsertShopid(){ // 매장이름 가져오기 
+//		
+//		ArrayList<KioskDto> dtoList = new ArrayList<KioskDto>();
+//		
+//		String whereStatement = "select shop_name from shop;";
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql,DBConnect.id_mysql,DBConnect.pw_mysql);
+//			Statement stmt_mysql = conn_mysql.createStatement();
+//
+//			ResultSet rs = stmt_mysql.executeQuery(whereStatement);
+//			
+//			while(rs.next()) {
+//				String wkshop_name = rs.getString(1);
+//				KioskDto dto = new KioskDto(wkshop_name);
+//				dtoList.add(dto);
+//			}
+//		
+//			conn_mysql.close();
+//			
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//			}
+//		return dtoList;
+//	}
+	
 
-	public ArrayList<KioskDto> cbInsertShopid(){
+	//매장, 포장 누를때 지점의 셀렉트아이템 값으로 shop_number 구하는거
+	
+	private void findShopNumber(){
 		
-		ArrayList<KioskDto> dtoList = new ArrayList<KioskDto>();
-		
-		String whereStatement = "select shop_name from shop;";
+		String whereStatement = "select shop_number from shop where shop_address = ";
+		String whereStatement1 = "'"+cbShop.getSelectedItem()+"'";
+		System.out.println(cbShop.getSelectedItem());
+		System.out.println(whereStatement+whereStatement1);
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql,DBConnect.id_mysql,DBConnect.pw_mysql);
 			Statement stmt_mysql = conn_mysql.createStatement();
-
-			ResultSet rs = stmt_mysql.executeQuery(whereStatement);
-			
-			while(rs.next()) {
-				
-				String wkshop_name = rs.getString(1);
-				
-				KioskDto dto = new KioskDto(wkshop_name);
-				dtoList.add(dto);
+			ResultSet rs = stmt_mysql.executeQuery(whereStatement+whereStatement1);
+			System.out.println(rs);
+			if(rs.next()) {
+				int wkshop_number = rs.getInt(1);
+				//KioskDto dto = new KioskDto(wkshop_number);
+				Static_StoreLocation.shop_number = wkshop_number;
+				System.out.println("스태틱 스토어 샾 넘버 "+Static_StoreLocation.shop_number);
 			}
 		
 			conn_mysql.close();
@@ -224,12 +261,7 @@ public class KioskMain {
 		}catch(Exception e) {
 			e.printStackTrace();
 			}
-		return dtoList;
 	}//cbInsertShopid End
-	
-	
-	
-	
 	
 	
 	
