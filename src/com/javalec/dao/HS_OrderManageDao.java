@@ -53,10 +53,11 @@ public class HS_OrderManageDao {
 	public ArrayList<HS_OrderManageDto> orderConditionList() {
 
 		ArrayList<HS_OrderManageDto> orderList = new ArrayList<HS_OrderManageDto>();
-		String whereStatement = "select o.order_id, c.customer_id, p.product_name, o.order_quantity, o.order_time from orders o, customer c, product p ,attend a, shop s ";
-		String whereStatement2 = "where  o.product_id = p.product_id and o.customer_id = c.customer_id and s.shop_number = a.shop_number and s.shop_number = o.shop_number ";
-		String whereStatement3 = "and o.shop_number = 1 and  o.order_time >=  attend_on and o.order_stamp = 0 group by o.order_time";
-											//shop_number를 불러올 수가 없음 그래서 그냥 입력
+		String whereStatement = "select o.order_id, c.customer_id, p.product_name, o.order_quantity, o.order_time from orders o, customer c, product p ,attend a, shop s, employee e ";
+		String whereStatement2 = "where  o.product_id = p.product_id and o.customer_id = c.customer_id and s.shop_number = a.shop_number and s.shop_number = o.shop_number and a.employee_id = e.employee_id ";
+		String whereStatement3 = "and o.shop_number = " + HS_Static_StaffId.shop_number +  " and o.order_stamp = 0 group by o.order_time order by o.order_time asc";
+											//shop_number가 로그인한 사람과 일치하고 o.order_stamp가 0인거 출력
+											
 		try {
 
 			Class.forName("com.mysql.cj.jdbc.Driver");
