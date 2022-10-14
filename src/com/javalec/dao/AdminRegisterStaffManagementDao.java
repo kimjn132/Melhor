@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.javalec.dto.AdminRegisterStaffManagementDto;
 import com.javalec.util.DBConnect;
+import com.javalec.util.StaticClass;
 
 public class AdminRegisterStaffManagementDao {
 	
@@ -31,7 +32,7 @@ public class AdminRegisterStaffManagementDao {
 		ArrayList<AdminRegisterStaffManagementDto> dtoList = new ArrayList<AdminRegisterStaffManagementDto>(); 
 		// 3. 담은 데이터 arraylist 형식으로 가져와서 연결(매개체>>Main class로 보냄)
 
-		String whereStatement = "select employee_id, employee_name, employee_in_date from employee where employee_role = 2 and employee_out_date is null"; // statement
+		String whereStatement = "select employee_id, employee_name, employee_in_date from employee where employee_role = 2 and employee_out_date is null and employee_shop_number = " +StaticClass.shop_number+ ""; // statement
 
 		// 검색 포맷
 		try { // error확인

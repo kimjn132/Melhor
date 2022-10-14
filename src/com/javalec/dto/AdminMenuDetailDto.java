@@ -9,14 +9,13 @@ public class AdminMenuDetailDto {
 	public String product_recipe;
 	public String product_explain;
 	public String product_category;
-	public int getProduct_id() {
-		return product_id;
-	}
+	public int count;
 	
 	//constructor
 	public AdminMenuDetailDto() {
 		// TODO Auto-generated constructor stub
 	}
+	
 	public AdminMenuDetailDto(int product_id, String product_name, String product_category, int product_price, String product_recipe,
 			String product_explain) {
 		super();
@@ -27,12 +26,22 @@ public class AdminMenuDetailDto {
 		this.product_explain = product_explain;
 		this.product_category = product_category;
 	}
+	
 	public AdminMenuDetailDto(String product_category) {
 		super();
 		this.product_category = product_category;
 	}
+	
+	public AdminMenuDetailDto(int count) {
+		super();
+		this.count = count;
+	}
 
 	//getter&setter
+	public int getProduct_id() {
+		return product_id;
+	}
+	
 	public void setProduct_id(int product_id) {
 		this.product_id = product_id;
 	}
@@ -67,5 +76,14 @@ public class AdminMenuDetailDto {
 	public void setProduct_category(String product_category) {
 		this.product_category = product_category;
 	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+	
 	
 }

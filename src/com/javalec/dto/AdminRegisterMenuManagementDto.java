@@ -12,7 +12,6 @@ public class AdminRegisterMenuManagementDto {
 	String wkName;
 	int wkPrice;
 	
-	
 	//constructor
 	public AdminRegisterMenuManagementDto() {
 		// TODO Auto-generated constructor stub
@@ -27,8 +26,11 @@ public class AdminRegisterMenuManagementDto {
 		this.wkPrice = wkPrice;
 	}
 	
-	
-	
+	public AdminRegisterMenuManagementDto(int wkId) {
+		super();
+		this.wkId = wkId;
+	}
+
 	//getter&setter
 	public String getWkFilename() {
 		return wkFilename;

@@ -1,5 +1,9 @@
 package com.javalec.dao;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,6 +17,7 @@ import com.javalec.util.StaticClass;
 public class AdminRevenueDetailDao {
 
 	// fields
+	FileInputStream file;
 
 	// constructor
 	public AdminRevenueDetailDao() {
@@ -23,9 +28,9 @@ public class AdminRevenueDetailDao {
 	// 제품 상세 정보 select 
 	public AdminRevenueDetailDto productDetail() {
 
-		AdminRevenueDetailDto dto = null; 
+		AdminRevenueDetailDto bean = null; 
 
-		String whereStatement = "select product_id, product_name, product_category, product_price ";
+		String whereStatement = "select product_id, product_name, product_category, product_price, product_image ";
 		String whereStatement2 = "from product where product_id = " +StaticClass.product_id;
 
 		// 검색 포맷
@@ -46,9 +51,21 @@ public class AdminRevenueDetailDao {
 				String wkCategory = rs.getString(3);
 				int wkPrice = rs.getInt(4);
 
-				dto = new AdminRevenueDetailDto(wkId, wkName, wkCategory, wkPrice);
+				// File
+				StaticClass.filename = StaticClass.filename + 1;
+				File file = new File(Integer.toString(StaticClass.filename));
+				FileOutputStream output = new FileOutputStream(file);
+				InputStream input = rs.getBinaryStream(5);
+				byte[] buffer = new byte[1024];
+				while (input.read(buffer) > 0) {
+					output.write(buffer);
+				}
+				
+			
+				bean = new AdminRevenueDetailDto(wkId, wkName, wkCategory, wkPrice);
 
 			}
+			
 
 			conn_mysql.close(); // close 해야 다른 사람의 DB도 들어올 수 있다.
 
@@ -56,7 +73,7 @@ public class AdminRevenueDetailDao {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		return dto;
+		return bean;
 	}
 	
 	// 제품 일 평균 수량
@@ -81,7 +98,7 @@ public class AdminRevenueDetailDao {
 			
 			while (rs.next()) {
 				
-				double wkDayQuantity = rs.getInt(1);
+				double wkDayQuantity = rs.getDouble(1);
 				
 				
 				dto = new AdminRevenueDetailDto(wkDayQuantity);

@@ -53,6 +53,7 @@ public class AdminMenuList extends JFrame {
 	private JRadioButton rdbtnNewRadioButton_1;
 	private JRadioButton rdbtnNewRadioButton_2;
 	private final ButtonGroup buttonGroup_1 = new ButtonGroup();
+	private JScrollPane scrollPane;
 
 	/**
 	 * Launch the application.
@@ -82,11 +83,11 @@ public class AdminMenuList extends JFrame {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("제품 검색");
+		frame.setTitle("메뉴 검색");
 		frame.setBackground(Color.WHITE);
 		frame.getContentPane().setBackground(new Color(247, 243, 243));
 		frame.addWindowListener(new WindowAdapter() {
-			// **************** 윈도우 이벤트 (세팅) ********************
+			// **************** 윈도우 이벤트 (테이블 세팅) ********************
 			@Override
 			public void windowActivated(WindowEvent e) {
 				tableInit();
@@ -97,12 +98,14 @@ public class AdminMenuList extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(getLblGoHome());
+		frame.getContentPane().add(getScrollPane());
 
 		JLabel lblStore = new JLabel("지점");
 		lblStore.setForeground(new Color(60, 143, 96));
 		lblStore.setFont(new Font("굴림", Font.PLAIN, 15));
 		lblStore.setBounds(340, 10, 50, 23);
 		frame.getContentPane().add(lblStore);
+		lblStore.setText(StaticClass.shop_name);
 
 		JLabel lblArrow = new JLabel("");
 		// 뒤로 가기 라벨 클릭 이벤트
@@ -122,30 +125,10 @@ public class AdminMenuList extends JFrame {
 		lblArrow.setIcon(updateIcon);
 		frame.getContentPane().add(lblArrow);
 
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(32, 127, 522, 230);
-		frame.getContentPane().add(scrollPane_1);
+		
 
-		Inner_Table = new JTable();
-		Inner_Table.setBackground(Color.WHITE);
-		Inner_Table.addMouseListener(new MouseAdapter() {
-			// ***********************테이블 클릭 이벤트(페이지 넘기기)******************
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getButton() == 1) {
-					frame.setVisible(false);
-					AdminMenuDetail adminMenuDetail = new AdminMenuDetail();
-					adminMenuDetail.main(null);
-					// static으로 상품 아이디 보내주기
-					tableClick();
-				}
-			}
-		});
-		scrollPane_1.setViewportView(Inner_Table);
-		// **************************** 테이블 세팅 **************************
-		Inner_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		Inner_Table.setModel(Outer_Table);
 
+		
 		tfSearch = new JTextField();
 		tfSearch.addMouseListener(new MouseAdapter() {
 			@Override
@@ -202,6 +185,40 @@ public class AdminMenuList extends JFrame {
 		frame.getContentPane().add(getRdbtnNewRadioButton_1());
 		frame.getContentPane().add(getRdbtnNewRadioButton_2());
 	}
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setBounds(32, 126, 522, 218);
+			scrollPane.setViewportView(getInner_Table());
+		}
+		return scrollPane;
+	}
+	private JTable getInner_Table() {
+		if (Inner_Table == null) {
+			Inner_Table = new JTable();
+			Inner_Table.setBackground(Color.WHITE);
+			Inner_Table.addMouseListener(new MouseAdapter() {
+				// ***********************테이블 클릭 이벤트(페이지 넘기기)******************
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (e.getButton() == 1) {
+						// static으로 상품 아이디 보내주기
+						System.out.println("리스트 클릭");
+						productId();
+						frame.setVisible(false);
+						AdminMenuDetail.main(null);
+					}
+				}
+			});
+			scrollPane.setViewportView(Inner_Table);
+			
+			// **************************** 테이블 세팅 **************************
+			Inner_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			Inner_Table.setModel(Outer_Table);
+		}
+		return Inner_Table;
+	}
+	
 	private JLabel getLblGoHome() {
 		if (lblGoHome == null) {
 			lblGoHome = new JLabel("");
@@ -309,12 +326,12 @@ public class AdminMenuList extends JFrame {
 
 		vColIndex = 2;
 		col = Inner_Table.getColumnModel().getColumn(vColIndex);
-		width = 100;
+		width = 140;
 		col.setPreferredWidth(width);
 
 		vColIndex = 3;
 		col = Inner_Table.getColumnModel().getColumn(vColIndex);
-		width = 100;
+		width = 140;
 		col.setPreferredWidth(width);
 
 	}
@@ -384,21 +401,14 @@ public class AdminMenuList extends JFrame {
 	}
 
 	// Table Click
-	private void tableClick() {
-
-		// getSelectedRow: 클릭한(선택한) row의 인덱스를 리턴
-		// DB에서 해당 행(row)의 번호 (primary key) 가져오기
+	private void productId() {
+		
 		int i = Inner_Table.getSelectedRow();
 
-		// getValueAt(int row, int column): 해당 row의 colum의 cell값을 반환
-		// i 행(row)을 가져오고, 0은 primary key(순서)만 알면 되니까 0번
-		String wkSequence = (String) Inner_Table.getValueAt(i, 0);
+		String wkSequence = Inner_Table.getValueAt(i, 0).toString();
 
-		// 숫자 프라이머리 키를 정수로 바꿈
-		AdminMenuInsertDao dao = new AdminMenuInsertDao(Integer.parseInt(wkSequence));
-
-		dao.productPk();
-
+		StaticClass.product_id = Integer.parseInt(wkSequence);
+		
 	}
 	
 	// 콤보박스 전체로 두고 검색 시 전체 나오게 
@@ -441,7 +451,6 @@ public class AdminMenuList extends JFrame {
 		
 	}
 	
-
 	
 	
 	

@@ -10,6 +10,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+
+import com.javalec.util.StaticClass;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -54,8 +57,16 @@ public class AdminStaffMenu extends JFrame {
 		frame.setBounds(100, 100, 600, 450);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		JLabel lblEm = new JLabel("null님");
+		lblEm.setForeground(new Color(60, 143, 96));
+		lblEm.setFont(new Font("굴림", Font.PLAIN, 14));
+		lblEm.setBackground(new Color(60, 143, 96));
+		lblEm.setBounds(40, 10, 80, 20);
+		frame.getContentPane().add(lblEm);
 		frame.getContentPane().add(getLblArrow());
 		frame.getContentPane().add(getLblGoHome());
+		lblEm.setText(StaticClass.employee_name+ "님");
 		
 		JLabel lblArrow = new JLabel("");
 		lblArrow.setBounds(10, 3, 35, 35);
@@ -64,13 +75,14 @@ public class AdminStaffMenu extends JFrame {
 		JLabel lblStore = new JLabel("지점");
 		lblStore.setForeground(new Color(60, 143, 96));
 		lblStore.setFont(new Font("굴림", Font.PLAIN, 15));
-		lblStore.setBounds(355, 8, 50, 23);
+		lblStore.setBounds(340, 15, 50, 15);
 		frame.getContentPane().add(lblStore);
+		lblStore.setText(StaticClass.shop_name);
 		
 		JLabel lblNewLabel_3 = new JLabel("Melhor Coffee");
 		lblNewLabel_3.setForeground(Color.WHITE);
 		lblNewLabel_3.setFont(new Font("굴림", Font.BOLD | Font.ITALIC, 18));
-		lblNewLabel_3.setBounds(182, 9, 142, 23);
+		lblNewLabel_3.setBounds(200, 10, 140, 23);
 		frame.getContentPane().add(lblNewLabel_3);
 		
 		JLabel lblGoHome = new JLabel("");
@@ -85,20 +97,8 @@ public class AdminStaffMenu extends JFrame {
 				AdminStaffInsert.main(null);
 			}
 		});
-		btnNewButton.setBounds(113, 97, 123, 81);
+		btnNewButton.setBounds(141, 155, 123, 81);
 		frame.getContentPane().add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("출퇴근 내역");
-		btnNewButton_1.setBounds(336, 227, 123, 81);
-		frame.getContentPane().add(btnNewButton_1);
-		
-		JButton btnNewButton_1_1 = new JButton("월급 내역");
-		btnNewButton_1_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_1_1.setBounds(113, 227, 123, 81);
-		frame.getContentPane().add(btnNewButton_1_1);
 		
 		JButton btnStaff = new JButton("staff 정보 관리");
 		//-------------------------스태프 해제 버튼---------------------------------
@@ -108,7 +108,7 @@ public class AdminStaffMenu extends JFrame {
 				AdminRegisterStaffManagement.main(null);
 			}
 		});
-		btnStaff.setBounds(336, 97, 123, 81);
+		btnStaff.setBounds(329, 155, 123, 81);
 		frame.getContentPane().add(btnStaff);
 		
 		JLabel lblNew3333 = new JLabel("");

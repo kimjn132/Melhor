@@ -156,6 +156,7 @@ public class AdminStaffDetail extends JFrame {
 			lblStore.setForeground(new Color(60, 143, 96));
 			lblStore.setFont(new Font("굴림", Font.PLAIN, 15));
 			lblStore.setBounds(355, 8, 50, 23);
+			lblStore.setText(StaticClass.shop_name);
 		}
 		return lblStore;
 	}
@@ -334,7 +335,11 @@ public class AdminStaffDetail extends JFrame {
 		if (ok == true) {
 
 			JOptionPane.showMessageDialog(null, StaticClass.staff_name + "님이 등록 해제 되었습니다.");
+			frame.setVisible(false);
+			AdminRegisterStaffManagement.main(null);
+			
 		} else {
+			
 			JOptionPane.showMessageDialog(null, "작업중 문제발생했습니다.");
 
 		}
@@ -354,6 +359,10 @@ public class AdminStaffDetail extends JFrame {
 		if (ok == true) {
 
 			JOptionPane.showMessageDialog(null, StaticClass.staff_name + "님의 정보가 수정되었습니다.");
+			frame.setVisible(false);
+			AdminRegisterStaffManagement.main(null);
+			
+			
 		} else {
 			JOptionPane.showMessageDialog(null, "작업중 문제발생했습니다.");
 

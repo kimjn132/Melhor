@@ -17,8 +17,6 @@ public class AdminLogInDto {
 		this.adminPw = adminPw;
 	}
 
-	
-	
 	//getter&setter
 	public String getAdminId() {
 		return adminId;
@@ -35,7 +33,5 @@ public class AdminLogInDto {
 	public void setAdminPw(String adminPw) {
 		this.adminPw = adminPw;
 	}
-	
-	
 	
 }

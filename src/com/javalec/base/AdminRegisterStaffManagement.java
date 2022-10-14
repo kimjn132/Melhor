@@ -109,7 +109,7 @@ public class AdminRegisterStaffManagement extends JFrame {
 		if (lblEm == null) {
 			lblEm = new JLabel("null님");
 			lblEm.setForeground(new Color(60, 143, 96));
-			lblEm.setFont(new Font("굴림", Font.BOLD, 15));
+			lblEm.setFont(new Font("굴림", Font.PLAIN, 15));
 			lblEm.setBounds(43, 10, 81, 22);
 			lblEm.setText(StaticClass.employee_name + "님");
 		}

@@ -21,20 +21,19 @@ import javax.swing.ImageIcon;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingConstants;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.JScrollPane;
 
 public class AdminMenuDetail extends JFrame {
 
 	private JFrame frame;
 	private JLabel lblProductName;
-	private JLabel lblProductId;
-	private JLabel lblProductPrice;
-	private JLabel lblProductRecipe;
-	private JLabel lblProductExplain;
-	private JLabel lblProductCategory;
 	private JLabel lblNewLabel;
 	private JLabel lblEm;
 	private JLabel lblNewLabel_1_1_5;
@@ -43,6 +42,13 @@ public class AdminMenuDetail extends JFrame {
 	private JLabel lblArrow;
 	private JLabel lblImage;
 	private JLabel lblGoHome;
+	private JButton btnUnregister;
+	private JScrollPane scrollPane;
+	private JTextPane tpExplain;
+	private JTextPane tpRecipe;
+	private JTextField tfId;
+	private JTextField tfCategory;
+	private JTextField tfPrice;
 
 	/**
 	 * Launch the application.
@@ -80,13 +86,15 @@ public class AdminMenuDetail extends JFrame {
 			}
 		});
 		frame.getContentPane().setBackground(new Color(247, 243, 243));
-		frame.setTitle("제품 등록");
+		frame.setTitle("메뉴 등록");
 		frame.setBounds(100, 100, 600, 450);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
-		lblImage = new JLabel("image");
-		lblImage.setBounds(99, 120, 90, 90);
+		frame.getContentPane().add(getBtnUnregister());
+
+		lblImage = new JLabel("");
+		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+		lblImage.setBounds(53, 120, 189, 100);
 		frame.getContentPane().add(lblImage);
 		frame.getContentPane().add(getLblArrow());
 		frame.getContentPane().add(getLblGoHome());
@@ -94,7 +102,6 @@ public class AdminMenuDetail extends JFrame {
 		frame.getContentPane().add(getLblNewLabel());
 		frame.getContentPane().add(getLblStore());
 		frame.getContentPane().add(getLblNewLabel_1_1_5());
-		
 
 		JLabel lblNewLabel_1_1 = new JLabel("제품번호");
 		lblNewLabel_1_1.setBounds(55, 250, 50, 15);
@@ -109,51 +116,27 @@ public class AdminMenuDetail extends JFrame {
 		frame.getContentPane().add(lblNewLabel_1_1_2);
 
 		JLabel lblNewLabel_1_1_3 = new JLabel("제품 설명");
-		lblNewLabel_1_1_3.setBounds(319, 251, 64, 15);
+		lblNewLabel_1_1_3.setBounds(319, 214, 64, 15);
 		frame.getContentPane().add(lblNewLabel_1_1_3);
 
-		JButton btnMenuInsert = new JButton("등록");
-		// *****************************메뉴 등록 버튼 이벤트********************
-		btnMenuInsert.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				menuInsertAction();
-			}
-		});
-		btnMenuInsert.setBounds(504, 378, 70, 30);
-		frame.getContentPane().add(btnMenuInsert);
-
 		lblProductName = new JLabel("New label");
+		lblProductName.setForeground(new Color(60, 143, 96));
+		lblProductName.setBackground(new Color(60, 143, 96));
 		lblProductName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProductName.setFont(new Font("굴림", Font.BOLD, 15));
-		lblProductName.setBounds(43, 73, 189, 30);
+		lblProductName.setBounds(53, 67, 189, 30);
 		frame.getContentPane().add(lblProductName);
-
-		lblProductId = new JLabel("New label");
-		lblProductId.setBounds(120, 250, 75, 15);
-		frame.getContentPane().add(lblProductId);
-
-		lblProductPrice = new JLabel("New label");
-		lblProductPrice.setBounds(120, 320, 75, 15);
-		frame.getContentPane().add(lblProductPrice);
-
-		lblProductRecipe = new JLabel("New label");
-		lblProductRecipe.setBounds(319, 113, 225, 121);
-		frame.getContentPane().add(lblProductRecipe);
-
-		lblProductExplain = new JLabel("New label");
-		lblProductExplain.setBounds(319, 276, 225, 60);
-		frame.getContentPane().add(lblProductExplain);
 
 		JLabel lblNewLabel_1_1_4 = new JLabel("카테고리");
 		lblNewLabel_1_1_4.setBounds(55, 285, 50, 15);
 		frame.getContentPane().add(lblNewLabel_1_1_4);
-
-		lblProductCategory = new JLabel("New label");
-		lblProductCategory.setBounds(120, 285, 75, 15);
-		frame.getContentPane().add(lblProductCategory);
 		frame.getContentPane().add(getLblNewLabel_1_2());
-		
-		
+		frame.getContentPane().add(getScrollPane());
+		frame.getContentPane().add(getTpRecipe());
+		frame.getContentPane().add(getTfId());
+		frame.getContentPane().add(getTfCategory());
+		frame.getContentPane().add(getTfPrice());
+
 	}
 
 	private JLabel getLblNewLabel() {
@@ -165,15 +148,18 @@ public class AdminMenuDetail extends JFrame {
 		}
 		return lblNewLabel;
 	}
+
 	private JLabel getLblEm() {
 		if (lblEm == null) {
 			lblEm = new JLabel("null님");
 			lblEm.setForeground(new Color(60, 143, 96));
 			lblEm.setFont(new Font("굴림", Font.PLAIN, 13));
 			lblEm.setBounds(40, 10, 80, 22);
+			lblEm.setText(StaticClass.employee_name+ "님");
 		}
 		return lblEm;
 	}
+
 	private JLabel getLblNewLabel_1_1_5() {
 		if (lblNewLabel_1_1_5 == null) {
 			lblNewLabel_1_1_5 = new JLabel("");
@@ -184,15 +170,18 @@ public class AdminMenuDetail extends JFrame {
 		}
 		return lblNewLabel_1_1_5;
 	}
+
 	private JLabel getLblStore() {
 		if (lblStore == null) {
 			lblStore = new JLabel("지점");
 			lblStore.setForeground(new Color(60, 143, 96));
 			lblStore.setFont(new Font("굴림", Font.PLAIN, 15));
 			lblStore.setBounds(340, 10, 50, 23);
+			lblStore.setText(StaticClass.shop_name);
 		}
 		return lblStore;
 	}
+
 	private JLabel getLblNewLabel_1_2() {
 		if (lblNewLabel_1_2 == null) {
 			lblNewLabel_1_2 = new JLabel("");
@@ -203,31 +192,8 @@ public class AdminMenuDetail extends JFrame {
 		}
 		return lblNewLabel_1_2;
 	}
-	
-	// 뒤로 가기 화살표 라벨 
-	private JLabel getLblArrow() {
-		if (lblArrow == null) {
-			lblArrow = new JLabel("");
-			lblArrow.addMouseListener(new MouseAdapter() {
-				@Override
-				// 뒤로 가기 라벨 클릭 이벤트
-				public void mouseClicked(MouseEvent e) {
-					AdminMenuList.main(null);
-					frame.setVisible(false);
-				}
-			});
-			lblArrow.setBounds(10, 3, 35, 35);
-			ImageIcon icon = new ImageIcon(
-					AdminMenuDetail.class.getResource("/com/javalec/image/leftarrow.png")
-					);
-			Image img = icon.getImage();  //ImageIcon을 Image로 변환.
-			Image updateImg = img.getScaledInstance(20, 15, java.awt.Image.SCALE_SMOOTH);
-			ImageIcon updateIcon = new ImageIcon(updateImg); 
-			
-			lblArrow.setIcon(updateIcon);
-		}
-		return lblArrow;
-	}
+
+
 	private JLabel getLblGoHome() {
 		if (lblGoHome == null) {
 			lblGoHome = new JLabel("");
@@ -244,53 +210,217 @@ public class AdminMenuDetail extends JFrame {
 			Image img = icon.getImage(); // ImageIcon을 Image로 변환.
 			Image updateImg = img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
 			ImageIcon updateIcon = new ImageIcon(updateImg);
-			
+
 			lblGoHome.setIcon(updateIcon);
 		}
 		return lblGoHome;
 	}
+
+	// 뒤로 가기 화살표 라벨
+	private JLabel getLblArrow() {
+		if (lblArrow == null) {
+			
+			AdminMenuDetailDao dao = new AdminMenuDetailDao();
+			AdminMenuDetailDto dto = dao.menuRegisterCheck();
+
+			int registerCheck = dto.getCount();
+			
+			if (registerCheck == 1) {
+				lblArrow = new JLabel("");
+				lblArrow.addMouseListener(new MouseAdapter() {
+					@Override
+					// 뒤로 가기 라벨 클릭 이벤트
+					public void mouseClicked(MouseEvent e) {
+						frame.setVisible(false);
+						AdminRegisterMenuManagement.main(null);
+					}
+				});
+				
+			}else if (registerCheck == 0) {
+				lblArrow = new JLabel("");
+				// 뒤로 가기 라벨 클릭 이벤트
+				lblArrow.addMouseListener(new MouseAdapter() {
+					@Override
+					// 뒤로 가기 라벨 클릭 이벤트
+					public void mouseClicked(MouseEvent e) {
+						frame.setVisible(false);
+						AdminMenuList.main(null);
+					}
+				});
+			}
+		
+			lblArrow.setBounds(10, 3, 35, 35);
+			ImageIcon icon = new ImageIcon(AdminMenuDetail.class.getResource("/com/javalec/image/leftarrow.png"));
+			Image img = icon.getImage(); // ImageIcon을 Image로 변환.
+			Image updateImg = img.getScaledInstance(20, 15, java.awt.Image.SCALE_SMOOTH);
+			ImageIcon updateIcon = new ImageIcon(updateImg);
+			
+			lblArrow.setIcon(updateIcon);
+		}
+		return lblArrow;
+	}
+	// 요기!!!!!!!!!!!!!!!!!
+	// 등록된 메뉴면 해제 버튼으로 바뀌고 등록 안 된 메뉴면 등록 버튼으로 바뀜
+	private JButton getBtnUnregister() {
+		if (btnUnregister == null) {
+
+			AdminMenuDetailDao dao = new AdminMenuDetailDao();
+			AdminMenuDetailDto dto = dao.menuRegisterCheck();
+
+			int registerCheck = dto.getCount();
+			
+			if (registerCheck == 1) {
+				btnUnregister = new JButton("해제");
+				btnUnregister.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						updateDeleteDate();
+						frame.setVisible(false);
+						AdminRegisterMenuManagement.main(null);
+					}
+				});
+			} else if (registerCheck == 0) {
+				btnUnregister = new JButton("등록");
+				btnUnregister.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						menuInsertCountCheck();
+						insertRegister();
+						frame.setVisible(false);
+						AdminMenuList.main(null);
+					}
+				});
+
+			}
+
+			btnUnregister.setBounds(500, 377, 80, 26);
+
+		}
+		return btnUnregister;
+	}
+
 	// ================================메소드=======================================
 
-	// 메뉴 상세 정보 출력 
+	// 메뉴 상세 정보 출력
 	private void menuDetail() {
 
 		AdminMenuDetailDao dao = new AdminMenuDetailDao(StaticClass.product_id);
 		AdminMenuDetailDto dto = dao.settingInfo();
 
-		lblProductId.setText(Integer.toString(dto.getProduct_id()));
+		tfId.setText(Integer.toString(dto.getProduct_id()));
 		lblProductName.setText(dto.getProduct_name());
-		lblProductCategory.setText(dto.getProduct_category());
-		lblProductPrice.setText(Integer.toString(dto.getProduct_price()));
-		lblProductRecipe.setText(dto.getProduct_recipe());
-		lblProductExplain.setText(dto.getProduct_explain());
-		
+		tfCategory.setText(dto.getProduct_category());
+		tfPrice.setText(Integer.toString(dto.getProduct_price()));
+		tpRecipe.setText(dto.getProduct_recipe());
+		tpExplain.setText(dto.getProduct_explain());
+
 		// Image처리
-        // File name이 틀려야 즉각 보여주기가 가능하여   
-        // ShareVar에서 int값으로 정의하여 계속 증가하게 하여 file name으로 사용후 삭제
-        
+		// File name이 틀려야 즉각 보여주기가 가능하여
+		// ShareVar에서 int값으로 정의하여 계속 증가하게 하여 file name으로 사용후 삭제
+
 		String filePath = Integer.toString(StaticClass.filename);
-		
+
 		lblImage.setIcon(new ImageIcon(filePath));
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		File file = new File(filePath);
 		file.delete();
-		
+
 	}
 
-	// insertAction()---------------------------
-	private void menuInsertAction() {
+	// register_id -> static
+
+	// 1. 등록 버튼일 때 메소드 insertAction()---------------------------
+	private void insertRegister() {
 
 		AdminMenuDetailDao dao = new AdminMenuDetailDao();
+
 		int check = dao.insertRegister();
-		if (check == 0) {
-			JOptionPane.showMessageDialog(null, StaticClass.product_id + "상품이 등록되었습니다.");
-			AdminMenuList.main(null);
-			frame.setVisible(false);
+		
+		if (check == 1) {
+
 		} else {
-			JOptionPane.showMessageDialog(null, "DB에 자료 입력중 에러가 발생했습니다! \n 시스템관리자에 문의하세요!");
+			JOptionPane.showMessageDialog(null, "작업중 문제발생했습니다.");
+
 		}
 	}
-	
-	
+
+	// 6개 넘게 등록 못하도록
+	private void menuInsertCountCheck() {
+
+		AdminMenuDetailDao dao = new AdminMenuDetailDao();
+		AdminMenuDetailDto dto = dao.menuCount();
+
+		int count = dto.getCount();
+		if (count < 6) {
+			JOptionPane.showMessageDialog(null, "메뉴가 등록되었습니다.");
+		} else {
+			JOptionPane.showMessageDialog(null, "메뉴는 6개만 등록 가능합니다. \n등록된 메뉴의 개수를 확인하세요.");
+		}
+
+	}
+
+	// 2. 해제 버튼일 때 메소드 update deletedate --------------------------------
+
+	private void updateDeleteDate() {
+
+		AdminMenuDetailDao dao = new AdminMenuDetailDao();
+		Boolean ok = dao.updateDelDate();
+
+		if (ok == true) {
+
+			JOptionPane.showMessageDialog(null, "메뉴 등록이 해제되었습니다.");
+		} else {
+			JOptionPane.showMessageDialog(null, "작업중 문제발생했습니다.");
+
+		}
+	}
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setBounds(319, 239, 236, 104);
+			scrollPane.setViewportView(getTpExplain());
+		}
+		return scrollPane;
+	}
+	private JTextPane getTpExplain() {
+		if (tpExplain == null) {
+			tpExplain = new JTextPane();
+			tpExplain.setEditable(false);
+		}
+		return tpExplain;
+	}
+	private JTextPane getTpRecipe() {
+		if (tpRecipe == null) {
+			tpRecipe = new JTextPane();
+			tpRecipe.setEditable(false);
+			tpRecipe.setBounds(319, 100, 236, 100);
+		}
+		return tpRecipe;
+	}
+	private JTextField getTfId() {
+		if (tfId == null) {
+			tfId = new JTextField();
+			tfId.setEditable(false);
+			tfId.setBounds(125, 247, 96, 21);
+			tfId.setColumns(10);
+		}
+		return tfId;
+	}
+	private JTextField getTfCategory() {
+		if (tfCategory == null) {
+			tfCategory = new JTextField();
+			tfCategory.setEditable(false);
+			tfCategory.setColumns(10);
+			tfCategory.setBounds(125, 282, 96, 21);
+		}
+		return tfCategory;
+	}
+	private JTextField getTfPrice() {
+		if (tfPrice == null) {
+			tfPrice = new JTextField();
+			tfPrice.setEditable(false);
+			tfPrice.setColumns(10);
+			tfPrice.setBounds(125, 317, 96, 21);
+		}
+		return tfPrice;
+	}
 }// END

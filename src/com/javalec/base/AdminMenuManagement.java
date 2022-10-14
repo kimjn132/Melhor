@@ -21,6 +21,7 @@ import java.awt.event.MouseEvent;
 public class AdminMenuManagement extends JFrame {
 
 	private JFrame frame;
+	private JLabel lblGoHome;
 
 	/**
 	 * Launch the application.
@@ -56,8 +57,8 @@ public class AdminMenuManagement extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
-		JButton btnMenuInsert = new JButton("메뉴 등록");
-		btnMenuInsert.setFont(new Font("굴림", Font.BOLD, 20));
+		JButton btnMenuInsert = new JButton("새 메뉴 등록");
+		btnMenuInsert.setFont(new Font("굴림", Font.PLAIN, 20));
 		// ***************메뉴 등록 버튼 이벤트***************************
 		btnMenuInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -75,6 +76,7 @@ public class AdminMenuManagement extends JFrame {
 				AdminMainPage.main(null);
 			}
 		});
+		frame.getContentPane().add(getLblGoHome());
 		lblArrow.setBounds(5, 2, 35, 35);
 		frame.getContentPane().add(lblArrow);
 		// arrow
@@ -94,6 +96,7 @@ public class AdminMenuManagement extends JFrame {
 		lblStore.setForeground(new Color(60, 143, 96));
 		lblStore.setFont(new Font("굴림", Font.PLAIN, 15));
 		lblStore.setBounds(340, 10, 50, 23);
+		lblStore.setText(StaticClass.shop_name);
 		frame.getContentPane().add(lblStore);
 		
 		JLabel lblNewLabel = new JLabel("Melhor Coffee");
@@ -101,11 +104,11 @@ public class AdminMenuManagement extends JFrame {
 		lblNewLabel.setFont(new Font("굴림", Font.BOLD | Font.ITALIC, 18));
 		lblNewLabel.setBounds(200, 10, 140, 23);
 		frame.getContentPane().add(lblNewLabel);
-		btnMenuInsert.setBounds(88, 123, 150, 150);
+		btnMenuInsert.setBounds(320, 122, 189, 150);
 		frame.getContentPane().add(btnMenuInsert);
 
-		JButton btnMenuManagement = new JButton("메뉴 관리");
-		btnMenuManagement.setFont(new Font("굴림", Font.BOLD, 20));
+		JButton btnMenuManagement = new JButton("등록된 메뉴 관리");
+		btnMenuManagement.setFont(new Font("굴림", Font.PLAIN, 20));
 		// *******************************메뉴 관리 이벤트*******************************
 		btnMenuManagement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -113,13 +116,13 @@ public class AdminMenuManagement extends JFrame {
 				AdminRegisterMenuManagement.main(null);
 			}
 		});
-		btnMenuManagement.setBounds(340, 123, 150, 150);
+		btnMenuManagement.setBounds(76, 122, 189, 150);
 		frame.getContentPane().add(btnMenuManagement);
 		
 		JLabel lblEm = new JLabel("null님");
 		lblEm.setForeground(new Color(60, 143, 96));
-		lblEm.setFont(new Font("굴림", Font.BOLD, 15));
-		lblEm.setBounds(43, 10, 81, 22);
+		lblEm.setFont(new Font("굴림", Font.PLAIN, 14));
+		lblEm.setBounds(40, 10, 80, 20);
 		frame.getContentPane().add(lblEm);
 		lblEm.setText(StaticClass.employee_name + "님");
 		
@@ -136,5 +139,28 @@ public class AdminMenuManagement extends JFrame {
 		lblNewLabel_1_2.setBackground(new Color(235, 199, 189));
 		lblNewLabel_1_2.setBounds(0, 374, 586, 40);
 		frame.getContentPane().add(lblNewLabel_1_2);
+	}
+	private JLabel getLblGoHome() {
+		if (lblGoHome == null) {
+			lblGoHome = new JLabel("");
+			lblGoHome.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					frame.setVisible(false);
+					AdminMainPage.main(null);
+				}
+			});
+			lblGoHome.setBounds(539, 2, 35, 35);
+			
+			lblGoHome.setBounds(545, 2, 35, 35);
+			ImageIcon icon = new ImageIcon(AdminStaffDetail.class.getResource("/com/javalec/image/home.png"));
+			Image img = icon.getImage(); // ImageIcon을 Image로 변환.
+			Image updateImg = img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
+			ImageIcon updateIcon = new ImageIcon(updateImg);
+
+			lblGoHome.setIcon(updateIcon);
+		}
+		
+		return lblGoHome;
 	}
 }
