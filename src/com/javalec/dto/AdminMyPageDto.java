@@ -18,6 +18,12 @@ public class AdminMyPageDto {
 		this.employeeTelno = employeeTelno;
 		this.employeeEmail = employeeEmail;
 	}
+	
+
+	public AdminMyPageDto(String employeeName) {
+		super();
+		this.employeeName = employeeName;
+	}
 
 	//getter&setter
 	public String getEmployeeName() {

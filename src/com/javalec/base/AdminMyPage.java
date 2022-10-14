@@ -40,7 +40,6 @@ public class AdminMyPage extends JFrame {
 	private JLabel lblStore;
 	private JLabel lblNewLabel_1_2;
 	private JButton btnNewButton;
-	private JLabel lblNewLabel_1;
 	private JTextField tfEmId;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
@@ -55,6 +54,8 @@ public class AdminMyPage extends JFrame {
 	private JLabel lblPwCheck;
 	private JPasswordField pfPw;
 	private JPasswordField pfPwCheck;
+	private JLabel lblNewLabel_2_1;
+	private JTextField tfAddress;
 
 	/**
 	 * Launch the application.
@@ -89,6 +90,7 @@ public class AdminMyPage extends JFrame {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				searchAction();
+				address();
 			}
 		});
 		frame.getContentPane().setBackground(new Color(247, 243, 243));
@@ -103,7 +105,6 @@ public class AdminMyPage extends JFrame {
 		frame.getContentPane().add(getLblNewLabel());
 		frame.getContentPane().add(getLblNew3333());
 		frame.getContentPane().add(getLblNewLabel_1_2());
-		frame.getContentPane().add(getLblNewLabel_1());
 		frame.getContentPane().add(getTfEmId());
 		frame.getContentPane().add(getLblNewLabel_2());
 		frame.getContentPane().add(getLblNewLabel_3());
@@ -116,6 +117,8 @@ public class AdminMyPage extends JFrame {
 		frame.getContentPane().add(getLblPwCheck());
 		frame.getContentPane().add(getPfPw());
 		frame.getContentPane().add(getPfPwCheck());
+		frame.getContentPane().add(getLblNewLabel_2_1());
+		frame.getContentPane().add(getTfAddress());
 	}
 	private JLabel getLblNew3333() {
 		if (lblNew3333 == null) {
@@ -142,6 +145,7 @@ public class AdminMyPage extends JFrame {
 			lblStore.setForeground(new Color(60, 143, 96));
 			lblStore.setFont(new Font("굴림", Font.PLAIN, 15));
 			lblStore.setBounds(355, 8, 50, 23);
+			lblStore.setText(StaticClass.shop_name);
 		}
 		return lblStore;
 	}
@@ -168,19 +172,12 @@ public class AdminMyPage extends JFrame {
 		}
 		return btnNewButton;
 	}
-	private JLabel getLblNewLabel_1() {
-		if (lblNewLabel_1 == null) {
-			lblNewLabel_1 = new JLabel("New label");
-			lblNewLabel_1.setBounds(50, 93, 100, 100);
-		}
-		return lblNewLabel_1;
-	}
 	private JTextField getTfEmId() {
 		if (tfEmId == null) {
 			tfEmId = new JTextField();
 			tfEmId.setEditable(false);
 			tfEmId.setForeground(new Color(60, 143, 96));
-			tfEmId.setBounds(230, 79, 111, 21);
+			tfEmId.setBounds(231, 65, 111, 21);
 			tfEmId.setColumns(10);
 		}
 		return tfEmId;
@@ -188,35 +185,36 @@ public class AdminMyPage extends JFrame {
 	private JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
 			lblNewLabel_2 = new JLabel("이름");
-			lblNewLabel_2.setBounds(230, 135, 50, 15);
+			lblNewLabel_2.setToolTipText("");
+			lblNewLabel_2.setBounds(182, 151, 50, 15);
 		}
 		return lblNewLabel_2;
 	}
 	private JLabel getLblNewLabel_3() {
 		if (lblNewLabel_3 == null) {
 			lblNewLabel_3 = new JLabel("전화번호");
-			lblNewLabel_3.setBounds(230, 180, 50, 15);
+			lblNewLabel_3.setBounds(182, 192, 50, 15);
 		}
 		return lblNewLabel_3;
 	}
 	private JLabel getLblNewLabel_4() {
 		if (lblNewLabel_4 == null) {
 			lblNewLabel_4 = new JLabel("이메일");
-			lblNewLabel_4.setBounds(230, 225, 50, 15);
+			lblNewLabel_4.setBounds(179, 234, 50, 15);
 		}
 		return lblNewLabel_4;
 	}
 	private JLabel getLblNewLabel_5() {
 		if (lblNewLabel_5 == null) {
 			lblNewLabel_5 = new JLabel("비밀번호");
-			lblNewLabel_5.setBounds(230, 270, 50, 15);
+			lblNewLabel_5.setBounds(182, 277, 50, 15);
 		}
 		return lblNewLabel_5;
 	}
 	private JLabel getLblNewLabel_6() {
 		if (lblNewLabel_6 == null) {
 			lblNewLabel_6 = new JLabel("비밀번호 확인");
-			lblNewLabel_6.setBounds(230, 315, 79, 15);
+			lblNewLabel_6.setBounds(182, 315, 79, 15);
 		}
 		return lblNewLabel_6;
 	}
@@ -230,7 +228,7 @@ public class AdminMyPage extends JFrame {
 					tfEmName.setText("");
 				}
 			});
-			tfEmName.setBounds(320, 130, 96, 21);
+			tfEmName.setBounds(272, 146, 96, 21);
 			tfEmName.setColumns(10);
 		}
 		return tfEmName;
@@ -245,7 +243,7 @@ public class AdminMyPage extends JFrame {
 					tfEmTelno.setText("");
 				}
 			});
-			tfEmTelno.setBounds(320, 175, 136, 21);
+			tfEmTelno.setBounds(272, 187, 136, 21);
 			tfEmTelno.setColumns(10);
 		}
 		return tfEmTelno;
@@ -260,7 +258,7 @@ public class AdminMyPage extends JFrame {
 					tfEmEmail.setText("");
 				}
 			});
-			tfEmEmail.setBounds(320, 220, 136, 21);
+			tfEmEmail.setBounds(269, 229, 136, 21);
 			tfEmEmail.setColumns(10);
 		}
 		return tfEmEmail;
@@ -268,6 +266,13 @@ public class AdminMyPage extends JFrame {
 	private JButton getBtnNewButton_1() {
 		if (btnNewButton_1 == null) {
 			btnNewButton_1 = new JButton("로그아웃");
+			// 로그아웃 버튼 클릭 이벤트
+			btnNewButton_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					frame.setVisible(false);
+					staticInit();
+				}
+			});
 			btnNewButton_1.setBounds(483, 10, 91, 23);
 		}
 		return btnNewButton_1;
@@ -300,14 +305,14 @@ public class AdminMyPage extends JFrame {
 			lblPwCheck = new JLabel("비밀번호를 확인하세요.");
 			lblPwCheck.setForeground(new Color(255, 0, 0));
 			lblPwCheck.setFont(new Font("굴림", Font.PLAIN, 8));
-			lblPwCheck.setBounds(320, 333, 118, 13);
+			lblPwCheck.setBounds(272, 333, 118, 13);
 		}
 		return lblPwCheck;
 	}
 	private JPasswordField getPfPw() {
 		if (pfPw == null) {
 			pfPw = new JPasswordField();
-			pfPw.setBounds(320, 265, 118, 21);
+			pfPw.setBounds(272, 272, 118, 21);
 		}
 		return pfPw;
 	}
@@ -321,7 +326,7 @@ public class AdminMyPage extends JFrame {
 					pwCheck();
 				}
 			});
-			pfPwCheck.setBounds(320, 310, 118, 21);
+			pfPwCheck.setBounds(272, 310, 118, 21);
 		}
 		return pfPwCheck;
 	}
@@ -338,6 +343,14 @@ public class AdminMyPage extends JFrame {
 		tfEmName.setText(dtoList.get(0).getEmployeeName());
 		tfEmTelno.setText(dtoList.get(0).getEmployeeTelno());
 		tfEmEmail.setText(dtoList.get(0).getEmployeeEmail());
+		
+	}
+	private void address() {
+		
+		AdminMyPageDao dao = new AdminMyPageDao(); // 연결
+		ArrayList<AdminMyPageDto> dtoList = dao.address(); 
+		
+		tfAddress.setText(dtoList.get(0).getEmployeeName());
 		
 	}
 	
@@ -372,17 +385,33 @@ public class AdminMyPage extends JFrame {
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	private void staticInit() {
+		
+		StaticClass.employee_id = 0;
+		StaticClass.employee_name = null;
+		StaticClass.filename = 0;
+		StaticClass.product_id = 0;
+		StaticClass.shop_name = null;
+		StaticClass.shop_number = 0;
+		StaticClass.shop_open_date = null;
+		StaticClass.staff_id = 0;
+		StaticClass.staff_name = null;
+		
+	}
+	private JLabel getLblNewLabel_2_1() {
+		if (lblNewLabel_2_1 == null) {
+			lblNewLabel_2_1 = new JLabel("지점 주소");
+			lblNewLabel_2_1.setToolTipText("");
+			lblNewLabel_2_1.setBounds(182, 115, 65, 15);
+		}
+		return lblNewLabel_2_1;
+	}
+	private JTextField getTfAddress() {
+		if (tfAddress == null) {
+			tfAddress = new JTextField();
+			tfAddress.setColumns(10);
+			tfAddress.setBounds(272, 112, 271, 21);
+		}
+		return tfAddress;
+	}
 }// END

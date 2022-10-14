@@ -11,6 +11,8 @@ public class AdminRevenueDto {
 	int sales;
 	double wkAvgQuantity;
 	double wkAvgSales;
+	double wkAvgMonthQuantity;
+	double wkAvgMonthSales;
 	
 	//constructor
 	public AdminRevenueDto() {
@@ -36,14 +38,16 @@ public class AdminRevenueDto {
 	}
 	
 	
-
-	public AdminRevenueDto(int id, String name, String category, double wkAvgQuantity, double wkAvgSales) {
+	public AdminRevenueDto(int id, String name, String category, double wkAvgQuantity, double wkAvgSales,
+			double wkAvgMonthQuantity, double wkAvgMonthSales) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.category = category;
 		this.wkAvgQuantity = wkAvgQuantity;
 		this.wkAvgSales = wkAvgSales;
+		this.wkAvgMonthQuantity = wkAvgMonthQuantity;
+		this.wkAvgMonthSales = wkAvgMonthSales;
 	}
 
 	//getter&setter
@@ -109,6 +113,22 @@ public class AdminRevenueDto {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public double getWkAvgMonthQuantity() {
+		return wkAvgMonthQuantity;
+	}
+
+	public void setWkAvgMonthQuantity(double wkAvgMonthQuantity) {
+		this.wkAvgMonthQuantity = wkAvgMonthQuantity;
+	}
+
+	public double getWkAvgMonthSales() {
+		return wkAvgMonthSales;
+	}
+
+	public void setWkAvgMonthSales(double wkAvgMonthSales) {
+		this.wkAvgMonthSales = wkAvgMonthSales;
 	}
 	
 	

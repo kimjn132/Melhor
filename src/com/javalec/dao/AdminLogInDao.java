@@ -78,7 +78,6 @@ public class AdminLogInDao {
 			e.printStackTrace();
 			return nameRs;
 		}
-		System.out.println(nameRs);
 		return nameRs;
 	}
 	
@@ -105,7 +104,6 @@ public class AdminLogInDao {
 			e.printStackTrace();
 			return rsShopName;
 		}
-		System.out.println(rsShopName);
 		return rsShopName;
 		
 	}
@@ -133,7 +131,6 @@ public class AdminLogInDao {
 			e.printStackTrace();
 			return rsShopNumber;
 		}
-		System.out.println(rsShopNumber);
 		return rsShopNumber;
 		
 	}
@@ -162,7 +159,6 @@ public class AdminLogInDao {
 			e.printStackTrace();
 			return rsShopNumber;
 		}
-		System.out.println(rsShopNumber);
 		return rsShopNumber;
 		
 	}

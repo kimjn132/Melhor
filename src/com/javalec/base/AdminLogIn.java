@@ -115,6 +115,12 @@ public class AdminLogIn extends JFrame {
 		frame.getContentPane().add(btnLogIn);
 
 		btnNewButton = new JButton("회원 가입");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				AdminJoin.main(null);
+			}
+		});
 		btnNewButton.setBounds(401, 284, 87, 23);
 		frame.getContentPane().add(btnNewButton);
 		

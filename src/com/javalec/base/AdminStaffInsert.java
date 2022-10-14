@@ -9,11 +9,14 @@ import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.javalec.dao.AdminStaffInsertDao;
 import com.javalec.util.StaticClass;
 
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
@@ -25,6 +28,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -42,10 +48,7 @@ public class AdminStaffInsert extends JFrame {
 	private JTextField tfStaffTelno;
 	private JLabel lblNewLabel_3_1;
 	private JTextField tfStaffName;
-	private JLabel lblNewLabel_1_3;
 	private JLabel lblEm;
-	private JTextField textField;
-	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -81,8 +84,8 @@ public class AdminStaffInsert extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(getLblEm());
-		frame.getContentPane().add(getLblArrow());
 		frame.getContentPane().add(getLblStore());
+		frame.getContentPane().add(getLblArrow());
 		
 		JButton btnStaffInsert = new JButton("등록");
 		btnStaffInsert.addActionListener(new ActionListener() {
@@ -95,7 +98,7 @@ public class AdminStaffInsert extends JFrame {
 		frame.getContentPane().add(btnStaffInsert);
 		
 		JLabel lblNewLabel_1 = new JLabel("이름");
-		lblNewLabel_1.setBounds(301, 137, 50, 15);
+		lblNewLabel_1.setBounds(171, 137, 50, 15);
 		frame.getContentPane().add(lblNewLabel_1);
 		frame.getContentPane().add(getLblNewLabel_3());
 		frame.getContentPane().add(getLblNew3333());
@@ -106,9 +109,6 @@ public class AdminStaffInsert extends JFrame {
 		frame.getContentPane().add(getTfStaffTelno());
 		frame.getContentPane().add(getLblNewLabel_3_1());
 		frame.getContentPane().add(getTfStaffName());
-		frame.getContentPane().add(getLblNewLabel_1_3());
-		frame.getContentPane().add(getTextField());
-		frame.getContentPane().add(getBtnNewButton());
 	}
 	private JLabel getLblArrow() {
 		if (lblArrow == null) {
@@ -156,6 +156,7 @@ public class AdminStaffInsert extends JFrame {
 			lblStore.setForeground(new Color(60, 143, 96));
 			lblStore.setFont(new Font("굴림", Font.PLAIN, 15));
 			lblStore.setBounds(355, 10, 50, 23);
+			lblStore.setText(StaticClass.shop_name);
 		}
 		return lblStore;
 	}
@@ -179,7 +180,7 @@ public class AdminStaffInsert extends JFrame {
 	private JLabel getLblNewLabel_4() {
 		if (lblNewLabel_4 == null) {
 			lblNewLabel_4 = new JLabel("이메일");
-			lblNewLabel_4.setBounds(301, 246, 50, 15);
+			lblNewLabel_4.setBounds(171, 244, 50, 15);
 		}
 		return lblNewLabel_4;
 	}
@@ -187,7 +188,7 @@ public class AdminStaffInsert extends JFrame {
 		if (tfStaffEmail == null) {
 			tfStaffEmail = new JTextField();
 			tfStaffEmail.setColumns(10);
-			tfStaffEmail.setBounds(391, 241, 136, 21);
+			tfStaffEmail.setBounds(255, 241, 136, 21);
 		}
 		return tfStaffEmail;
 	}
@@ -195,14 +196,14 @@ public class AdminStaffInsert extends JFrame {
 		if (tfStaffTelno == null) {
 			tfStaffTelno = new JTextField();
 			tfStaffTelno.setColumns(10);
-			tfStaffTelno.setBounds(391, 188, 136, 21);
+			tfStaffTelno.setBounds(255, 188, 136, 21);
 		}
 		return tfStaffTelno;
 	}
 	private JLabel getLblNewLabel_3_1() {
 		if (lblNewLabel_3_1 == null) {
 			lblNewLabel_3_1 = new JLabel("전화번호");
-			lblNewLabel_3_1.setBounds(301, 191, 50, 15);
+			lblNewLabel_3_1.setBounds(171, 191, 50, 15);
 		}
 		return lblNewLabel_3_1;
 	}
@@ -210,42 +211,19 @@ public class AdminStaffInsert extends JFrame {
 		if (tfStaffName == null) {
 			tfStaffName = new JTextField();
 			tfStaffName.setColumns(10);
-			tfStaffName.setBounds(391, 134, 96, 21);
+			tfStaffName.setBounds(255, 134, 96, 21);
 		}
 		return tfStaffName;
-	}
-	private JLabel getLblNewLabel_1_3() {
-		if (lblNewLabel_1_3 == null) {
-			lblNewLabel_1_3 = new JLabel("image");
-			lblNewLabel_1_3.setBounds(53, 103, 100, 100);
-		}
-		return lblNewLabel_1_3;
 	}
 	private JLabel getLblEm() {
 		if (lblEm == null) {
 			lblEm = new JLabel("null님");
 			lblEm.setForeground(new Color(60, 143, 96));
-			lblEm.setFont(new Font("굴림", Font.BOLD, 15));
+			lblEm.setFont(new Font("굴림", Font.PLAIN, 15));
 			lblEm.setBounds(53, 10, 81, 22);
-			lblEm.setText(StaticClass.employee_name);
+			lblEm.setText(StaticClass.employee_name + "님");
 		}
 		return lblEm;
-	}
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.setEditable(false);
-			textField.setColumns(10);
-			textField.setBounds(53, 229, 114, 21);
-		}
-		return textField;
-	}
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("파일 경로");
-			btnNewButton.setBounds(180, 228, 90, 23);
-		}
-		return btnNewButton;
 	}
 	
 	// =====================================메소드======================================
@@ -253,15 +231,15 @@ public class AdminStaffInsert extends JFrame {
 	// ---------------insertAction-------------------
 	private void insertAction() {
 
-		String name = tfStaffName.getText();
-		String telno = tfStaffTelno.getText();
-		String email = tfStaffEmail.getText();
-
+		String name = tfStaffName.getText().trim();
+		String telno = tfStaffTelno.getText().trim();
+		String email = tfStaffEmail.getText().trim();
+		
 		AdminStaffInsertDao dao = new AdminStaffInsertDao(name, telno, email);
 
-		int insert = dao.insertAction();
+		boolean insert = dao.insertAction();
 		
-		if (insert == 1) {
+		if (insert == true) {
 			JOptionPane.showMessageDialog(null, tfStaffName.getText() + "님의 정보가 입력되었습니다.");
 			JOptionPane.showMessageDialog(null, tfStaffName.getText() + "님의 사원 번호는 " +dao.staffId()+ "입니다.");
 			frame.setVisible(false);

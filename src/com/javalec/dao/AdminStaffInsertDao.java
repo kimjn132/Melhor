@@ -1,5 +1,6 @@
 package com.javalec.dao;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import com.javalec.util.DBConnect;
+import com.javalec.util.StaticClass;
 
 public class AdminStaffInsertDao {
 
@@ -14,11 +16,28 @@ public class AdminStaffInsertDao {
 	String name;
 	String telno;
 	String email;
+	FileInputStream product_image;
+	String fileName;
+	
 
 	// constructor
 	public AdminStaffInsertDao() {
 		// TODO Auto-generated constructor stub
 	}
+
+	
+	
+	public AdminStaffInsertDao(String name, String telno, String email, FileInputStream product_image,
+			String fileName) {
+		super();
+		this.name = name;
+		this.telno = telno;
+		this.email = email;
+		this.product_image = product_image;
+		this.fileName = fileName;
+	}
+
+
 
 	public AdminStaffInsertDao(String name, String telno, String email) {
 		super();
@@ -30,19 +49,20 @@ public class AdminStaffInsertDao {
 	// method============================================================================
 	
 	//-------------insertAction()-------------------------
-	public int insertAction() {
+	public boolean insertAction() {
 		PreparedStatement ps = null;
-		int check = 0;
 		try { // error확인
 
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(DBConnect.url_mysql, DBConnect.id_mysql,
 					DBConnect.pw_mysql); // database에 접근을 하겠다. (선언자, 아직 실행 단계 x)
+			
+			@SuppressWarnings("unused")
 			Statement stmt_mysql = conn_mysql.createStatement();
 
 			// 쿼리 문장 만들기 (preparestatement)
-			String query = "insert into employee (employee_name, employee_telno, employee_email, employee_role, employee_in_date) "; // relation)
-			String query2 = " values (?,?,?,?,curdate()) ";
+			String query = "insert into employee (employee_name, employee_telno, employee_email, employee_role, employee_in_date, employee_shop_number) ";
+			String query2 = " values (?,?,?,?,curdate(), ?) ";
 
 			// 위의 쿼리 문장대로 순서대로 쓴다.
 			ps = conn_mysql.prepareStatement(query + query2);// insert(), value()
@@ -51,17 +71,18 @@ public class AdminStaffInsertDao {
 			ps.setString(2, telno);
 			ps.setString(3, email);
 			ps.setInt(4, 2);
+			ps.setInt(5, StaticClass.shop_number);
 
-			check = ps.executeUpdate(); // 입력이 되서 여기서 check값에 1값이 담긴다.>>맨 아래 return check로 넘어간다.
+			ps.executeUpdate(); // 입력이 되서 여기서 check값에 1값이 담긴다.>>맨 아래 return check로 넘어간다.
 
 			conn_mysql.close(); // close 해야 다른 사람의 DB도 들어올 수 있다.
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			return check;
+			return false;
 		}
-		return check;
+		return true;
 	}
 
 	// 스태프 아이디 가져오는 메소드

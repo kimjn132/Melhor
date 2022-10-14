@@ -7,6 +7,8 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Color;
@@ -16,7 +18,9 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import com.javalec.dao.AdminMenuDetailDao;
 import com.javalec.dao.AdminRegisterMenuManagementDao;
+import com.javalec.dto.AdminMenuDetailDto;
 import com.javalec.dto.AdminRegisterMenuManagementDto;
 import com.javalec.util.StaticClass;
 import java.awt.event.WindowAdapter;
@@ -52,6 +56,7 @@ public class AdminRegisterMenuManagement extends JFrame {
 	private JComboBox cbSelection;
 	private JTextField tfSearch;
 	private JButton btnSearch;
+	private JLabel lblCount;
 
 	/**
 	 * Launch the application.
@@ -87,6 +92,7 @@ public class AdminRegisterMenuManagement extends JFrame {
 			public void windowOpened(WindowEvent e) {
 				tableInit();
 				queryAction();
+				getLblCount();
 			}
 
 			public void windowClosing(WindowEvent e) {
@@ -108,6 +114,7 @@ public class AdminRegisterMenuManagement extends JFrame {
 		frame.getContentPane().add(getCbSelection());
 		frame.getContentPane().add(getTfSearch());
 		frame.getContentPane().add(getBtnSearch());
+		frame.getContentPane().add(getLblCount());
 	}
 
 	private JLabel getLblNewLabel() {
@@ -123,8 +130,10 @@ public class AdminRegisterMenuManagement extends JFrame {
 	private JLabel getLblStore() {
 		if (lblStore == null) {
 			lblStore = new JLabel("지점");
+			lblStore.setFont(new Font("굴림", Font.PLAIN, 15));
 			lblStore.setForeground(new Color(60, 143, 96));
-			lblStore.setBounds(340, 15, 50, 15);
+			lblStore.setBounds(340, 10, 80, 22);
+			lblStore.setText(StaticClass.shop_name);
 		}
 		return lblStore;
 	}
@@ -201,7 +210,7 @@ public class AdminRegisterMenuManagement extends JFrame {
 	private JScrollPane getScrollPane_1() {
 		if (scrollPane_1 == null) {
 			scrollPane_1 = new JScrollPane();
-			scrollPane_1.setBounds(40, 115, 496, 248);
+			scrollPane_1.setBounds(40, 120, 496, 248);
 			scrollPane_1.setViewportView(getInnerTable());
 		}
 		return scrollPane_1;
@@ -214,6 +223,18 @@ public class AdminRegisterMenuManagement extends JFrame {
 					return (column == 0) ? Icon.class : Object.class; // <--****************
 				}
 			};
+			InnerTable.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					System.out.println("클릭");
+					System.out.println(StaticClass.product_id);
+						tableClick();
+						registerId();
+						frame.setVisible(false);
+						AdminMenuDetail.main(null);
+					
+				}
+			});
 			InnerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			InnerTable.setRowHeight(150); // <--***************************************************
 			InnerTable.setModel(OuterTable);
@@ -225,7 +246,7 @@ public class AdminRegisterMenuManagement extends JFrame {
 		if (cbSelection == null) {
 			cbSelection = new JComboBox();
 			cbSelection.setModel(new DefaultComboBoxModel(new String[] { "카테고리", "제품 번호", "제품 이름" }));
-			cbSelection.setBounds(39, 70, 65, 30);
+			cbSelection.setBounds(39, 60, 65, 30);
 		}
 		return cbSelection;
 	}
@@ -233,7 +254,7 @@ public class AdminRegisterMenuManagement extends JFrame {
 	private JTextField getTfSearch() {
 		if (tfSearch == null) {
 			tfSearch = new JTextField();
-			tfSearch.setBounds(120, 72, 327, 28);
+			tfSearch.setBounds(120, 62, 327, 28);
 			tfSearch.setColumns(10);
 		}
 		return tfSearch;
@@ -247,9 +268,32 @@ public class AdminRegisterMenuManagement extends JFrame {
 					conditionQuery();
 				}
 			});
-			btnSearch.setBounds(464, 70, 65, 30);
+			btnSearch.setBounds(470, 60, 65, 30);
 		}
 		return btnSearch;
+	}
+
+	// 개수 출력 라벨
+	private JLabel getLblCount() {
+		if (lblCount == null) {
+			lblCount = new JLabel("개수");
+			lblCount.setFont(new Font("굴림", Font.BOLD, 12));
+			lblCount.setLabelFor(frame);
+			lblCount.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblCount.setForeground(new Color(60, 143, 96));
+			lblCount.setBounds(486, 100, 50, 17);
+
+			AdminRegisterMenuManagementDao dao = new AdminRegisterMenuManagementDao();
+			AdminRegisterMenuManagementDto dto = dao.menuCount();
+
+			String count = Integer.toString(dto.getWkId());
+			
+			System.out.println("count: " +count);
+			
+			lblCount.setText("총" +count+ "개");
+
+		}
+		return lblCount;
 	}
 	// ==========================================메소드======================================
 
@@ -298,7 +342,6 @@ public class AdminRegisterMenuManagement extends JFrame {
 		beanList = dbAction.SelectList();
 
 		int listCount = beanList.size();
-		System.out.println("listcount: " + listCount);
 
 		for (int index = 0; index < listCount; index++) {
 			ImageIcon icon = new ImageIcon("./" + beanList.get(index).getWkFilename());
@@ -341,7 +384,6 @@ public class AdminRegisterMenuManagement extends JFrame {
 		// 0번째면, 이름으로 검색한다는 뜻
 
 		tableInit();
-//		clearColumn();
 		conditionQueryAction(conditionQueryColumn); // 여기서 0번째 이름 일부 검색 >> conditionQueryAction으로 간다.
 
 	}
@@ -355,7 +397,7 @@ public class AdminRegisterMenuManagement extends JFrame {
 		ArrayList<AdminRegisterMenuManagementDto> dtoList = dao.conditionList();
 
 		int listCount = dtoList.size();
-		System.out.println(listCount);
+		System.out.println("l: " +listCount);
 		// 데이터의 행의 수를 나타냄
 
 		// 위의 데이터 행의 수만큼 정보 출력
@@ -366,6 +408,30 @@ public class AdminRegisterMenuManagement extends JFrame {
 			OuterTable.addRow(tempData);
 		}
 
+	}
+
+	// 테이블 클릭해서 스태틱에 product_id 넘겨주기
+	private void tableClick() {
+
+		int i = InnerTable.getSelectedRow();
+
+		String wkSequence = InnerTable.getValueAt(i, 1).toString();
+
+		StaticClass.product_id = Integer.parseInt(wkSequence);
+		
+	}
+	
+	// 테이블 클릭시 register_id 넘기기 
+	
+	private void registerId() {
+		
+		AdminRegisterMenuManagementDao dao = new AdminRegisterMenuManagementDao();
+		AdminRegisterMenuManagementDto registerId = dao.registerId();
+		
+		int changeRegisterId = registerId.getWkId();
+		
+		StaticClass.register_id = changeRegisterId;
+		
 	}
 	
 	
@@ -378,11 +444,5 @@ public class AdminRegisterMenuManagement extends JFrame {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
+
 }// END

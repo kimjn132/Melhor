@@ -40,15 +40,13 @@ public class AdminRevenue extends JFrame {
 	private JTextField tfSearch;
 	private JButton btnSearch;
 	private JTable Inner_Table;
-	private JRadioButton rdbtnNewRadioButton;
-	private JRadioButton rdbtnNewRadioButton_1;
-	private JRadioButton rdbtnNewRadioButton_2;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	// ******************* Table definition ************************************
 	private final DefaultTableModel Outer_Table = new DefaultTableModel();
 	private final ButtonGroup buttonGroup_1 = new ButtonGroup();
 	private JComboBox cbPeriod;
+	private JLabel lblGoHome;
 
 	/**
 	 * Launch the application.
@@ -91,16 +89,7 @@ public class AdminRevenue extends JFrame {
 		frame.setBounds(100, 100, 600, 450);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-
-		JButton btnMyPage = new JButton("My Page");
-		btnMyPage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-				AdminMyPage.main(null);
-			}
-		});
-		btnMyPage.setBounds(483, 9, 91, 23);
-		frame.getContentPane().add(btnMyPage);
+		frame.getContentPane().add(getLblGoHome());
 
 		JLabel lblStore = new JLabel("지점");
 		lblStore.setForeground(new Color(60, 143, 96));
@@ -157,9 +146,6 @@ public class AdminRevenue extends JFrame {
 		frame.getContentPane().add(getScrollPane());
 		frame.getContentPane().add(getTfSearch());
 		frame.getContentPane().add(getBtnSearch());
-		frame.getContentPane().add(getRdbtnNewRadioButton());
-		frame.getContentPane().add(getRdbtnNewRadioButton_1());
-		frame.getContentPane().add(getRdbtnNewRadioButton_2());
 		frame.getContentPane().add(getCbPeriod());
 	}
 
@@ -167,7 +153,7 @@ public class AdminRevenue extends JFrame {
 		if (cbCategory == null) {
 			cbCategory = new JComboBox();
 			cbCategory.setModel(new DefaultComboBoxModel(new String[] { "제품 이름", "제품 번호", "카테고리" }));
-			cbCategory.setBounds(30, 75, 80, 30);
+			cbCategory.setBounds(30, 78, 80, 30);
 		}
 		return cbCategory;
 	}
@@ -184,7 +170,7 @@ public class AdminRevenue extends JFrame {
 	private JTextField getTfSearch() {
 		if (tfSearch == null) {
 			tfSearch = new JTextField();
-			tfSearch.setBounds(210, 80, 240, 21);
+			tfSearch.setBounds(215, 83, 240, 21);
 			tfSearch.setColumns(10);
 		}
 		return tfSearch;
@@ -198,7 +184,7 @@ public class AdminRevenue extends JFrame {
 					conditionQuery();
 				}
 			});
-			btnSearch.setBounds(469, 77, 80, 26);
+			btnSearch.setBounds(469, 80, 80, 26);
 		}
 		return btnSearch;
 	}
@@ -222,58 +208,35 @@ public class AdminRevenue extends JFrame {
 		return Inner_Table;
 	}
 
-	private JRadioButton getRdbtnNewRadioButton() {
-		if (rdbtnNewRadioButton == null) {
-			rdbtnNewRadioButton = new JRadioButton("최근 한달 ");
-			rdbtnNewRadioButton.addMouseListener(new MouseAdapter() {
-				// 최근 한달 정렬
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					tableInit();
-					monthDayAvg();
-				}
-			});
-			buttonGroup_1.add(rdbtnNewRadioButton);
-			rdbtnNewRadioButton.setBackground(new Color(247, 243, 243));
-			rdbtnNewRadioButton.setBounds(30, 46, 81, 23);
-		}
-		return rdbtnNewRadioButton;
-	}
-
-	private JRadioButton getRdbtnNewRadioButton_1() {
-		if (rdbtnNewRadioButton_1 == null) {
-			rdbtnNewRadioButton_1 = new JRadioButton("작일");
-			rdbtnNewRadioButton_1.addMouseListener(new MouseAdapter() {
-				@Override
-				// 작일 매출 수량으로 정렬
-				public void mouseClicked(MouseEvent e) {
-					yesterdayAvg();
-				}
-			});
-			buttonGroup_1.add(rdbtnNewRadioButton_1);
-			rdbtnNewRadioButton_1.setBackground(new Color(247, 243, 243));
-			rdbtnNewRadioButton_1.setBounds(120, 46, 81, 23);
-		}
-		return rdbtnNewRadioButton_1;
-	}
-
-	private JRadioButton getRdbtnNewRadioButton_2() {
-		if (rdbtnNewRadioButton_2 == null) {
-			rdbtnNewRadioButton_2 = new JRadioButton("베스트");
-			buttonGroup_1.add(rdbtnNewRadioButton_2);
-			rdbtnNewRadioButton_2.setBackground(new Color(247, 243, 243));
-			rdbtnNewRadioButton_2.setBounds(210, 46, 81, 23);
-		}
-		return rdbtnNewRadioButton_2;
-	}
-
 	private JComboBox getCbPeriod() {
 		if (cbPeriod == null) {
 			cbPeriod = new JComboBox();
 			cbPeriod.setModel(new DefaultComboBoxModel(new String[] { "최근 한달", "3개월 ", "6개월" }));
-			cbPeriod.setBounds(122, 75, 70, 30);
+			cbPeriod.setBounds(120, 78, 80, 30);
 		}
 		return cbPeriod;
+	}
+	private JLabel getLblGoHome() {
+		if (lblGoHome == null) {
+			lblGoHome = new JLabel("");
+			lblGoHome.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					frame.setVisible(false);
+					AdminMainPage.main(null);
+					
+				}
+			});
+			lblGoHome.setBounds(551, 9, 35, 35);
+			lblGoHome.setBounds(545, 2, 35, 35);
+			ImageIcon icon = new ImageIcon(AdminStaffDetail.class.getResource("/com/javalec/image/home.png"));
+			Image img = icon.getImage(); // ImageIcon을 Image로 변환.
+			Image updateImg = img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
+			ImageIcon updateIcon = new ImageIcon(updateImg);
+			
+			lblGoHome.setIcon(updateIcon);
+		}
+		return lblGoHome;
 	}
 
 	// ===================================메소드==================================
@@ -284,10 +247,12 @@ public class AdminRevenue extends JFrame {
 		Outer_Table.addColumn("제품 번호"); // 1
 		Outer_Table.addColumn("제품 이름"); // 2
 		Outer_Table.addColumn("카테고리");// 3
-		Outer_Table.addColumn("주문 수량"); // 4
-		Outer_Table.addColumn("매출"); // 5
+		Outer_Table.addColumn("하루 평균 주문 수량"); // 4
+		Outer_Table.addColumn("하루 평균 매출"); // 5
+		Outer_Table.addColumn("달 평균 주문 수량"); // 6
+		Outer_Table.addColumn("달 평균 매출"); // 7
 
-		Outer_Table.setColumnCount(5);
+		Outer_Table.setColumnCount(7);
 
 		// 기존 데이터 다 지우기
 		int i = Outer_Table.getRowCount();
@@ -301,17 +266,17 @@ public class AdminRevenue extends JFrame {
 		// 만든 칼럼 폭 사이즈 조정
 		int vColIndex = 0;
 		TableColumn col = Inner_Table.getColumnModel().getColumn(vColIndex);
-		int width = 100;
+		int width = 50;
 		col.setPreferredWidth(width);
 
 		vColIndex = 1;
 		col = Inner_Table.getColumnModel().getColumn(vColIndex);
-		width = 100;
+		width = 60;
 		col.setPreferredWidth(width);
 
 		vColIndex = 2;
 		col = Inner_Table.getColumnModel().getColumn(vColIndex);
-		width = 100;
+		width = 70;
 		col.setPreferredWidth(width);
 
 		vColIndex = 3;
@@ -321,7 +286,17 @@ public class AdminRevenue extends JFrame {
 
 		vColIndex = 4;
 		col = Inner_Table.getColumnModel().getColumn(vColIndex);
-		width = 120;
+		width = 100;
+		col.setPreferredWidth(width);
+		
+		vColIndex = 5;
+		col = Inner_Table.getColumnModel().getColumn(vColIndex);
+		width = 100;
+		col.setPreferredWidth(width);
+		
+		vColIndex = 6;
+		col = Inner_Table.getColumnModel().getColumn(vColIndex);
+		width = 100;
 		col.setPreferredWidth(width);
 
 	}
@@ -338,30 +313,13 @@ public class AdminRevenue extends JFrame {
 		// 위의 데이터 행의 수만큼 정보 출력
 		for (int index = 0; index < listCount; index++) {
 			String temp = Integer.toString(dtoList.get(index).getId()); // temp: seqno 할당
-			String[] qTxt = { temp, dtoList.get(index).getName(), Integer.toString(dtoList.get(index).getPrice()),
+			String[] qTxt = { temp, dtoList.get(index).getName(), dtoList.get(index).getCategory(),
 					Double.toString(dtoList.get(index).getWkAvgQuantity()),
-					Double.toString(dtoList.get(index).getWkAvgSales()) }; // 1행의 박스 할당
-			Outer_Table.addRow(qTxt); // 출력
-		}
-
-	}
-
-	// --------------------- 작일 매출 ------------------------------------
-
-	private void yesterdayAvg() {
-
-		AdminRevenueDao dao = new AdminRevenueDao(); // 연결
-		ArrayList<AdminRevenueDto> dtoList = dao.yesterdayAvg();
-		// Dao의 selectList 메소드 실행시켜 arrayList로 만든 후, dtoList에 저장
-
-		int listCount = dtoList.size(); // 데이터의 열의 수를 나타냄
-
-		// 위의 데이터 행의 수만큼 정보 출력
-		for (int index = 0; index < listCount; index++) {
-			String temp = Integer.toString(dtoList.get(index).getId()); // temp: seqno 할당
-			String[] qTxt = { temp, dtoList.get(index).getName(), Integer.toString(dtoList.get(index).getPrice()),
-					Double.toString(dtoList.get(index).getWkAvgQuantity()),
-					Double.toString(dtoList.get(index).getWkAvgSales()) }; // 1행의 박스 할당
+					Double.toString(dtoList.get(index).getWkAvgSales()),
+					Double.toString(dtoList.get(index).getWkAvgMonthQuantity()),
+					Double.toString(dtoList.get(index).getWkAvgMonthSales())
+					
+			}; // 1행의 박스 할당
 			Outer_Table.addRow(qTxt); // 출력
 		}
 
@@ -371,115 +329,14 @@ public class AdminRevenue extends JFrame {
 	private void productId() {
 
 		// getSelectedRow: 클릭한(선택한) row의 인덱스를 리턴
-		// 화면의 테이블에서 해당 행(row)의 번호 (primary key) 가져오기
 		int i = Inner_Table.getSelectedRow();
 
-		// getValueAt(int row, int column): DB에서 해당 row의 colum의 cell값을 반환
-		// i 행(row)을 가져오고, 0은 primary key(순서)만 알면 되니까 0번
 		String wkSequence = (String) Inner_Table.getValueAt(i, 0);
 
 		// 숫자 프라이머리 키를 정수로 바꿔서 static으로 만들기
 		StaticClass.product_id = Integer.parseInt(wkSequence);
 
 	}
-
-	// ========================= 기간 콤보박스로 정렬 ==================================
-//	private void conditionQueryPeriod() {
-//
-//		int i = cbPeriod.getSelectedIndex();
-//		int conditionQueryColumn = 0;
-//
-//		switch (i) {
-//		case 0:
-//			conditionQueryColumn = 1;
-//			break;
-//		case 1:
-//			conditionQueryColumn = 3;
-//			break;
-//		case 2:
-//			conditionQueryColumn = 6;
-//			break;
-//		default:
-//			break;
-//		}
-//
-//		// 0번째면, 이름으로 검색한다는 뜻
-//
-//		tableInit();
-//		conditionQueryPeriodAction(conditionQueryColumn); // 여기서 0번째 이름 일부 검색 >> conditionQueryAction으로 간다.
-//
-//	}
-//
-//	// 조건 검색 % conditionQueryAction() ----------
-//	// 콤보박스에서 conditionQueryColumn 가져옴
-//	private void conditionQueryPeriodAction(int conditionQueryColumn) {
-//
-//		AdminRevenueDao dao = new AdminRevenueDao(conditionQueryColumn);
-//		ArrayList<AdminRevenueDto> dtoList = dao.periodList();
-//
-//		int listCount = dtoList.size();
-//		// 데이터의 행의 수를 나타냄
-//
-//		// 위의 데이터 행의 수만큼 정보 출력
-//		for (int index = 0; index < listCount; index++) {
-//			// 박스 풀기 ( seqno 의 데이터 행에 있는 데이터만)
-//			String temp = Integer.toString(dtoList.get(index).getId());
-//			String[] qTxt = { temp, dtoList.get(index).getName(), Integer.toString(dtoList.get(index).getPrice()),
-//					Double.toString(dtoList.get(index).getWkAvgQuantity()),
-//					Double.toString(dtoList.get(index).getWkAvgSales()) }; // 1행의 박스 하나
-//			Outer_Table.addRow(qTxt);
-//		}
-//
-//	}
-//	
-//	// ====================== 조건 검색 ===============================
-//	private void conditionQuery() {
-//		
-//		int i = cbCategory.getSelectedIndex();
-//		String conditionQueryColumn = "";
-//		
-//		switch (i) {
-//		case 0:
-//			conditionQueryColumn = "product_name";
-//			break;
-//		case 1:
-//			conditionQueryColumn = "product_id";
-//			break;
-//		case 2:
-//			conditionQueryColumn = "product_category";
-//			break;
-//		default:
-//			break;
-//		}
-//		
-//		// 0번째면, 이름으로 검색한다는 뜻
-//		
-//		tableInit();
-//		conditionQueryAction(conditionQueryColumn); // 여기서 0번째 이름 일부 검색 >> conditionQueryAction으로 간다.
-//		
-//	}
-//	
-//	// 조건 검색 % conditionQueryAction() ----------
-//	// 콤보박스에서 conditionQueryColumn 가져옴
-//	private void conditionQueryAction(String conditionQueryColumn) {
-//		
-//		AdminRevenueDao dao = new AdminRevenueDao(conditionQueryColumn);
-//		ArrayList<AdminRevenueDto> dtoList = dao.conditionList();
-//		
-//		int listCount = dtoList.size();
-//		// 데이터의 행의 수를 나타냄
-//		
-//		// 위의 데이터 행의 수만큼 정보 출력
-//		for (int index = 0; index < listCount; index++) {
-//			// 박스 풀기 ( seqno 의 데이터 행에 있는 데이터만)
-//			String temp = Integer.toString(dtoList.get(index).getId());
-//			String[] qTxt = { temp, dtoList.get(index).getName(), Integer.toString(dtoList.get(index).getPrice()),
-//					Double.toString(dtoList.get(index).getWkAvgQuantity()),
-//					Double.toString(dtoList.get(index).getWkAvgSales()) }; // 1행의 박스 하나
-//			Outer_Table.addRow(qTxt);
-//		}
-//		
-//	}
 
 	// ======================= 콤보박스 ============================================
 
@@ -524,7 +381,6 @@ public class AdminRevenue extends JFrame {
 
 		tableInit();
 		conditionQueryAction(categoryColumn, periodColumn); // 여기서 0번째 이름 일부 검색 >> conditionQueryAction으로 간다.
-		System.out.println(".. 카테고리: " +categoryColumn);
 		
 	}
 
@@ -535,7 +391,6 @@ public class AdminRevenue extends JFrame {
 
 		int listCount = dtoList.size();
 		// 데이터의 행의 수를 나타냄
-		System.out.println("listCount: " +listCount);
 
 		String temp = null;
 
@@ -545,8 +400,10 @@ public class AdminRevenue extends JFrame {
 			temp = Integer.toString(dtoList.get(index).getId());
 			String[] qTxt = { temp, dtoList.get(index).getName(), dtoList.get(index).getCategory(),
 					Double.toString(dtoList.get(index).getWkAvgQuantity()),
-					Double.toString(dtoList.get(index).getWkAvgSales()) };
-			System.out.println("temp: " + temp);
+					Double.toString(dtoList.get(index).getWkAvgSales()),
+					Double.toString(dtoList.get(index).getWkAvgMonthQuantity()),
+					Double.toString(dtoList.get(index).getWkAvgMonthSales())
+			};
 			Outer_Table.addRow(qTxt);
 
 		}

@@ -33,7 +33,6 @@ import java.awt.Font;
 public class AdminMainPage extends JFrame {
 
 	private JFrame frame;
-	private JButton btnStaffManagement_1;
 
 	/**
 	 * Launch the application.
@@ -105,7 +104,8 @@ public class AdminMainPage extends JFrame {
 		JLabel lblStore = new JLabel("지점");
 		lblStore.setFont(new Font("굴림", Font.PLAIN, 13));
 		lblStore.setForeground(new Color(60, 143, 96));
-		lblStore.setBounds(340, 10, 50, 22);
+		lblStore.setBounds(340, 10, 80, 22);
+		lblStore.setText(StaticClass.shop_name);
 		
 		panel.add(lblStore);
 		btnLogOut.setBounds(483, 382, 91, 23);
@@ -152,7 +152,7 @@ public class AdminMainPage extends JFrame {
 				AdminMenuManagement.main(null);
 			}
 		});
-		btnProduct.setBounds(131, 87, 100, 100);
+		btnProduct.setBounds(74, 149, 100, 100);
 		panel.add(btnProduct);
 		
 		JButton btnRevenue = new JButton("매출 현황");
@@ -163,7 +163,7 @@ public class AdminMainPage extends JFrame {
 				AdminRevenue.main(null);
 			}
 		});
-		btnRevenue.setBounds(337, 87, 100, 100);
+		btnRevenue.setBounds(404, 149, 100, 100);
 		panel.add(btnRevenue);
 		
 		JButton btnStaffManagement = new JButton("staff 관리");
@@ -175,17 +175,8 @@ public class AdminMainPage extends JFrame {
 				AdminStaffMenu.main(null);
 			}
 		});
-		btnStaffManagement.setBounds(131, 220, 100, 100);
+		btnStaffManagement.setBounds(240, 149, 100, 100);
 		panel.add(btnStaffManagement);
-		panel.add(getBtnStaffManagement_1());
-	}
-	private JButton getBtnStaffManagement_1() {
-		if (btnStaffManagement_1 == null) {
-			btnStaffManagement_1 = new JButton("주문 내역");
-			btnStaffManagement_1.setFont(new Font("굴림", Font.PLAIN, 15));
-			btnStaffManagement_1.setBounds(337, 220, 100, 100);
-		}
-		return btnStaffManagement_1;
 	}
 	
 	public void logOut() {
