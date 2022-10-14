@@ -102,7 +102,7 @@ public class AppStoreLocationDao {
 
 		AppStoreLocationDto dto = null; // dto 변수 선언
 
-		String whereStatement = "select shop_name from shop "; // statement, 스페이스
+		String whereStatement = "select shop_name, shop_number from shop "; // statement, 스페이스
 																										// 바 잊지 말
 		String whereStatement2 = "where shop_number = " + shop_number;
 
@@ -116,13 +116,13 @@ public class AppStoreLocationDao {
 			ResultSet rs = stmt_mysql.executeQuery(whereStatement + whereStatement2);
 
 			while (rs.next()) { // 0: true, 1: false>> 0일때 데이터값이 있어서 데이터를 보여줄 수 잇다
-
+			
 				String wkShopName  = rs.getString(1);
 			
-				
+				int wkShopNumber = rs.getInt(2);
 				
 
-				dto = new AppStoreLocationDto(wkShopName);
+				dto = new AppStoreLocationDto(wkShopName, wkShopNumber);
 
 			}
 

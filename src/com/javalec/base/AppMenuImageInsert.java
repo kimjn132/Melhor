@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JTextPane;
+import javax.swing.JScrollBar;
 
 public class AppMenuImageInsert {
 
@@ -39,6 +40,9 @@ public class AppMenuImageInsert {
 	private JLabel lblNewLabel_3;
 	private JTextPane tpRecipe;
 	private JTextPane tpExplain;
+	private JLabel lblNewLabel_4;
+	private JTextField tfCategory;
+	private JScrollBar scrollBar;
 
 	/**
 	 * Launch the application.
@@ -85,6 +89,9 @@ public class AppMenuImageInsert {
 		frmMelhor.getContentPane().add(getLblNewLabel_3());
 		frmMelhor.getContentPane().add(getTpRecipe());
 		frmMelhor.getContentPane().add(getTpExplain());
+		frmMelhor.getContentPane().add(getLblNewLabel_4());
+		frmMelhor.getContentPane().add(getTfCategory());
+		frmMelhor.getContentPane().add(getScrollBar());
 	}
 	
 	
@@ -115,7 +122,7 @@ public class AppMenuImageInsert {
 	private JTextField getTfProductName() {
 		if (tfProductName == null) {
 			tfProductName = new JTextField();
-			tfProductName.setBounds(119, 35, 130, 26);
+			tfProductName.setBounds(119, 6, 130, 26);
 			tfProductName.setColumns(10);
 		}
 		return tfProductName;
@@ -123,7 +130,7 @@ public class AppMenuImageInsert {
 	private JTextField getTfProductPrice() {
 		if (tfProductPrice == null) {
 			tfProductPrice = new JTextField();
-			tfProductPrice.setBounds(119, 89, 130, 26);
+			tfProductPrice.setBounds(119, 60, 130, 26);
 			tfProductPrice.setColumns(10);
 		}
 		return tfProductPrice;
@@ -151,28 +158,28 @@ public class AppMenuImageInsert {
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("제품이름");
-			lblNewLabel.setBounds(18, 40, 61, 16);
+			lblNewLabel.setBounds(18, 11, 61, 16);
 		}
 		return lblNewLabel;
 	}
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("제품가격");
-			lblNewLabel_1.setBounds(18, 94, 61, 16);
+			lblNewLabel_1.setBounds(18, 65, 61, 16);
 		}
 		return lblNewLabel_1;
 	}
 	private JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
 			lblNewLabel_2 = new JLabel("제품레시피");
-			lblNewLabel_2.setBounds(18, 151, 61, 16);
+			lblNewLabel_2.setBounds(18, 110, 61, 16);
 		}
 		return lblNewLabel_2;
 	}
 	private JLabel getLblNewLabel_3() {
 		if (lblNewLabel_3 == null) {
 			lblNewLabel_3 = new JLabel("제품설명");
-			lblNewLabel_3.setBounds(18, 258, 61, 16);
+			lblNewLabel_3.setBounds(18, 222, 61, 16);
 		}
 		return lblNewLabel_3;
 	}
@@ -183,7 +190,7 @@ public class AppMenuImageInsert {
 		int product_price = Integer.parseInt(tfProductPrice.getText());
 		String product_recipe = tpRecipe.getText();
 		String product_explain = tpExplain.getText();
-		
+		String product_category = tfCategory.getText();
 		
 		
 		// Image File
@@ -196,7 +203,7 @@ public class AppMenuImageInsert {
 			e.printStackTrace();
 		}
 		
-		AppMenuImageInsertDao dbaction = new AppMenuImageInsertDao(product_name, input, product_price, product_recipe, product_explain);
+		AppMenuImageInsertDao dbaction = new AppMenuImageInsertDao(product_name, input, product_price, product_recipe, product_explain, product_category);
 		boolean aaa = dbaction.insertImage();
                  
 		}
@@ -220,15 +227,37 @@ public class AppMenuImageInsert {
 	private JTextPane getTpRecipe() {
 		if (tpRecipe == null) {
 			tpRecipe = new JTextPane();
-			tpRecipe.setBounds(119, 139, 156, 81);
+			tpRecipe.setBounds(119, 98, 156, 81);
 		}
 		return tpRecipe;
 	}
 	private JTextPane getTpExplain() {
 		if (tpExplain == null) {
 			tpExplain = new JTextPane();
-			tpExplain.setBounds(118, 223, 157, 98);
+			tpExplain.setBounds(119, 185, 157, 98);
 		}
 		return tpExplain;
+	}
+	private JLabel getLblNewLabel_4() {
+		if (lblNewLabel_4 == null) {
+			lblNewLabel_4 = new JLabel("카테고리");
+			lblNewLabel_4.setBounds(18, 298, 61, 16);
+		}
+		return lblNewLabel_4;
+	}
+	private JTextField getTfCategory() {
+		if (tfCategory == null) {
+			tfCategory = new JTextField();
+			tfCategory.setBounds(119, 295, 130, 26);
+			tfCategory.setColumns(10);
+		}
+		return tfCategory;
+	}
+	private JScrollBar getScrollBar() {
+		if (scrollBar == null) {
+			scrollBar = new JScrollBar();
+			scrollBar.setBounds(260, 187, 15, 96);
+		}
+		return scrollBar;
 	}
 }

@@ -14,6 +14,7 @@ import com.javalec.dto.AppMenuDetailDto;
 import com.javalec.dto.AppMenuListDto;
 import com.javalec.util.DBConnect;
 import com.javalec.util.Static_CustomerId;
+import com.javalec.util.Static_StoreLocation;
 import com.mysql.cj.jdbc.Blob;
 
 public class AppMenuDetailDao {
@@ -35,15 +36,21 @@ public class AppMenuDetailDao {
 	int order_quantity;
 	String order_payment;
 
+	
+	
 	public AppMenuDetailDao() {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	
 	public AppMenuDetailDao(int product_id) {
 		super();
 		this.product_id = product_id;
 	}
 
+	
+	
 	public AppMenuDetailDao(int product_id, String product_name, FileInputStream product_image, int product_price,
 			String product_explain) {
 		super();
@@ -120,8 +127,10 @@ public class AppMenuDetailDao {
             	DBConnect.filename = DBConnect.filename + 1;
             	File file = new File(Integer.toString(DBConnect.filename));
             	FileOutputStream output = new FileOutputStream(file);
+            	
             	InputStream input = rs.getBinaryStream(4);
-                byte[] buffer = new byte[1024];
+                
+            	byte[] buffer = new byte[1024];
                 while (input.read(buffer) > 0) {
                     output.write(buffer);
 				
@@ -165,7 +174,7 @@ public class AppMenuDetailDao {
 			ps.setInt(3, shop_number);
 			ps.setInt(4, cart_product_quantity);
 			
-			
+			System.out.println(Static_StoreLocation.shop_number);
 
 			check = ps.executeUpdate(); // insert update method 이거 하나밖에 없다
 
@@ -175,7 +184,6 @@ public class AppMenuDetailDao {
 			// TODO: handle exception
 			e.printStackTrace();
 			return check;
-
 		}
 		return check;
 	}

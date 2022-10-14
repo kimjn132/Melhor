@@ -16,12 +16,6 @@ public class AppStoreLocationDto {
 	
 	
 
-	
-	
-
-
-
-
 
 
 	public AppStoreLocationDto(int shop_number, String shop_name, String shop_address, String shop_telno) {
@@ -36,7 +30,7 @@ public class AppStoreLocationDto {
 
 
 
-	public AppStoreLocationDto(int shop_number, String shop_name) {
+	public AppStoreLocationDto(String shop_name, int shop_number) {
 		super();
 		this.shop_number = shop_number;
 		this.shop_name = shop_name;
