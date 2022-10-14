@@ -22,6 +22,7 @@ import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import javax.swing.DefaultComboBoxModel;
 
 public class HS_StaffSignup {
 
@@ -39,7 +40,7 @@ public class HS_StaffSignup {
 	private JTextField tfTelno;
 	private JTextField tfEmail;
 	private JTextField tfEmail2;
-	private JComboBox comboBox;
+	private JComboBox cbEmail;
 	private JPasswordField pfPw;
 	private JPasswordField pfPw2;
 	private JLabel lblNewLabel_3;
@@ -94,7 +95,7 @@ public class HS_StaffSignup {
 		frame.getContentPane().add(getTfTelno());
 		frame.getContentPane().add(getTfEmail());
 		frame.getContentPane().add(getTfEmail2());
-		frame.getContentPane().add(getComboBox());
+		frame.getContentPane().add(getCbEmail());
 		frame.getContentPane().add(getPfPw());
 		frame.getContentPane().add(getPfPw2());
 		frame.getContentPane().add(getLblNewLabel_3());
@@ -103,6 +104,7 @@ public class HS_StaffSignup {
 		frame.getContentPane().add(getBtnNewButton());
 		frame.getContentPane().add(getTfFilepath());
 	}
+
 	private JLabel getLblImage() {
 		if (lblImage == null) {
 			lblImage = new JLabel("image");
@@ -111,19 +113,21 @@ public class HS_StaffSignup {
 		}
 		return lblImage;
 	}
+
 	private JButton getBtnFilePath() {
 		if (btnFilePath == null) {
 			btnFilePath = new JButton("업로드");
 			btnFilePath.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					FilePath();
-					
+
 				}
 			});
 			btnFilePath.setBounds(314, 121, 80, 21);
 		}
 		return btnFilePath;
 	}
+
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("아이디");
@@ -132,6 +136,7 @@ public class HS_StaffSignup {
 		}
 		return lblNewLabel;
 	}
+
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("비밀번호");
@@ -140,6 +145,7 @@ public class HS_StaffSignup {
 		}
 		return lblNewLabel_1;
 	}
+
 	private JLabel getLblNewLabel_1_1() {
 		if (lblNewLabel_1_1 == null) {
 			lblNewLabel_1_1 = new JLabel("비밀번호 확인");
@@ -148,6 +154,7 @@ public class HS_StaffSignup {
 		}
 		return lblNewLabel_1_1;
 	}
+
 	private JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
 			lblNewLabel_2 = new JLabel("이름");
@@ -156,6 +163,7 @@ public class HS_StaffSignup {
 		}
 		return lblNewLabel_2;
 	}
+
 	private JLabel getLblNewLabel_2_1() {
 		if (lblNewLabel_2_1 == null) {
 			lblNewLabel_2_1 = new JLabel("전화번호");
@@ -164,6 +172,7 @@ public class HS_StaffSignup {
 		}
 		return lblNewLabel_2_1;
 	}
+
 	private JLabel getLblNewLabel_2_1_1() {
 		if (lblNewLabel_2_1_1 == null) {
 			lblNewLabel_2_1_1 = new JLabel("이메일");
@@ -172,6 +181,7 @@ public class HS_StaffSignup {
 		}
 		return lblNewLabel_2_1_1;
 	}
+
 	private JTextField getTfId() {
 		if (tfId == null) {
 			tfId = new JTextField();
@@ -181,6 +191,7 @@ public class HS_StaffSignup {
 		}
 		return tfId;
 	}
+
 	private JTextField getTfName() {
 		if (tfName == null) {
 			tfName = new JTextField();
@@ -190,6 +201,7 @@ public class HS_StaffSignup {
 		}
 		return tfName;
 	}
+
 	private JTextField getTfTelno() {
 		if (tfTelno == null) {
 			tfTelno = new JTextField();
@@ -199,6 +211,7 @@ public class HS_StaffSignup {
 		}
 		return tfTelno;
 	}
+
 	private JTextField getTfEmail() {
 		if (tfEmail == null) {
 			tfEmail = new JTextField();
@@ -208,22 +221,51 @@ public class HS_StaffSignup {
 		}
 		return tfEmail;
 	}
+
 	private JTextField getTfEmail2() {
 		if (tfEmail2 == null) {
 			tfEmail2 = new JTextField();
+			
 			tfEmail2.setToolTipText("");
 			tfEmail2.setColumns(10);
 			tfEmail2.setBounds(188, 176, 123, 21);
 		}
 		return tfEmail2;
 	}
-	private JComboBox getComboBox() {
-		if (comboBox == null) {
-			comboBox = new JComboBox();
-			comboBox.setBounds(321, 176, 73, 21);
+
+	// 이메일 콤보박스-------------------------------------------------------------------
+	
+	
+	private JComboBox getCbEmail() {
+		if (cbEmail == null) {
+			cbEmail = new JComboBox();
+			
+			
+			cbEmail.setModel(
+					new DefaultComboBoxModel(new String[] { "직접입력", "naver.com", "hanmail.net", "google.com" }));
+			
+			cbEmail.setBounds(321, 176, 73, 21);
+			
+			cbEmail.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+
+					cbEmailAction();
+
+				}
+			});
 		}
-		return comboBox;
+
+		return cbEmail;
 	}
+
+	
+	
+	
+	
+	
+	
+	
+	//---------------------------------------------------------------------------------
 	private JPasswordField getPfPw() {
 		if (pfPw == null) {
 			pfPw = new JPasswordField();
@@ -231,6 +273,7 @@ public class HS_StaffSignup {
 		}
 		return pfPw;
 	}
+
 	private JPasswordField getPfPw2() {
 		if (pfPw2 == null) {
 			pfPw2 = new JPasswordField();
@@ -238,6 +281,7 @@ public class HS_StaffSignup {
 		}
 		return pfPw2;
 	}
+
 	private JLabel getLblNewLabel_3() {
 		if (lblNewLabel_3 == null) {
 			lblNewLabel_3 = new JLabel("@");
@@ -245,13 +289,13 @@ public class HS_StaffSignup {
 		}
 		return lblNewLabel_3;
 	}
+
 	private JButton getBtnSignOk() {
 		if (btnSignOk == null) {
 			btnSignOk = new JButton("회원가입");
 			btnSignOk.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
-					
+
 					staffSignUp();
 					insertFieldCheck();
 				}
@@ -260,25 +304,23 @@ public class HS_StaffSignup {
 		}
 		return btnSignOk;
 	}
+
 	private JButton getBtnBackPage() {
 		if (btnBackPage == null) {
 			btnBackPage = new JButton("이전");
 			btnBackPage.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+
 					HS_StaffLogin.main(null);
 					frame.setVisible(false);
-					
-					
+
 				}
 			});
 			btnBackPage.setBounds(76, 225, 72, 23);
 		}
 		return btnBackPage;
 	}
-	
-	
-	
+
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("중복체크");
@@ -291,7 +333,7 @@ public class HS_StaffSignup {
 		}
 		return btnNewButton;
 	}
-	
+
 	private JTextField getTfFilepath() {
 		if (tfFilepath == null) {
 			tfFilepath = new JTextField();
@@ -303,96 +345,88 @@ public class HS_StaffSignup {
 	}
 	// --------------------- Function ----------------------
 
-	
-	
 	private int insertFieldCheck() {
-		
+
 		int i = 0;
 		String result = "";
-		
-		if(tfId.getText().trim().length() == 0) {
+
+		if (tfId.getText().trim().length() == 0) {
 			i++;
 			result = "ID를 ";
 			tfId.requestFocus();
-			
-		} else if(pfPw.getText().trim().length() == 0) {
+
+		} else if (pfPw.getText().trim().length() == 0) {
 			i++;
 			result = "PW를 ";
 			pfPw.requestFocus();
-			
-		} else if(pfPw2.getText().trim().length() == 0) {
+
+		} else if (pfPw2.getText().trim().length() == 0) {
 			i++;
 			result = "PW확인을 ";
 			pfPw2.requestFocus();
-			
-		} else if(tfName.getText().trim().length() == 0) {
+
+		} else if (tfName.getText().trim().length() == 0) {
 			i++;
 			result = "이름을";
 			tfName.requestFocus();
-			
-		} else if(tfTelno.getText().trim().length() == 0) {
+
+		} else if (tfTelno.getText().trim().length() == 0) {
 			i++;
 			result = "전화번호를";
 			tfTelno.requestFocus();
-			
-		}else if(tfEmail.getText().trim().length() == 0) {
+
+		} else if (tfEmail.getText().trim().length() == 0) {
 			i++;
 			result = "이메일을";
 			tfEmail.requestFocus();
-			
-		}else if(tfEmail2.getText().trim().length() == 0) {
+
+		} else if (tfEmail2.getText().trim().length() == 0) {
 			i++;
 			result = "이메일을";
 			tfEmail2.requestFocus();
-			
+
 		}
-		
-		if(i > 0) {
+
+		if (i > 0) {
 			JOptionPane.showMessageDialog(null, result + "확인하세요!");
 		}
-		
+
 		return i;
 	}
-	
+
 	// Id 중복체크
 	private void staffIdCheck() {
-		
+
 		int staff_id = Integer.parseInt(tfId.getText());
-		
+
 		HS_StaffSignupDao dao = new HS_StaffSignupDao(staff_id);
 		int count = dao.staffIdCheck();
-		
-		
-		if(count == 0) {
+
+		if (count == 0) {
 			JOptionPane.showMessageDialog(null, staff_id + "는(은) 사용 가능한 아이디입니다");
 			pfPw.requestFocus();
-			
+
 		} else {
 			JOptionPane.showMessageDialog(null, staff_id + "는(은) 중복된 아이디입니다.");
 			tfId.requestFocus();
 			tfId.setText("");
-			
+
 		}
 
-		
 	}
-	
-	
-	
-	
-	
-	//회원가입
+
+	// 회원가입
 	private void staffSignUp() {
-		
+
 		int staff_id = Integer.parseInt(tfId.getText());
 		String staff_pw = pfPw.getText();
 		String staff_name = tfName.getText();
 		String staff_telno = tfTelno.getText();
 		String staff_email = tfEmail.getText();
 		String staff_email2 = tfEmail2.getText();
-		
-		String email = staff_email +"@"+ staff_email2;
-		
+
+		String email = staff_email + "@" + staff_email2;
+
 		// Image File
 		FileInputStream input = null;
 		File file = new File(tfFilepath.getText());
@@ -402,11 +436,11 @@ public class HS_StaffSignup {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		HS_StaffSignupDao dao = new HS_StaffSignupDao(staff_id,staff_pw, staff_name, staff_telno, email, input);
+
+		HS_StaffSignupDao dao = new HS_StaffSignupDao(staff_id, staff_pw, staff_name, staff_telno, email, input);
 		int count = dao.staffSignUp();
-		
-		if(count == 1) {
+
+		if (count == 1) {
 			JOptionPane.showMessageDialog(null, "회원가입 완료");
 			HS_StaffLogin.main(null);
 			frame.setVisible(false);
@@ -415,17 +449,16 @@ public class HS_StaffSignup {
 			HS_StaffLogin.main(null);
 			frame.setVisible(false);
 		}
-		
+
 	}
-	
-	
+
 	private void FilePath() {
 		JFileChooser chooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG, BMP", "jpg","png","bmp");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG, BMP", "jpg", "png", "bmp");
 		chooser.setFileFilter(filter);
-		
+
 		int ret = chooser.showOpenDialog(null);
-		if(ret != JFileChooser.APPROVE_OPTION) {
+		if (ret != JFileChooser.APPROVE_OPTION) {
 			JOptionPane.showMessageDialog(null, "파일을 선택해주세요!", "오류", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
@@ -434,58 +467,21 @@ public class HS_StaffSignup {
 		lblImage.setIcon(new ImageIcon(filePath));
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
 	}
+
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-}//end
+	private void cbEmailAction() {
+
+		if (cbEmail.getSelectedItem() == "직접입력") {
+
+			tfEmail2.setText("");
+			tfEmail2.setEditable(true);
+		} else {
+
+			tfEmail2.setText(cbEmail.getSelectedItem().toString());
+			tfEmail2.setEditable(false);
+		}
+
+	}
+
+}// end

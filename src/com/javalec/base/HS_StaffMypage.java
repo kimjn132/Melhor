@@ -6,25 +6,32 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.javalec.dao.HS_StaffMypageDao;
 import com.javalec.dto.HS_StaffMypageDto;
+import com.javalec.util.DBConnect;
 import com.javalec.util.HS_Static_StaffId;
 
 import java.awt.Font;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -47,14 +54,18 @@ public class HS_StaffMypage {
 	private JComboBox cbEmailupdate;
 	private JTextField tfPwupdate;
 	private JButton btnUpdate;
-	private JPanel panelImage;
-	private JButton btnImageupdate;
+//	private JButton btnImageupdate;
 	private JButton btnBackpage;
-	private JTextField tfFilepath;
 
 	/**
 	 * Launch the application.
 	 */
+
+	ArrayList<HS_StaffMypageDto> beanList = null;
+//	private JTextField tfFilepath;
+	private JLabel lblImage;
+	private JButton btnNewButton;
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -73,7 +84,6 @@ public class HS_StaffMypage {
 	 */
 	public HS_StaffMypage() {
 		initialize();
-		staffVisibleAction();
 	}
 
 	/**
@@ -85,10 +95,13 @@ public class HS_StaffMypage {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				staffVisibleAction();
-				
-				
-				
-				
+
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+
+				closingAction();
 			}
 		});
 		frame.getContentPane().setBackground(new Color(227, 147, 132));
@@ -110,10 +123,11 @@ public class HS_StaffMypage {
 		frame.getContentPane().add(getCbEmailupdate());
 		frame.getContentPane().add(getTfPwupdate());
 		frame.getContentPane().add(getBtnUpdate());
-		frame.getContentPane().add(getPanelImage());
-		frame.getContentPane().add(getBtnImageupdate());
+//		frame.getContentPane().add(getBtnImageupdate());
 		frame.getContentPane().add(getBtnBackpage());
-		frame.getContentPane().add(getTfFilepath());
+//		frame.getContentPane().add(getTfFilepath());
+		frame.getContentPane().add(getLblImage());
+		frame.getContentPane().add(getBtnNewButton());
 	}
 
 	private JLabel getLblNewLabel_4() {
@@ -201,7 +215,7 @@ public class HS_StaffMypage {
 		if (lblNewLabel_5 == null) {
 			lblNewLabel_5 = new JLabel("@");
 			lblNewLabel_5.setFont(new Font("굴림", Font.PLAIN, 14));
-			lblNewLabel_5.setBounds(177, 142, 18, 15);
+			lblNewLabel_5.setBounds(165, 142, 18, 15);
 		}
 		return lblNewLabel_5;
 	}
@@ -210,7 +224,7 @@ public class HS_StaffMypage {
 		if (tfEmailupdate2 == null) {
 			tfEmailupdate2 = new JTextField();
 			tfEmailupdate2.setColumns(10);
-			tfEmailupdate2.setBounds(207, 139, 96, 21);
+			tfEmailupdate2.setBounds(176, 139, 66, 21);
 		}
 		return tfEmailupdate2;
 	}
@@ -218,8 +232,14 @@ public class HS_StaffMypage {
 	private JComboBox getCbEmailupdate() {
 		if (cbEmailupdate == null) {
 			cbEmailupdate = new JComboBox();
-			cbEmailupdate.setModel(new DefaultComboBoxModel(new String[] {"naver.com", "hanmail.net", "google.com"}));
-			cbEmailupdate.setBounds(302, 138, 32, 23);
+			cbEmailupdate.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					cbEmailAction();
+				}
+			});
+			cbEmailupdate.setModel(new DefaultComboBoxModel(new String[] {"직접입력", "naver.com", "hanmail.net", "google.com"}));
+			cbEmailupdate.setBounds(249, 138, 85, 23);
 		}
 		return cbEmailupdate;
 	}
@@ -237,26 +257,34 @@ public class HS_StaffMypage {
 	private JButton getBtnUpdate() {
 		if (btnUpdate == null) {
 			btnUpdate = new JButton("수정");
+			btnUpdate.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+
+					staffUpdateAction();
+					
+					frame.setVisible(false);// 창 종료
+					HS_StaffMenu.main(null);// 전체메뉴 창 열기
+				}
+			});
 			btnUpdate.setBounds(114, 217, 66, 23);
 		}
 		return btnUpdate;
 	}
 
-	private JPanel getPanelImage() {
-		if (panelImage == null) {
-			panelImage = new JPanel();
-			panelImage.setBounds(302, 10, 124, 126);
-		}
-		return panelImage;
-	}
-
-	private JButton getBtnImageupdate() {
-		if (btnImageupdate == null) {
-			btnImageupdate = new JButton("이미지 변경");
-			btnImageupdate.setBounds(312, 171, 114, 23);
-		}
-		return btnImageupdate;
-	}
+//	private JButton getBtnImageupdate() {
+//		if (btnImageupdate == null) {
+//			btnImageupdate = new JButton("이미지 변경");
+//			btnImageupdate.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//
+//					FilePath();// 이미지 수정 버튼
+//
+//				}
+//			});
+//			btnImageupdate.setBounds(312, 171, 114, 23);
+//		}
+//		return btnImageupdate;
+//	}
 
 	private JButton getBtnBackpage() {
 		if (btnBackpage == null) {
@@ -274,16 +302,40 @@ public class HS_StaffMypage {
 		}
 		return btnBackpage;
 	}
-	
-	private JTextField getTfFilepath() {
-		if (tfFilepath == null) {
-			tfFilepath = new JTextField();
-			tfFilepath.setBounds(358, 139, 66, 21);
-			tfFilepath.setColumns(10);
+
+//	private JTextField getTfFilepath() {
+//		if (tfFilepath == null) {
+//			tfFilepath = new JTextField();
+//			tfFilepath.setBounds(330, 139, 96, 21);
+//			tfFilepath.setColumns(10);
+//		}
+//		return tfFilepath;
+//	}
+
+	private JLabel getLblImage() {
+		if (lblImage == null) {
+			lblImage = new JLabel("");
+			lblImage.setBounds(245, 10, 181, 112);
 		}
-		return tfFilepath;
+		return lblImage;
 	}
 
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("스케줄 확인");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					//스케줄 달력 켜지게 함
+					HS_StaffCalender.main(null);
+					
+					
+				}
+			});
+			btnNewButton.setBounds(273, 200, 114, 23);
+		}
+		return btnNewButton;
+	}
 	// ---------------------------------------------------function----------------
 
 	private void staffUpdateAction() {// 이름, 번호, 이메일, 패스워드 입력 후 수정버튼 누르면 update 되는 메소드
@@ -291,12 +343,23 @@ public class HS_StaffMypage {
 		String employee_name = tfNameupdate.getText().trim();
 		String employee_telno = tfTelnoupdate.getText().trim();
 		String employee_email = tfEmailupdate.getText().trim();
-		String employee_email2 = tfEmailupdate2.getText().trim();
+
+		String employee_email2 = cbEmailupdate.getSelectedItem().toString();
+
 		String employee_pw = tfPwupdate.getText().trim();
-		String employee_image = tfFilepath.getText().trim();
+
+		// Image File
+		FileInputStream input = null;
+//		File file = new File(tfFilepath.getText());
+//		try {
+//			input = new FileInputStream(file);
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		HS_StaffMypageDao hs_staffmypagedao = new HS_StaffMypageDao(employee_name, employee_telno, employee_email,
-				employee_email2, employee_pw, employee_image);
+				employee_email2, employee_pw, input);
 
 		Boolean ok = hs_staffmypagedao.updateAction();
 
@@ -314,33 +377,75 @@ public class HS_StaffMypage {
 
 	private void staffVisibleAction() {
 
-		HS_StaffMypageDao dao = new HS_StaffMypageDao()
-				;
+		HS_StaffMypageDao dao = new HS_StaffMypageDao();
+
 		HS_StaffMypageDto dtoList = dao.staffInfoSave();
-		
+
 		tfIdupdate.setText(Integer.toString(HS_Static_StaffId.staff_Id));
 		tfNameupdate.setText(dtoList.getTfNameupdate());
 		tfTelnoupdate.setText(dtoList.getTfTelnoupdate());
 		tfEmailupdate.setText(dtoList.getTfemailupdate());
 		tfPwupdate.setText(dtoList.getTfpwupdate());
+
 		
-	
+		
+		// 이미지 처리
+		String filepath = Integer.toString(DBConnect.filename);
+
+		lblImage.setIcon(new ImageIcon(filepath));
+
+		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+
+		File file = new File(filepath);
+		file.delete();
+
 	}
 
+//	private void FilePath() {
+//
+//		JFileChooser chooser = new JFileChooser();
+//		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG, BMP", "jpg", "png", "bmp");
+//		chooser.setFileFilter(filter);
+//
+//		int ret = chooser.showOpenDialog(null);
+//
+//		if (ret != JFileChooser.APPROVE_OPTION) {
+//			JOptionPane.showMessageDialog(null, "파일을 선택해주세요!", "오류", JOptionPane.WARNING_MESSAGE);
+//			return;
+//		}
+//
+//		String filePath = chooser.getSelectedFile().getPath();
+//
+//		tfFilepath.setText(filePath);
+//		tfFilepath.setText(filePath);
+//
+//		lblImage.setIcon(new ImageIcon(filePath));
+//
+//		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+//	}
+
+	private void closingAction() {
+
+		for (int index = 0; index < beanList.size(); index++) {
+			File file = new File("./" + beanList.get(index).getTfFilename());
+			file.delete();
+
+		}
+
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	private void cbEmailAction() {
+
+		if (cbEmailupdate.getSelectedItem() == "직접입력") {
+
+			tfEmailupdate2.setText("");
+			tfEmailupdate2.setEditable(true);
+		} else {
+
+			tfEmailupdate2.setText(cbEmailupdate.getSelectedItem().toString());
+			tfEmailupdate2.setEditable(false);
+		}
+
+	}
 	
 }// end

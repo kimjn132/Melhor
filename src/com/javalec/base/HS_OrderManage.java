@@ -26,6 +26,7 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 
 public class HS_OrderManage {
 
@@ -34,6 +35,7 @@ public class HS_OrderManage {
 	private JTable Inner_Table;
 	private final DefaultTableModel Outer_Table = new DefaultTableModel();
 	private JButton btnBackpage;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -63,6 +65,8 @@ public class HS_OrderManage {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setTitle("주문 관리");
+		frame.getContentPane().setBackground(new Color(227, 147, 132));
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
@@ -77,6 +81,7 @@ public class HS_OrderManage {
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(getScrollPane());
 		frame.getContentPane().add(getBtnBackpage());
+		frame.getContentPane().add(getBtnNewButton());
 	}
 
 	private JScrollPane getScrollPane() {
@@ -87,26 +92,9 @@ public class HS_OrderManage {
 		}
 		return scrollPane;
 	}
-
-	private JTable getInner_Table() {
-		if (Inner_Table == null) {
-			Inner_Table = new JTable();
-			Inner_Table.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-
-					if (e.getButton() == 1) {
-						tableClick();
-					}
-
-				}
-			});
-			Inner_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			Inner_Table.setModel(Outer_Table);
-
-		}
-		return Inner_Table;
-	}
+	
+	
+	// ------------------------------------Action Listener------------------------------------
 
 	private JButton getBtnBackpage() {
 		if (btnBackpage == null) {
@@ -124,8 +112,52 @@ public class HS_OrderManage {
 		return btnBackpage;
 	}
 
+	
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("이전 주문내역");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					
+					frame.setVisible(false);
+					HS_OrderManagePast.main(null);
+					
+					
+				}
+			});
+			btnNewButton.setBounds(265, 211, 159, 23);
+		}
+		return btnNewButton;
+	}
+	
+	private JTable getInner_Table() {
+		if (Inner_Table == null) {
+			Inner_Table = new JTable();
+			Inner_Table.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+					if (e.getButton() == 1) {
+						tableClick();
+					}
+					
+				}
+			});
+			Inner_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			Inner_Table.setModel(Outer_Table);
+			
+		}
+		return Inner_Table;
+	}
+	
+	
+	
+	
+	
+	
+	
 	// ------------------------------------function------------------------------------
-
 	public void tableInit() {
 
 		Outer_Table.addColumn("주문번호");
@@ -218,9 +250,5 @@ public class HS_OrderManage {
 		}
 
 	}
-
-	// 이후에 그 오더는 사라지도록
-
-	
 
 }// end
