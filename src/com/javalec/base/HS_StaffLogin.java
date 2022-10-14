@@ -5,15 +5,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JTextField;
 
 import com.javalec.dao.HS_StaffLoginDao;
+import com.javalec.dto.HS_StaffLoginDto;
 import com.javalec.dto.HS_StaffMypageDto;
 import com.javalec.util.DBConnect;
 import com.javalec.util.HS_Static_StaffId;
+import com.javalec.util.Static_CustomerId;
 
 import javax.swing.JPasswordField;
 import javax.swing.JLabel;
@@ -21,6 +24,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class HS_StaffLogin {
 
@@ -31,7 +36,9 @@ public class HS_StaffLogin {
 	private JLabel lblPw;
 	private JButton btnLogin;
 	private JButton btnSignup;
-	private JButton btnFindidandpw;
+	private JComboBox cbShopname;
+	private JComboBox comboBox;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Launch the application.
@@ -54,6 +61,7 @@ public class HS_StaffLogin {
 	 */
 	public HS_StaffLogin() {
 		initialize();
+		addComboShopName();
 	}
 
 	/**
@@ -72,7 +80,8 @@ public class HS_StaffLogin {
 		frame.getContentPane().add(getLblPw());
 		frame.getContentPane().add(getBtnLogin());
 		frame.getContentPane().add(getBtnSignup());
-		frame.getContentPane().add(getBtnFindidandpw());
+		frame.getContentPane().add(getCbShopname());
+		frame.getContentPane().add(getLblNewLabel());
 	}
 
 	private JTextField getTfId() {
@@ -108,13 +117,20 @@ public class HS_StaffLogin {
 		return lblPw;
 	}
 
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("지점 선택");
+			lblNewLabel.setBounds(121, 66, 83, 23);
+		}
+		return lblNewLabel;
+	}
+
 	private JButton getBtnLogin() {
 		if (btnLogin == null) {
 			btnLogin = new JButton("Login");
 			btnLogin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					staffLoginCheck();
-					
 
 				}
 			});
@@ -128,11 +144,10 @@ public class HS_StaffLogin {
 			btnSignup = new JButton("회원가입");
 			btnSignup.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
-					
+
 					HS_StaffSignup.main(null);
 					frame.setVisible(false);
-					
+
 				}
 			});
 			btnSignup.setBounds(138, 217, 91, 23);
@@ -140,12 +155,23 @@ public class HS_StaffLogin {
 		return btnSignup;
 	}
 
-	private JButton getBtnFindidandpw() {
-		if (btnFindidandpw == null) {
-			btnFindidandpw = new JButton("아이디,비번찾기");
-			btnFindidandpw.setBounds(242, 217, 173, 23);
+	private JComboBox getCbShopname() {
+		if (cbShopname == null) {
+			cbShopname = new JComboBox();
+			cbShopname.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+
+					saveShopNumber();
+
+				}
+			});
+			cbShopname.setModel(new DefaultComboBoxModel(new String[] { "지점 선택하기" }));
+			cbShopname.setBounds(216, 66, 138, 23);
+
 		}
-		return btnFindidandpw;
+
+		return cbShopname;
+
 	}
 
 	// -------------------------------------------function--------------------------
@@ -161,27 +187,48 @@ public class HS_StaffLogin {
 
 		if (loginCheck == 1) {
 			JOptionPane.showMessageDialog(null, "로그인되었습니다.");
-
+			
+			
 			HS_Static_StaffId.setStaff_Id(Integer.parseInt(staffId));
-
 			// HS_Static_StaffId에 staffId를 저장해 주는 것
 			// 이게 sql 상에서는 employeeId 입니다
 
-			
-
-		
-			
-			
 			frame.setVisible(false);// 로그인 창 종료
 			HS_StaffMenu.main(null);// 다음 창 열기
 
 		} else {
-			JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 확인하세요.");
-			System.out.println(loginCheck);
+			JOptionPane.showMessageDialog(null, "다시 시도해주세요.");
 
 		}
 
 	}
-	
-	
+
+	// 여기부터 콤보박스 소스
+
+	private void addComboShopName() {
+
+		HS_StaffLoginDao dao = new HS_StaffLoginDao();
+
+		ArrayList<HS_StaffLoginDto> dtoList = dao.cbInsertShopname();
+
+		int i = 0;
+
+		while (dtoList.size() > i) {
+
+			cbShopname.addItem(dtoList.get(i).getShop_name());
+
+			i++;
+		}
+	}// addComboShopName End
+
+	// shopnumber를 static에 저장하는 메소드
+
+	private void saveShopNumber() {
+
+		HS_StaffLoginDao dao = new HS_StaffLoginDao(cbShopname.getSelectedItem().toString());
+
+		dao.gotshopNumber();
+		
+	}
+
 }// end

@@ -89,7 +89,7 @@ public class HS_StaffMenu {
 					hs_StaffMenuDao.inworkAction();
 					
 
-					JOptionPane.showMessageDialog(null, "출근되었습니다.");
+					JOptionPane.showMessageDialog(null, "Ok");
 				}
 			});
 			btnNewButton.setFont(new Font("HY엽서M", Font.PLAIN, 20));
@@ -108,7 +108,7 @@ public class HS_StaffMenu {
 
 					hs_StaffMenuDao2.outworkAction();
 
-					JOptionPane.showMessageDialog(null, "퇴근되었습니다.");
+					JOptionPane.showMessageDialog(null, "Ok");
 
 				}
 			});
