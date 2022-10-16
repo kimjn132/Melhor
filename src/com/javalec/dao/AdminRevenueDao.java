@@ -24,11 +24,6 @@ public class AdminRevenueDao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AdminRevenueDao(int number) {
-		super();
-		this.number = number;
-	}
-	
 	public AdminRevenueDao(String categoryColumn, int periodColumn, String tfSearch) {
 		super();
 		this.categoryColumn = categoryColumn;
@@ -93,7 +88,7 @@ public class AdminRevenueDao {
 
 		ArrayList<AdminRevenueDto> dtoList = new ArrayList<AdminRevenueDto>();
 
-		String whereStatement = "select p.product_id, product_name, product_category, sum(order_quantity)/(30*" +periodColumn+ "), sum(order_saleprice*order_quantity)/(30*" +periodColumn+ "), sum(order_quantity)/(1*" +periodColumn+ "), sum(order_saleprice*order_quantity)/(1*" +periodColumn+ ") " ;
+		String whereStatement = "select o.product_id, product_name, product_category, sum(order_quantity)/(30*" +periodColumn+ "), sum(order_saleprice*order_quantity)/(30*" +periodColumn+ "), sum(order_quantity)/(1*" +periodColumn+ "), sum(order_saleprice*order_quantity)/(1*" +periodColumn+ ") " ;
 		String whereStatement2 = "from orders o, product p, shop s where o.product_id = p.product_id and o.shop_number = s.shop_number  and o.order_stamp is not null ";
 		String whereStatement3 = "and " +categoryColumn+ " like '%" +tfSearch+ "%' and order_time > (now() - interval " +periodColumn+ " month) and o.shop_number = " +StaticClass.shop_number+ " group by o.product_id order by sum(order_quantity)/30 desc ";
 		

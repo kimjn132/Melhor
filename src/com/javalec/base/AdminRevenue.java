@@ -57,6 +57,9 @@ public class AdminRevenue extends JFrame {
 				try {
 					AdminRevenue window = new AdminRevenue();
 					window.frame.setVisible(true);
+					// 가운데 정렬
+					window.frame.setLocationRelativeTo(null);
+					window.frame.setResizable(false);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -152,7 +155,7 @@ public class AdminRevenue extends JFrame {
 	private JComboBox getCbCategory() {
 		if (cbCategory == null) {
 			cbCategory = new JComboBox();
-			cbCategory.setModel(new DefaultComboBoxModel(new String[] { "제품 이름", "제품 번호", "카테고리" }));
+			cbCategory.setModel(new DefaultComboBoxModel(new String[] {"제품 이름", "제품 번호", "카테고리"}));
 			cbCategory.setBounds(30, 78, 80, 30);
 		}
 		return cbCategory;
@@ -344,41 +347,19 @@ public class AdminRevenue extends JFrame {
 
 		String categoryColumn = "";
 		int periodColumn = 0;
-		String[] categoryArray = { "product_name", "product_id", "product_category" };
+		String[] categoryArray = { "product_name", "o.product_id", "product_category" };
 		int[] periodArray = { 1, 3, 6 };
 
-		int i = cbCategory.getSelectedIndex();
-		int j = cbPeriod.getSelectedIndex();
-
-		if (i == 0 && j == 0) {
+		
+		// 위의 코드 for문(+break) 변환 
+		for(int i=cbCategory.getSelectedIndex(); i<3; i++) {
 			categoryColumn = categoryArray[i];
-			periodColumn = periodArray[j];
-		} else if (i == 0 && j == 1) {
-			categoryColumn = categoryArray[i];
-			periodColumn = periodArray[j];
-		} else if (i == 0 && j == 2) {
-			categoryColumn = categoryArray[i];
-			periodColumn = periodArray[j];
-		} else if (i == 1 && j == 0) {
-			categoryColumn = categoryArray[i];
-			periodColumn = periodArray[j];
-		} else if (i == 1 && j == 1) {
-			categoryColumn = categoryArray[i];
-			periodColumn = periodArray[j];
-		} else if (i == 1 && j == 2) {
-			categoryColumn = categoryArray[i];
-			periodColumn = periodArray[j];
-		} else if (i == 2 && j == 0) {
-			categoryColumn = categoryArray[i];
-			periodColumn = periodArray[j];
-		} else if (i == 2 && j == 1) {
-			categoryColumn = categoryArray[i];
-			periodColumn = periodArray[j];
-		} else if (i == 2 && j == 2) {
-			categoryColumn = categoryArray[i];
-			periodColumn = periodArray[j];
+			for(int j=cbPeriod.getSelectedIndex(); j<3; j++) {
+				periodColumn = periodArray[j];
+			}
+			break;
 		}
-
+		
 		tableInit();
 		conditionQueryAction(categoryColumn, periodColumn); // 여기서 0번째 이름 일부 검색 >> conditionQueryAction으로 간다.
 		
